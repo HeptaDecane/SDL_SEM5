@@ -1,72 +1,91 @@
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
-public class Applicant {
-    private String firstName;
-    private String lastName;
-    private UniqueId id;
-    private String uniqueIdNo;
+public class Applicant implements Apply,Enroll{
+
     private String applicationId;
-    private Set<Examination> examinations;
-    private String email;
-    private String phNo;
+    private ApplicationForm applicationForm;
     private Status status;
-    private Reservation reservation;
-
     private List<University.Branches> offeredBranches;
     private University.Branches selectedBranch;
     private EnrollmentForm enrollmentForm;
     private String enrollmentId;
 
     public Applicant(){
-        applicationId = "UNASSIGNED";
-        examinations = new LinkedHashSet<>();
+        applicationForm = new ApplicationForm();
         status = Status.PENDING;
-        reservation = null;
+
         offeredBranches = new ArrayList<>();
         enrollmentForm = null;
     }
 
-    //------------------------------------- GETTERS -------------------------------------//
-    public Reservation getReservation() {
-        return reservation;
-    }
+// GETTER
     public Status getStatus() {
         return status;
     }
     public List<University.Branches> getOfferedBranches() {
         return offeredBranches;
     }
+    public ApplicationForm getApplicationForm(){
+        return applicationForm;
+    }
     public EnrollmentForm getEnrollmentForm() {
         return enrollmentForm;
     }
-    //-----------------------------------------------------------------------------------//
+    public String getApplicationId(){
+        return applicationId;
+    }
 
-    //------------------------------------- SETTERS -------------------------------------//
-    public void setName(String firstName,String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+// SETTER
+    public void setStatus(Status status){
+        this.status = status;
     }
-    public void setId(UniqueId id,String uniqueIdNo){
-        this.id = id;
-        this.uniqueIdNo = uniqueIdNo;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setPhNo(String phNo) {
-        this.phNo = phNo;
-    }
-    public void setReservation(Reservation reservation){
-        this.reservation = reservation;
-    }
-    //-----------------------------------------------------------------------------------//
 
-    public void addExamination(Examination examination){
-        examinations.add(examination);
+// APPLY INTERFACE
+    @Override
+    public void fillApplicationForm(ApplicationForm applicationForm) {
+        this.applicationForm = applicationForm;
     }
+
+    @Override
+    public Status apply(){
+        if(!applicationForm.isValid())
+            return status;
+        if(!University.isUnique(this))
+            return status;
+        applicationId = University.generateApplicationId(this);
+        University.addApplicant(this);
+        status = Status.APPLIED;
+        return status;
+    }
+
+    @Override
+    public Status lock(){
+        if(status == Status.SHORTLISTED)
+            status = Status.LOCKED;
+        return status;
+    }
+
+// ENROLL INTERFACE
+    @Override
+    public Status accept(){
+        if(status==Status.SHORTLISTED && selectedBranch!=null)
+            status = Status.ACCEPTED;
+
+        return status;
+    }
+
+    @Override
+    public void fillEnrollmentForm(EnrollmentForm enrollmentForm) {
+        this.enrollmentForm = enrollmentForm;
+    }
+
+
+    @Override
+    public Status enroll(){
+        return status;
+    }
+
 
     public boolean selectBranch(University.Branches branch){
         if(offeredBranches.contains(branch)) {
@@ -77,36 +96,34 @@ public class Applicant {
         return false;
     }
 
-    public Status accept(){
-        if(status==Status.SHORTLISTED && selectedBranch!=null)
-            status = Status.ACCEPTED;
-        // Enrollment ID generation
-        return status;
-    }
-
-    public Status lock(){
-        if(status == Status.SHORTLISTED)
-            status = Status.LOCKED;
-        return status;
-    }
-
-    public Status apply(){
-            status = Status.APPLIED;
-            // Application ID generation
-        return status;
-    }
-
-    public void printExams(){
-        for(Examination examination:examinations){
-            System.out.println(examination);
-        }
-    }
-
-    //-----------------------------------------------------------------------------------//
-
+// METHODS
     @Override
     public String toString() {
-        return firstName+" "+lastName;
+        if(applicationId==null)
+            return status.toString();
+        return applicationId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (this.getClass().equals(obj.getClass())){
+            Applicant first = this;
+            Applicant second = (Applicant) obj;
+            if(first.applicationForm.getUniqueIdNo().equals(second.applicationForm.getUniqueIdNo()))
+                return true;
+            if(first.applicationForm.getEmail().equals(second.applicationForm.getEmail()))
+                return true;
+            if(first.applicationForm.getPhNo().equals(second.applicationForm.getPhNo()))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return applicationId.hashCode();
     }
 
     public static enum UniqueId{
@@ -114,10 +131,39 @@ public class Applicant {
     }
 
     public static enum Status{
-        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED
+        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED
     }
 
-    public static enum Reservation{
-        OBC,SC,ST,NT,PWD
+    final static class Name{
+        private String first;
+        private String middle;
+        private String last;
+
+        public Name(String first,String last){
+            this.first = first;
+            this.last = last;
+        }
+        public Name(String first,String middle,String last){
+            this(first,last);
+            this.middle = middle;
+        }
+
+        public String getFirst() {
+            return first;
+        }
+        public String getMiddle() {
+            return middle;
+        }
+        public String getLast() {
+            return last;
+        }
+
+        @Override
+        public String toString() {
+            if (middle == null)
+                return first + " " + last;
+            else
+                return first + " " + middle + " " + last;
+        }
     }
 }
