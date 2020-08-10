@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ApplicationForm {
+public class ApplicationForm implements Serializable {
     private Applicant.Name name;
     private Applicant.UniqueId id;
     private String uniqueIdNo;
@@ -25,8 +26,8 @@ public class ApplicationForm {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setHsc(HSC hsc){
-        this.hsc = hsc;
+    public void setHsc(String board,String regNo,double percentage){
+        this.hsc = new HSC(board,regNo,percentage);
     }
     public void setPhNo(String phNo) {
         this.phNo = phNo;
@@ -73,13 +74,13 @@ public class ApplicationForm {
         return true;
     }
 
-    final static class HSC extends Examination{
+    final static class HSC extends Examination implements Serializable{
         String board;
-        float percentage;
+        double percentage;
 
-        public HSC(String board,String rollNo,float percentage){
+        public HSC(String board,String regNo,double percentage){
             super("HSC");
-            super.setRollNo(rollNo);
+            super.setRegNo(regNo);
             this.board = board;
             this.percentage = percentage;
         }

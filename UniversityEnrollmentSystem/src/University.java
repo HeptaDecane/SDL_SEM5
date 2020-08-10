@@ -27,7 +27,7 @@ public class University extends Data {
             return false;
         String key = applicant.getApplicationId();
         applicants.put(key,applicant);
-        storeApplicant();
+        storeApplicants();
         return false;
     }
 

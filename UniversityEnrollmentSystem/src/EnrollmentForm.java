@@ -1,2 +1,4 @@
-public class EnrollmentForm {
+import java.io.Serializable;
+
+public class EnrollmentForm implements Serializable {
 }

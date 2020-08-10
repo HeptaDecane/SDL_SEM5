@@ -1,8 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Applicant implements Apply,Enroll{
-
+public class Applicant implements Apply,Enroll,Serializable {
     private String applicationId;
     private ApplicationForm applicationForm;
     private Status status;
@@ -134,7 +134,7 @@ public class Applicant implements Apply,Enroll{
         PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED
     }
 
-    final static class Name{
+    final static class Name implements Serializable{
         private String first;
         private String middle;
         private String last;

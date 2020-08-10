@@ -1,10 +1,11 @@
-public class Examination {
+import java.io.Serializable;
+
+public class Examination implements Serializable {
     private String title;
     private String regNo;
-    private String rollNo;
-    private float maxMarks;
-    private float obtainedMarks;
-    private float percentile;
+    private double maxMarks;
+    private double obtainedMarks;
+    private double percentile;
 
     public Examination(String title){
         this.title = title;
@@ -17,16 +18,13 @@ public class Examination {
     public String getRegNo() {
         return regNo;
     }
-    public String getRollNo() {
-        return rollNo;
-    }
-    public float getMaxMarks() {
+    public double getMaxMarks() {
         return maxMarks;
     }
-    public float getObtainedMarks() {
+    public double getObtainedMarks() {
         return obtainedMarks;
     }
-    public float getPercentile() {
+    public double getPercentile() {
         return percentile;
     }
 
@@ -37,16 +35,13 @@ public class Examination {
     public void setRegNo(String regNo) {
         this.regNo = regNo;
     }
-    public void setRollNo(String rollNo) {
-        this.rollNo = rollNo;
-    }
-    public void setMaxMarks(float maxMarks) {
+    public void setMaxMarks(double maxMarks) {
         this.maxMarks = maxMarks;
     }
-    public void setObtainedMarks(float obtainedMarks) {
+    public void setObtainedMarks(double obtainedMarks) {
         this.obtainedMarks = obtainedMarks;
     }
-    public void setPercentile(float percentile) {
+    public void setPercentile(double percentile) {
         this.percentile = percentile;
     }
 
