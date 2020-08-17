@@ -7,8 +7,9 @@ public class Examination implements Serializable {
     private double obtainedMarks;
     private double percentile;
 
-    public Examination(String title){
+    public Examination(String title,double maxMarks){
         this.title = title;
+        this.maxMarks = maxMarks;
     }
 
 // GETTERS

@@ -1,30 +1,25 @@
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Applicant implements Apply,Enroll,Serializable {
     private String applicationId;
     private ApplicationForm applicationForm;
-    private Status status;
-    private List<University.Branches> offeredBranches;
-    private University.Branches selectedBranch;
+
     private EnrollmentForm enrollmentForm;
     private String enrollmentId;
+
+    private Status status;
 
     public Applicant(){
         applicationForm = new ApplicationForm();
         status = Status.PENDING;
 
-        offeredBranches = new ArrayList<>();
+
         enrollmentForm = null;
     }
 
 // GETTER
     public Status getStatus() {
         return status;
-    }
-    public List<University.Branches> getOfferedBranches() {
-        return offeredBranches;
     }
     public ApplicationForm getApplicationForm(){
         return applicationForm;
@@ -42,8 +37,7 @@ public class Applicant implements Apply,Enroll,Serializable {
     }
 
 // APPLY INTERFACE
-    @Override
-    public void fillApplicationForm(ApplicationForm applicationForm) {
+    public void setApplicationForm(ApplicationForm applicationForm) {
         this.applicationForm = applicationForm;
     }
 
@@ -69,7 +63,7 @@ public class Applicant implements Apply,Enroll,Serializable {
 // ENROLL INTERFACE
     @Override
     public Status accept(){
-        if(status==Status.SHORTLISTED && selectedBranch!=null)
+        if(status==Status.SHORTLISTED)
             status = Status.ACCEPTED;
 
         return status;
@@ -86,15 +80,6 @@ public class Applicant implements Apply,Enroll,Serializable {
         return status;
     }
 
-
-    public boolean selectBranch(University.Branches branch){
-        if(offeredBranches.contains(branch)) {
-            selectedBranch = branch;
-            return true;
-        }
-        selectedBranch = null;
-        return false;
-    }
 
 // METHODS
     @Override

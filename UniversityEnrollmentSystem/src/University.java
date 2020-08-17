@@ -1,11 +1,17 @@
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class University extends Data {
 
+    private Set<Branch> branches;
+    private String name;
+    public static String entrance = "JEE";
+    public static double maxMarks = 360;
+
+    public University(String name){
+        this.name = name;
+        branches = new HashSet<>();
+    }
 
     public static boolean isUnique(Applicant newApplicant){
         for(Applicant applicant:applicants.values()){
@@ -13,6 +19,14 @@ public class University extends Data {
                 return false;
         }
         return true;
+    }
+
+    public Set<Branch> getBranches(){
+        return Collections.unmodifiableSet(branches);
+    }
+
+    public void addBranch(Branch branch){
+        branches.add(branch);
     }
 
     public static String generateApplicationId(Applicant newApplicant){
@@ -31,32 +45,27 @@ public class University extends Data {
         return false;
     }
 
-    public static enum Branches{
-        BRANCH1,BRANCH2,BRANCH3,BRANCH4,BRANCH5,BRANCH6
-    }
-
     public static class Branch{
         String name;
+        String code;
         int seats;
         int lockedSeats;
-        List<CutOff> cutOffs;
+        int cutOff;
 
-        public Branch(String name,int seats){
+        public Branch(String code,String name,int seats,int cutOff){
+            this.code = code;
             this.name = name;
             this.seats = seats;
             lockedSeats = 0;
-            cutOffs = new ArrayList<>();
+            this.cutOff = cutOff;
         }
-        public void addCutoff(CutOff cutOff){
-            cutOffs.add(cutOff);
-        }
-    }
-    public static class CutOff{
-        String title;
-        int score;
-        public CutOff(String title,int score){
-            this.title = title;
-            this.score = score;
+
+        public String getName() {
+            return name;
+        }public String getCode() {
+            return code;
+        }public int getCutOff() {
+            return cutOff;
         }
     }
 }

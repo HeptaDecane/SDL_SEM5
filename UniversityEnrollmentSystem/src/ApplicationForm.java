@@ -1,19 +1,16 @@
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ApplicationForm implements Serializable {
     private Applicant.Name name;
     private Applicant.UniqueId id;
     private String uniqueIdNo;
     private HSC hsc;
-    private Set<Examination> examinations;
+    private Examination examination;
     private String email;
     private String phNo;
+    private University.Branch branch;
 
-    public ApplicationForm(){
-        examinations = new HashSet<>();
-    }
+
 
 // SETTERS
     public void setName(Applicant.Name name){
@@ -32,9 +29,14 @@ public class ApplicationForm implements Serializable {
     public void setPhNo(String phNo) {
         this.phNo = phNo;
     }
+    public void setBranch(University.Branch branch){
+        this.branch = branch;
+    }
+    public void setEntrance(Examination examination){
+        this.examination = examination;
+    }
 
-
-// GETTERS
+    // GETTERS
     public Applicant.Name getName() {
         return name;
     }
@@ -44,8 +46,8 @@ public class ApplicationForm implements Serializable {
     public String getUniqueIdNo() {
         return uniqueIdNo;
     }
-    public Set<Examination> getExaminations() {
-        return examinations;
+    public Examination getExamination() {
+        return examination;
     }
     public String getEmail() {
         return email;
@@ -53,21 +55,21 @@ public class ApplicationForm implements Serializable {
     public String getPhNo() {
         return phNo;
     }
+    public University.Branch getBranch() {
+        return branch;
+    }
 
     @Override
     public String toString() {
         return name.toString();
     }
 
-    public void addExamination(Examination examination){
-        examinations.add(examination);
-    }
 
     public boolean isValid(){
         if(name == null) return false;
         if(id == null) return false;
         if(uniqueIdNo == null) return false;
-        if(examinations.size() == 0) return false;
+        if(examination == null) return false;
         if(email == null) return false;
         if(phNo == null) return false;
         if(hsc == null)return false;
@@ -79,7 +81,7 @@ public class ApplicationForm implements Serializable {
         double percentage;
 
         public HSC(String board,String regNo,double percentage){
-            super("HSC");
+            super("HSC",0);
             super.setRegNo(regNo);
             this.board = board;
             this.percentage = percentage;
