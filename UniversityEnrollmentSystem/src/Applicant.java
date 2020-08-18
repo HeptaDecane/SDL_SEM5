@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Applicant implements Apply,Enroll,Serializable {
+public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializable {
     private String applicationId;
     private ApplicationForm applicationForm;
 
@@ -12,8 +12,11 @@ public class Applicant implements Apply,Enroll,Serializable {
     public Applicant(){
         applicationForm = new ApplicationForm();
         status = Status.PENDING;
-
-
+        enrollmentForm = null;
+    }
+    public Applicant(ApplicationForm applicationForm){
+        this.applicationForm = applicationForm;
+        status = Status.PENDING;
         enrollmentForm = null;
     }
 
@@ -111,12 +114,29 @@ public class Applicant implements Apply,Enroll,Serializable {
         return applicationId.hashCode();
     }
 
+    @Override
+    public int compareTo(Applicant that) {
+        Examination exam1 = this.applicationForm.getExamination();
+        Examination exam2 = that.applicationForm.getExamination();
+
+        if(exam1.getPercentile()>exam2.getPercentile())
+            return -1;
+        else if(exam1.getPercentile()<exam2.getPercentile())
+            return 1;
+        else
+            if(exam1.getObtainedMarks()>exam2.getObtainedMarks())
+                return -1;
+            else if(exam1.getObtainedMarks()<exam2.getObtainedMarks())
+                return 1;
+            else return (this.applicationId.compareTo(that.applicationId));
+    }
+
     public static enum UniqueId{
         UIDAI,PASSPORT,PAN,DRIVING_LICENSE,VOTER_ID
     }
 
     public static enum Status{
-        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED
+        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND
     }
 
     final static class Name implements Serializable{

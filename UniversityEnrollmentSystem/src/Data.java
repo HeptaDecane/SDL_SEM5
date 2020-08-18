@@ -54,7 +54,8 @@ public abstract class Data {
             System.out.println("\tName: "+applicant.getApplicationForm().getName());
             System.out.println("\tEmail: "+applicant.getApplicationForm().getEmail());
             System.out.println("\tPhone: "+applicant.getApplicationForm().getPhNo());
-            System.out.println("\tUIDAI"+applicant.getApplicationForm().getUniqueIdNo());
+            System.out.println("\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo());
+            System.out.println("\tOpted for: "+applicant.getApplicationForm().getBranch());
             System.out.println();
         }
     }

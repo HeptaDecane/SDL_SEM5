@@ -8,7 +8,7 @@ public class ApplicationForm implements Serializable {
     private Examination examination;
     private String email;
     private String phNo;
-    private University.Branch branch;
+    private String branch;
 
 
 
@@ -29,10 +29,10 @@ public class ApplicationForm implements Serializable {
     public void setPhNo(String phNo) {
         this.phNo = phNo;
     }
-    public void setBranch(University.Branch branch){
+    public void setBranch(String branch){
         this.branch = branch;
     }
-    public void setEntrance(Examination examination){
+    public void setExamination(Examination examination){
         this.examination = examination;
     }
 
@@ -55,9 +55,10 @@ public class ApplicationForm implements Serializable {
     public String getPhNo() {
         return phNo;
     }
-    public University.Branch getBranch() {
+    public String getBranch() {
         return branch;
     }
+
 
     @Override
     public String toString() {
@@ -66,13 +67,14 @@ public class ApplicationForm implements Serializable {
 
 
     public boolean isValid(){
-        if(name == null) return false;
-        if(id == null) return false;
-        if(uniqueIdNo == null) return false;
+        if(name == null)        return false;
+        if(id == null)          return false;
+        if(uniqueIdNo == null)  return false;
         if(examination == null) return false;
-        if(email == null) return false;
-        if(phNo == null) return false;
-        if(hsc == null)return false;
+        if(email == null)       return false;
+        if(phNo == null)        return false;
+        if(hsc == null)         return false;
+        if(branch == null)      return false;
         return true;
     }
 
