@@ -69,6 +69,11 @@ public class University extends Data {
         return applicants.get(id);
     }
 
+
+
+
+
+
     public static class Branch implements Serializable {
         String name;
         int seats;
