@@ -8,7 +8,7 @@ public class ApplicationForm implements Serializable {
     private Examination examination;
     private String email;
     private String phNo;
-    private String branch;
+    private String branchName;
 
 
 
@@ -29,8 +29,8 @@ public class ApplicationForm implements Serializable {
     public void setPhNo(String phNo) {
         this.phNo = phNo;
     }
-    public void setBranch(String branch){
-        this.branch = branch;
+    public void setBranchName(String branchName){
+        this.branchName = branchName;
     }
     public void setExamination(Examination examination){
         this.examination = examination;
@@ -55,10 +55,12 @@ public class ApplicationForm implements Serializable {
     public String getPhNo() {
         return phNo;
     }
-    public String getBranch() {
-        return branch;
+    public String getBranchName() {
+        return branchName;
     }
-
+    public HSC getHsc() {
+        return hsc;
+    }
 
     @Override
     public String toString() {
@@ -74,19 +76,23 @@ public class ApplicationForm implements Serializable {
         if(email == null)       return false;
         if(phNo == null)        return false;
         if(hsc == null)         return false;
-        if(branch == null)      return false;
+        if(branchName == null)      return false;
         return true;
     }
 
-    final static class HSC extends Examination implements Serializable{
-        String board;
-        double percentage;
+    public static class HSC extends Examination implements Serializable{
+        private String board;
+        private double percentage;
 
         public HSC(String board,String regNo,double percentage){
             super("HSC",0);
             super.setRegNo(regNo);
             this.board = board;
             this.percentage = percentage;
+        }
+
+        public double getPercentage() {
+            return percentage;
         }
     }
 

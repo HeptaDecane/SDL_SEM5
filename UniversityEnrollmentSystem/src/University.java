@@ -37,6 +37,13 @@ public class University extends Data {
         return Collections.unmodifiableSet(branches);
     }
 
+    protected static Branch getBranch(String branchName){
+        for(Branch branch:branches)
+            if(branch.getName().equals(branchName))
+                return branch;
+        return null;
+    }
+
     public static void addBranch(Branch branch){
         branches.add(branch);
     }
@@ -44,7 +51,7 @@ public class University extends Data {
     public static String generateApplicationId(Applicant newApplicant){
         Date date = Calendar.getInstance().getTime();
         String prefix = new SimpleDateFormat("ddMMyyyy").format(date);
-        String suffix = String.format("%05d",applicants.size()+1);
+        String suffix = String.format("%05d",applicants.size()+shortlisted.size()+1);
         return "I"+prefix+suffix;
     }
 
@@ -61,12 +68,19 @@ public class University extends Data {
     public static Applicant.Status checkStatus(String id){
         if(applicants.containsKey(id))
             return applicants.get(id).getStatus();
+        else if(shortlisted.containsKey(id))
+            return shortlisted.get(id).getStatus();
         else
             return Applicant.Status.NOT_FOUND;
     }
 
     public static Applicant fetchApplicant(String id){
-        return applicants.get(id);
+        if(applicants.containsKey(id))
+            return applicants.get(id);
+        else if(shortlisted.containsKey(id))
+            return shortlisted.get(id);
+        else
+            return null;
     }
 
 
@@ -78,6 +92,7 @@ public class University extends Data {
         String name;
         int seats;
         int lockedSeats;
+        int allocatedSeats;
         int cutOff;
 
         public Branch(String name){
@@ -87,6 +102,7 @@ public class University extends Data {
             this.name = name;
             this.seats = seats;
             lockedSeats = 0;
+            allocatedSeats = 0;
             this.cutOff = cutOff;
         }
 
@@ -94,6 +110,19 @@ public class University extends Data {
             return name;
         }public int getCutOff() {
             return cutOff;
+        }
+
+        protected void lockSeat(){
+            if(seats > lockedSeats)
+                lockedSeats++;
+        }
+        protected void unlockSeat(){
+            if(lockedSeats > 0)
+                lockedSeats--;
+        }
+        protected void allocateSeat(){
+            if(lockedSeats > allocatedSeats)
+                allocatedSeats++;
         }
 
         @Override

@@ -1,20 +1,20 @@
 import java.util.PriorityQueue;
 
 public class BranchQueue{
-    private String branch;
+    private String branchName;
     private PriorityQueue<Applicant> queue;
 
-    public BranchQueue(String branch){
-        this.branch = branch;
+    public BranchQueue(String branchName){
+        this.branchName = branchName;
         queue = new PriorityQueue<>();
     }
 
-    public void setBranch(String branch) {
-        this.branch = branch;
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
     }
 
-    public String getBranch() {
-        return branch;
+    public String getBranchName() {
+        return branchName;
     }
 
     public boolean add(Applicant applicant) { return queue.add(applicant); }

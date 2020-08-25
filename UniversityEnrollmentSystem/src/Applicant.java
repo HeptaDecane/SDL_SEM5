@@ -60,15 +60,18 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
     public Status lock(){
         if(status == Status.SHORTLISTED)
             status = Status.LOCKED;
+
+        Data.storeShortlisted();
         return status;
     }
 
 // ENROLL INTERFACE
     @Override
     public Status accept(){
-        if(status==Status.SHORTLISTED)
+        if(status==Status.SHORTLISTED || status==Status.LOCKED)
             status = Status.ACCEPTED;
 
+        Data.storeShortlisted();
         return status;
     }
 

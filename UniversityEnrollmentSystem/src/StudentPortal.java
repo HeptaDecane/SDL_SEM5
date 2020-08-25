@@ -37,7 +37,7 @@ public class StudentPortal {
         applicationForm.setPhNo(phNo);
         applicationForm.setHsc(hscBoard,hscReg,hscPercentage);
         applicationForm.setExamination(examination);
-        applicationForm.setBranch(branchName);
+        applicationForm.setBranchName(branchName);
 
         applicant = new Applicant(applicationForm);
     }
