@@ -2,6 +2,7 @@ import java.io.Serializable;
 
 public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializable {
     private String applicationId;
+    private String password;
     private ApplicationForm applicationForm;
 
     private EnrollmentForm enrollmentForm;
@@ -39,7 +40,11 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
         this.status = status;
     }
 
-// APPLY INTERFACE
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // APPLY INTERFACE
     public void setApplicationForm(ApplicationForm applicationForm) {
         this.applicationForm = applicationForm;
     }
@@ -86,6 +91,9 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
         return status;
     }
 
+    public boolean matchPassword(String password){
+        return this.password.equals(password);
+    }
 
 // METHODS
     @Override

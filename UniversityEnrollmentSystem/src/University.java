@@ -74,13 +74,18 @@ public class University extends Data {
             return Applicant.Status.NOT_FOUND;
     }
 
-    public static Applicant fetchApplicant(String id){
+    public static Applicant fetchApplicant(String id,String password){
+        Applicant applicant;
         if(applicants.containsKey(id))
-            return applicants.get(id);
+            applicant = applicants.get(id);
         else if(shortlisted.containsKey(id))
-            return shortlisted.get(id);
+            applicant = applicants.get(id);
         else
             return null;
+
+        if(applicant.matchPassword(password))
+            return applicant;
+        else return null;
     }
 
 

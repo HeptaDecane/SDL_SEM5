@@ -1,8 +1,10 @@
 public class Admin extends University{
     private String username;
+    private String password;
 
-    public Admin(String username){
+    public Admin(String username,String password){
         this.username = username;
+        this.password = password;
     }
 
     public void shortlistApplicants(){

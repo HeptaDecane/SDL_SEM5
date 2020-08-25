@@ -6,7 +6,7 @@ public class StudentPortal {
 
     private ApplicationForm applicationForm;
     private Applicant applicant;
-    private String firstName,lastName,uniqueId,email,phNo,regNo,branchName,hscBoard,hscReg;
+    private String firstName,password,lastName,uniqueId,email,phNo,regNo,branchName,hscBoard,hscReg;
     private Double percentile,obtainedMarks,hscPercentage;
     private Examination examination;
     private static Set<University.Branch> branches;
@@ -21,6 +21,12 @@ public class StudentPortal {
             if(branchName.equals(branch.getName()))
                 return true;
         }
+        return false;
+    }
+    private boolean setPassword(){
+        System.out.print("Password: ");   password = input.nextLine();
+        if(password.length()>=8)
+            return true;
         return false;
     }
 
@@ -40,6 +46,7 @@ public class StudentPortal {
         applicationForm.setBranchName(branchName);
 
         applicant = new Applicant(applicationForm);
+        applicant.setPassword(password);
     }
 
     public String register(){
@@ -49,6 +56,12 @@ public class StudentPortal {
         System.out.print("UIDAI No: ");     uniqueId = input.nextLine();
         System.out.print("Email: ");        email = input.nextLine();
         System.out.print("Phone: ");        phNo = input.nextLine();
+
+        while (true){
+            if(setPassword())
+                break;
+            System.out.println("Password must be at least 8 characters long");
+        }
 
         System.out.println("Entrance Details: "+University.entrance);
         System.out.print("Reg No: ");           regNo = input.nextLine();
@@ -79,7 +92,7 @@ public class StudentPortal {
         return University.checkStatus(id);
     }
 
-    public Applicant fetchApplicant(String id){
-        return University.fetchApplicant(id);
+    public Applicant fetchApplicant(String id,String password){
+        return University.fetchApplicant(id,password);
     }
 }
