@@ -80,6 +80,27 @@ public abstract class Data {
         }
     }
 
+
+    protected static boolean authenticateAdmin(String username, String password){
+        try(
+            FileInputStream file = new FileInputStream("admin.dat");
+            BufferedInputStream buffer = new BufferedInputStream(file);
+            DataInputStream iStream = new DataInputStream(buffer)
+        ){
+            while (true){
+                if(iStream.readUTF().equals(username)){
+                    return iStream.readUTF().equals(password);
+                }
+                iStream.readUTF();
+            }
+        }catch (EOFException e){
+            return false;
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return false;
+    }
+
     public static void listApplicants() {
         System.out.println("\nAPPLICANTS:");
         for(Applicant applicant:applicants.values()){

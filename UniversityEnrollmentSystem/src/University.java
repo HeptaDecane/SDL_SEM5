@@ -1,4 +1,4 @@
-import java.io.Serializable;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -88,6 +88,13 @@ public class University extends Data {
         else return null;
     }
 
+    public static Admin accessAdmin(String username, String password){
+        if(authenticateAdmin(username,password))
+            return new Admin(username);
+        else
+            return null;
+    }
+
 
 
 
@@ -100,9 +107,6 @@ public class University extends Data {
         int allocatedSeats;
         int cutOff;
 
-        public Branch(String name){
-            this(name,0,0);
-        }
         public Branch(String name,int seats,int cutOff){
             this.name = name;
             this.seats = seats;
@@ -150,6 +154,75 @@ public class University extends Data {
         @Override
         public String toString() {
             return name;
+        }
+    }
+
+
+
+    public static class Admin{
+        private final String username;
+
+        private Admin(String username){
+            this.username = username;
+        }
+
+        public void shortlistApplicants(){
+            for(Applicant applicant:Data.applicants.values()){
+                ApplicationForm applicationForm = applicant.getApplicationForm();
+                Examination examination = applicationForm.getExamination();
+                ApplicationForm.HSC hsc = applicationForm.getHsc();
+                String branchName = applicationForm.getBranchName();
+                Branch branch = getBranch(branchName);
+
+                if(hsc.getPercentage()<75 || examination.getObtainedMarks()<branch.cutOff){
+                    applicant.setStatus(Applicant.Status.REJECTED);
+                    continue;
+                }
+
+                for(BranchQueue branchQueue: branchQueues) {
+                    if (branchQueue.getBranchName().equals(branchName)){
+                        branchQueue.add(applicant);
+                        break;
+                    }
+                }
+            }
+
+            for(BranchQueue branchQueue:branchQueues){
+                Branch branch = getBranch(branchQueue.getBranchName());
+                while(branchQueue.size() > 0){
+                    if(branch.lockedSeats >= branch.seats)
+                        break;
+                    Applicant applicant = branchQueue.poll();
+                    String applicantId = applicant.getApplicationId();
+
+                    applicant.setStatus(Applicant.Status.SHORTLISTED);
+                    shortlisted.put(applicantId,applicant);
+                    branch.lockSeat();
+                    applicants.remove(applicantId);
+                }
+            }
+            storeApplicants();
+            storeShortlisted();
+
+            for(BranchQueue branchQueue : branchQueues)
+                branchQueue.clear();
+        }
+
+        public void registerNewAdmin(String username, String password){
+            try(
+                    FileOutputStream file = new FileOutputStream("admin.dat",true);
+                    DataOutputStream oStream = new DataOutputStream(file)
+            ){
+                oStream.writeUTF(username);
+                oStream.writeUTF(password);
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return username;
         }
     }
 }
