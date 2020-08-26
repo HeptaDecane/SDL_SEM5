@@ -52,9 +52,9 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
     @Override
     public Status apply(){
         if(!applicationForm.isValid())
-            return status;
+            return Status.FAILED;
         if(!University.isUnique(this))
-            return status;
+            return Status.FAILED;
         applicationId = University.generateApplicationId(this);
         University.addApplicant(this);
         status = Status.APPLIED;
@@ -147,7 +147,7 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
     }
 
     public static enum Status{
-        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND
+        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND,FAILED
     }
 
     final static class Name implements Serializable{

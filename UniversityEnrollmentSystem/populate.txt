@@ -3,6 +3,7 @@ Vaidya
 695423157456
 rickyvadiya@gmail.com
 7856321459
+testpass01
 60900280
 288
 97.2
@@ -16,6 +17,7 @@ Sarna
 755925439751
 tanaysarna@gmail.com
 04195304003
+testpass02
 86512485
 302
 98.1
@@ -29,6 +31,7 @@ Mitter
 784262547496
 jaswantmitter@gmail.com
 05074061542
+testpass03
 84532157
 250
 96.1
@@ -42,6 +45,7 @@ Harjo
 475136584566
 vivekharjo@gmail.com
 +917758732006
+testpass04
 58462458
 295
 97.8
@@ -55,6 +59,7 @@ Mander
 856924153256
 nalinimander@gmail.com
 01427173772
+testpass05
 55974125
 274
 96.5
@@ -68,6 +73,7 @@ Rupesh
 458763525546
 radhikarupesh@gmail.com
 0613415428
+testpass06
 78563249
 309
 98.3
@@ -81,6 +87,7 @@ Tiwari
 996844582315
 himeshtiwari@gmail.com
 05272095139
+testpass07
 85349512
 210
 94.3
@@ -94,6 +101,7 @@ Soni
 226458746352
 nupoorsoni@gmail.com
 01054461652
+testpass08
 root1234
 74589652
 245
@@ -108,6 +116,7 @@ Kartik
 485632154785
 animeshkartik@gmail.com
 0535252881
+testpass09
 48563214
 220
 94.5
@@ -121,6 +130,7 @@ Saurabh
 653248521535
 divyasaurabh@gmail.com
 02405329062
+testpass10
 65327546
 247
 94.9
@@ -128,3 +138,33 @@ STATE
 4586325
 84
 ENTC
+
+Jyoti
+Saxena
+874596315846
+jyotisaxena@gmail.com
++918974881563
+testpass11
+85641256
+310
+98.7
+CBSE
+7456985
+89
+CS
+
+Nayan
+Baral
+784596514587
+nayanbaral@gmail.com
+7859456588
+testpass12
+45856582
+289
+97.4
+STATE
+7458654
+85
+CHEM
+
+

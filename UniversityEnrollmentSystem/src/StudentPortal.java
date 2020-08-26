@@ -24,7 +24,7 @@ public class StudentPortal {
         return false;
     }
     private boolean setPassword(){
-        System.out.print("Password: ");   password = input.nextLine();
+        System.out.print("Password: ");     password = input.nextLine();
         if(password.length()>=8)
             return true;
         return false;

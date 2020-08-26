@@ -10,14 +10,14 @@ public class Main {
 
 //        System.out.println(studentPortal.checkStatus("I2508202000001"));
 
-//        Applicant applicant = studentPortal.fetchApplicant("I2608202000001","root1234");
+//        Applicant applicant = studentPortal.fetchApplicant("I2708202000001","root1234");
 //        if(applicant != null)
 //            System.out.println(applicant.getStatus());
 
 //        Admin admin = new Admin("admin");
 //        admin.shortlistApplicants();
 
-//        Data.listApplicants();
+        Data.listApplicants();
 //        Data.listShortlisted();
 
 //        University.Admin admin = University.accessAdmin("admin01","testpass08");
