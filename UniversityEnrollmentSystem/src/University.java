@@ -65,15 +65,6 @@ public class University extends Data {
         return false;
     }
 
-    public static Applicant.Status checkStatus(String id){
-        if(applicants.containsKey(id))
-            return applicants.get(id).getStatus();
-        else if(shortlisted.containsKey(id))
-            return shortlisted.get(id).getStatus();
-        else
-            return Applicant.Status.NOT_FOUND;
-    }
-
     public static Applicant fetchApplicant(String id,String password){
         Applicant applicant;
         if(applicants.containsKey(id))
@@ -206,6 +197,22 @@ public class University extends Data {
 
             for(BranchQueue branchQueue : branchQueues)
                 branchQueue.clear();
+        }
+
+        public Applicant.Status checkStatus(String id){
+            if(applicants.containsKey(id))
+                return applicants.get(id).getStatus();
+            else if(shortlisted.containsKey(id))
+                return shortlisted.get(id).getStatus();
+            else
+                return Applicant.Status.NOT_FOUND;
+        }
+
+        public void listApplicants(){
+            Data.listApplicants();
+        }
+        public void listShortlisted(){
+            Data.listShortlisted();
         }
 
         public void registerNewAdmin(String username, String password){

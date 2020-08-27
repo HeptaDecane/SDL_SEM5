@@ -88,10 +88,6 @@ public class StudentPortal {
         return applicant.getApplicationId();
     }
 
-    public Applicant.Status checkStatus(String id){
-        return University.checkStatus(id);
-    }
-
     public Applicant fetchApplicant(String id,String password){
         return University.fetchApplicant(id,password);
     }

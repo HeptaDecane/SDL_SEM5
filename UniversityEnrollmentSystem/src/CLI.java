@@ -9,6 +9,7 @@ public class CLI {
     private static boolean adminAuthenticated = false;
     private static boolean studentAuthenticated = false;
     private static Applicant.Status status = null;
+    private static University.Admin admin = null;
 
     public static void main(String[] args) {
 
@@ -22,7 +23,16 @@ public class CLI {
                 break;
 
                 case 2:
-                    System.out.println("/admin-login");
+                    input.nextLine();
+                    System.out.print("Username: ");
+                    String username = input.nextLine();
+                    System.out.print("Password: ");
+                    String password = readPassword();
+                    admin = University.accessAdmin(username,password);
+                    if(admin == null)
+                        System.out.println("Incorrect Admin Credentials");
+                    else
+                        adminView();
                 break;
 
                 default:
@@ -38,8 +48,10 @@ public class CLI {
         System.out.println("1. List Applicants");
         System.out.println("2. List Shortlisted");
         System.out.println("3. Shortlist Applicants");
-        System.out.println("4. Register New Admin");
-        System.out.println("5. Enroll Applicants");
+        System.out.println("4. Check Applicant Status");
+        System.out.println("5. Register New Admin");
+        System.out.println("6. Enroll Applicants");
+        System.out.println("0. Logout");
     }
     public static void printApplicantOptions(){
         System.out.println("1. Check Status");
@@ -124,6 +136,53 @@ public class CLI {
             choice = input.nextInt();
         }
 
+    }
+
+    public static void adminView(){
+        printAdminOptions();
+        int choice = input.nextInt();
+
+        while (choice != 0){
+            switch (choice){
+                case 1:
+                    admin.listApplicants();
+                break;
+
+                case 2:
+                    admin.listShortlisted();
+                break;
+
+                case 3:
+                    admin.shortlistApplicants();
+                break;
+
+                case 4:
+                    input.nextLine();
+                    System.out.print("Applicant ID: ");
+                    String id = input.nextLine();
+                    System.out.println(admin.checkStatus(id));
+                break;
+
+                case 5:
+                    input.nextLine();
+                    System.out.print("Username: ");
+                    String username = input.nextLine();
+                    System.out.print("Password: ");
+                    String password = readPassword();
+                    admin.registerNewAdmin(username,password);
+                    System.out.println("New Admin "+username+" Registered");
+                break;
+
+                case 6:
+                    System.out.println("Not Implemented");
+                break;
+
+                default:
+                    System.out.println("Invalid Selection");
+            }
+            printAdminOptions();
+            choice = input.nextInt();
+        }
     }
 
     public static String readPassword() {
