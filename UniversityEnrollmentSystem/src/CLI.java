@@ -13,8 +13,9 @@ public class CLI {
 
     public static void main(String[] args) {
 
-
+        System.out.println("\nMAIN PAGE");
         System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
+        System.out.print("\ninput> ");
         int choice = input.nextInt();
         while (choice != 0) {
             switch (choice){
@@ -24,6 +25,7 @@ public class CLI {
 
                 case 2:
                     input.nextLine();
+                    System.out.println("\nADMIN LOGIN");
                     System.out.print("Username: ");
                     String username = input.nextLine();
                     System.out.print("Password: ");
@@ -38,37 +40,44 @@ public class CLI {
                 default:
                     System.out.println("Invalid Selection");
             }
+            System.out.println("\nMAIN PAGE");
             System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
+            System.out.print("\ninput> ");
             choice = input.nextInt();
         }
 
     }
 
     public static void printAdminOptions(){
+        System.out.println("\nADMIN PAGE");
         System.out.println("1. List Applicants");
         System.out.println("2. List Shortlisted");
         System.out.println("3. Shortlist Applicants");
         System.out.println("4. Check Applicant Status");
         System.out.println("5. Register New Admin");
-        System.out.println("6. Enroll Applicants");
+        System.out.println("6. Issue Enrollment Forms");
         System.out.println("0. Logout");
     }
     public static void printApplicantOptions(){
+        System.out.println("\nAPPLICANT PAGE");
         System.out.println("1. Check Status");
-        System.out.println("2. Lock Seat");
-        System.out.println("3. Accept Seat");
+        System.out.println("2. Float Seat");
+        System.out.println("3. Lock Seat");
         System.out.println("4. Fill Enrollment Details");
         System.out.println("0. Logout");
     }
 
     public static void studentPortalView(){
+        System.out.println("\nSTUDENT PORTAL");
         System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
+        System.out.print("\ninput> ");
         int choice = input.nextInt();
 
         while (choice != 0) {
             switch (choice){
                 case 1:
                     input.nextLine();
+                    System.out.println("\nAPPLICANT LOGIN");
                     System.out.print("ApplicantID: ");
                     String id = input.nextLine();
                     System.out.print("Password: ");
@@ -81,6 +90,7 @@ public class CLI {
                     break;
 
                 case 2:
+                    System.out.println("\nAPPLICANT REGISTRATION");
                     String applicantId = studentPortal.register();
                     if(applicantId == null)
                         System.out.println("Registration Failed\nInvalid/Duplicate Credentials");
@@ -91,33 +101,44 @@ public class CLI {
                 default:
                     System.out.println("Invalid Selection");
             }
+            System.out.println("\nSTUDENT PORTAL");
             System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
+            System.out.print("\ninput> ");
             choice = input.nextInt();
         }
     }
 
     public static void applicantView(){
 
+        System.out.println("\nLogged in as:");
+        System.out.println("Applicant ID: "+applicant.getApplicationId());
+        System.out.println("\tName: "+applicant.getApplicationForm().getName());
+        System.out.println("\tEmail: "+applicant.getApplicationForm().getEmail());
+        System.out.println("\tPhone: "+applicant.getApplicationForm().getPhNo());
+        System.out.println("\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo());
+        System.out.println("\tOpted for: "+applicant.getApplicationForm().getBranchName());
+
         printApplicantOptions();
+        System.out.print("\ninput> ");
         int choice = input.nextInt();
         while (choice != 0){
             switch (choice){
                 case 1:
-                    System.out.println(applicant.getStatus());
+                    System.out.println("Status: "+applicant.getStatus());
                 break;
 
                 case 2:
-                    status = applicant.lock();
-                    if(status != Applicant.Status.LOCKED)
+                    status = applicant.hover();
+                    if(status != Applicant.Status.FLOATED)
                         System.out.println("Status SHORTLISTED Required");
                     else
                         System.out.println("Success\nStatus: "+status);
                 break;
 
                 case 3:
-                    status = applicant.accept();
-                    if(status != Applicant.Status.ACCEPTED)
-                        System.out.println("Status SHORTLISTED/LOCKED Required");
+                    status = applicant.lock();
+                    if(status != Applicant.Status.LOCKED)
+                        System.out.println("Status SHORTLISTED/FLOATED Required");
                     else
                         System.out.println("Success\nStatus: "+status);
                 break;
@@ -126,20 +147,28 @@ public class CLI {
                     if(applicant.getEnrollmentForm() == null)
                         System.out.println("Enrollment Form Not Issued");
                     else
-                        System.out.println("Enrollment Form Filling Procedure");
+                        if(studentPortal.fillEnrollmentForm(applicant))
+                            System.out.println("Submitted Enrollment Form");
+                        else
+                            System.out.println("Invalid Enrollment Details");
+                break;
 
                 default:
                     System.out.println("Invalid Selection");
 
             }
             printApplicantOptions();
+            System.out.print("\ninput> ");
             choice = input.nextInt();
         }
 
     }
 
     public static void adminView(){
+        System.out.println("\nLogged in as: "+admin.getUsername());
+
         printAdminOptions();
+        System.out.print("\ninput> ");
         int choice = input.nextInt();
 
         while (choice != 0){
@@ -154,6 +183,7 @@ public class CLI {
 
                 case 3:
                     admin.shortlistApplicants();
+                    System.out.println("Applicants Shortlisted");
                 break;
 
                 case 4:
@@ -170,17 +200,19 @@ public class CLI {
                     System.out.print("Password: ");
                     String password = readPassword();
                     admin.registerNewAdmin(username,password);
-                    System.out.println("New Admin "+username+" Registered");
+                    System.out.println("Success\nNew Admin "+username+" Registered");
                 break;
 
                 case 6:
-                    System.out.println("Not Implemented");
+                    admin.issueEnrollmentForms();
+                    System.out.println("Success\nIssued Enrollment for LOCKED Applicants");
                 break;
 
                 default:
                     System.out.println("Invalid Selection");
             }
             printAdminOptions();
+            System.out.print("\ninput> ");
             choice = input.nextInt();
         }
     }

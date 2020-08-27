@@ -91,4 +91,20 @@ public class StudentPortal {
     public Applicant fetchApplicant(String id,String password){
         return University.fetchApplicant(id,password);
     }
+
+    public boolean fillEnrollmentForm(Applicant applicant){
+        EnrollmentForm enrollmentForm = applicant.getEnrollmentForm();
+        if(enrollmentForm == null)
+            return false;
+
+        System.out.print("Placeholder: ");
+        String placeholder = input.nextLine();
+        enrollmentForm.setPlaceholder(placeholder);
+        if(!enrollmentForm.isValid())
+            return false;
+
+        applicant.setStatus(Applicant.Status.UNDER_VERIFICATION);
+        applicant.setEnrollmentForm(enrollmentForm);
+        return true;
+    }
 }

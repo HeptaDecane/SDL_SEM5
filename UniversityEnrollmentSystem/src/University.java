@@ -70,7 +70,7 @@ public class University extends Data {
         if(applicants.containsKey(id))
             applicant = applicants.get(id);
         else if(shortlisted.containsKey(id))
-            applicant = applicants.get(id);
+            applicant = shortlisted.get(id);
         else
             return null;
 
@@ -157,6 +157,10 @@ public class University extends Data {
             this.username = username;
         }
 
+        public String getUsername() {
+            return username;
+        }
+
         public void shortlistApplicants(){
             for(Applicant applicant:Data.applicants.values()){
                 ApplicationForm applicationForm = applicant.getApplicationForm();
@@ -224,6 +228,13 @@ public class University extends Data {
                 oStream.writeUTF(password);
             }catch (Exception e){
                 System.out.println(e);
+            }
+        }
+
+        public void issueEnrollmentForms(){
+            for(Applicant applicant : shortlisted.values()){
+                if(applicant.getStatus() == Applicant.Status.LOCKED)
+                    applicant.setEnrollmentForm(new EnrollmentForm());
             }
         }
 

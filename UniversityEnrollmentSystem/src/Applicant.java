@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializable {
+public class Applicant implements Comparable<Applicant>,Serializable {
     private String applicationId;
     private String password;
     private ApplicationForm applicationForm;
@@ -35,7 +35,11 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
         return applicationId;
     }
 
-// SETTER
+//    public String getPassword() {
+//        return password;
+//    }
+
+    // SETTER
     public void setStatus(Status status){
         this.status = status;
     }
@@ -49,7 +53,12 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
         this.applicationForm = applicationForm;
     }
 
-    @Override
+    public void setEnrollmentForm(EnrollmentForm enrollmentForm) {
+        this.enrollmentForm = enrollmentForm;
+        Data.storeShortlisted();
+    }
+
+
     public Status apply(){
         if(!applicationForm.isValid())
             return Status.FAILED;
@@ -61,32 +70,26 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
         return status;
     }
 
-    @Override
-    public Status lock(){
+
+    public Status hover(){
         if(status == Status.SHORTLISTED)
-            status = Status.LOCKED;
+            status = Status.FLOATED;
 
         Data.storeShortlisted();
         return status;
     }
 
 // ENROLL INTERFACE
-    @Override
-    public Status accept(){
-        if(status==Status.SHORTLISTED || status==Status.LOCKED)
-            status = Status.ACCEPTED;
+
+    public Status lock(){
+        if(status==Status.SHORTLISTED || status==Status.FLOATED)
+            status = Status.LOCKED;
 
         Data.storeShortlisted();
         return status;
     }
 
-    @Override
-    public void fillEnrollmentForm(EnrollmentForm enrollmentForm) {
-        this.enrollmentForm = enrollmentForm;
-    }
 
-
-    @Override
     public Status enroll(){
         return status;
     }
@@ -147,7 +150,7 @@ public class Applicant implements Apply,Enroll,Comparable<Applicant>,Serializabl
     }
 
     public static enum Status{
-        PENDING,APPLIED,SHORTLISTED,ACCEPTED,REJECTED,LOCKED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND,FAILED
+        PENDING,APPLIED,SHORTLISTED,LOCKED,REJECTED,FLOATED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND,FAILED
     }
 
     final static class Name implements Serializable{
