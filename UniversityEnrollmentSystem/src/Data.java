@@ -13,8 +13,10 @@ public abstract class Data {
         applicants = new HashMap<>();
         shortlisted = new HashMap<>();
         enrolled = new LinkedList<>();
+
         loadApplicants();
         loadShortlisted();
+        loadEnrolled();
     }
 
     protected static void loadApplicants(){
@@ -80,6 +82,36 @@ public abstract class Data {
         }
     }
 
+    protected static void loadEnrolled(){
+        try(
+                FileInputStream file = new FileInputStream("enrolled.dat");
+                BufferedInputStream buffer = new BufferedInputStream(file);
+                ObjectInputStream iStream = new ObjectInputStream(buffer)
+        ){
+            while(true){
+                Applicant applicant = (Applicant) iStream.readObject();
+                enrolled.add(applicant);
+            }
+        }catch (EOFException e){
+            System.out.println("Loaded Enrolled Applicants");
+        }catch (FileNotFoundException e){
+            System.out.println("Enrolled Applicants: Empty");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+    protected static void storeEnrolled(){
+        try(
+                FileOutputStream file = new FileOutputStream("enrolled.dat");
+                BufferedOutputStream buffer = new BufferedOutputStream(file);
+                ObjectOutputStream oStream = new ObjectOutputStream(buffer)
+        ){
+            for(Applicant applicant : enrolled)
+                oStream.writeObject(applicant);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
 
     protected static boolean authenticateAdmin(String username, String password){
         try(

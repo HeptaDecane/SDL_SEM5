@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 public class EnrollmentForm implements Serializable {
-    String placeholder="";
+    private String placeholder="";
 
     public String getPlaceholder() {
         return placeholder;

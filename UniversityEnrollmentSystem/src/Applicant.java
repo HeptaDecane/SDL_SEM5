@@ -35,7 +35,11 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         return applicationId;
     }
 
-//    public String getPassword() {
+    public String getEnrollmentId() {
+        return enrollmentId;
+    }
+
+    //    public String getPassword() {
 //        return password;
 //    }
 
@@ -46,6 +50,10 @@ public class Applicant implements Comparable<Applicant>,Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setEnrollmentId(String enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 
     // APPLY INTERFACE
@@ -64,7 +72,7 @@ public class Applicant implements Comparable<Applicant>,Serializable {
             return Status.FAILED;
         if(!University.isUnique(this))
             return Status.FAILED;
-        applicationId = University.generateApplicationId(this);
+        applicationId = University.generateApplicationId();
         University.addApplicant(this);
         status = Status.APPLIED;
         return status;
@@ -79,8 +87,6 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         return status;
     }
 
-// ENROLL INTERFACE
-
     public Status lock(){
         if(status==Status.SHORTLISTED || status==Status.FLOATED)
             status = Status.LOCKED;
@@ -90,9 +96,7 @@ public class Applicant implements Comparable<Applicant>,Serializable {
     }
 
 
-    public Status enroll(){
-        return status;
-    }
+
 
     public boolean matchPassword(String password){
         return this.password.equals(password);

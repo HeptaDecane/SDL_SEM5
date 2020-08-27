@@ -48,25 +48,6 @@ public class CLI {
 
     }
 
-    public static void printAdminOptions(){
-        System.out.println("\nADMIN PAGE");
-        System.out.println("1. List Applicants");
-        System.out.println("2. List Shortlisted");
-        System.out.println("3. Shortlist Applicants");
-        System.out.println("4. Check Applicant Status");
-        System.out.println("5. Register New Admin");
-        System.out.println("6. Issue Enrollment Forms");
-        System.out.println("0. Logout");
-    }
-    public static void printApplicantOptions(){
-        System.out.println("\nAPPLICANT PAGE");
-        System.out.println("1. Check Status");
-        System.out.println("2. Float Seat");
-        System.out.println("3. Lock Seat");
-        System.out.println("4. Fill Enrollment Details");
-        System.out.println("0. Logout");
-    }
-
     public static void studentPortalView(){
         System.out.println("\nSTUDENT PORTAL");
         System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
@@ -153,6 +134,10 @@ public class CLI {
                             System.out.println("Invalid Enrollment Details");
                 break;
 
+                case 5:
+                    System.out.println("Enrollment ID: "+applicant.getEnrollmentId());
+                break;
+
                 default:
                     System.out.println("Invalid Selection");
 
@@ -190,7 +175,7 @@ public class CLI {
                     input.nextLine();
                     System.out.print("Applicant ID: ");
                     String id = input.nextLine();
-                    System.out.println(admin.checkStatus(id));
+                    System.out.println("Status: "+admin.checkStatus(id));
                 break;
 
                 case 5:
@@ -208,6 +193,24 @@ public class CLI {
                     System.out.println("Success\nIssued Enrollment for LOCKED Applicants");
                 break;
 
+                case 7:
+                    admin.viewSeatStatus();
+                break;
+
+                case 8:
+                    admin.viewEnrollmentForms();
+                break;
+
+                case 9:
+                    input.nextLine();
+                    System.out.print("Application ID: ");
+                    String applicantId = input.nextLine();
+                    if(admin.enrollApplicant(applicantId))
+                        System.out.println("Success\nEnrolled: "+applicantId);
+                    else
+                        System.out.println("Invalid Status for "+applicantId);
+                break;
+
                 default:
                     System.out.println("Invalid Selection");
             }
@@ -215,6 +218,29 @@ public class CLI {
             System.out.print("\ninput> ");
             choice = input.nextInt();
         }
+    }
+
+    public static void printAdminOptions(){
+        System.out.println("\nADMIN PAGE");
+        System.out.println("1. List Applicants");
+        System.out.println("2. List Shortlisted");
+        System.out.println("3. Shortlist Applicants");
+        System.out.println("4. Check Applicant Status");
+        System.out.println("5. Register New Admin");
+        System.out.println("6. Issue Enrollment Forms");
+        System.out.println("7. View Seat Status");
+        System.out.println("8. View Enrollment Forms");
+        System.out.println("9. Enroll Applicant");
+        System.out.println("0. Logout");
+    }
+    public static void printApplicantOptions(){
+        System.out.println("\nAPPLICANT PAGE");
+        System.out.println("1. Check Status");
+        System.out.println("2. Float Seat");
+        System.out.println("3. Lock Seat");
+        System.out.println("4. Fill/Update Enrollment Details");
+        System.out.println("5. View Enrollment ID");
+        System.out.println("0. Logout");
     }
 
     public static String readPassword() {

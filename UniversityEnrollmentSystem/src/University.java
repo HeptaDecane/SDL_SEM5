@@ -14,7 +14,7 @@ public class University extends Data {
         entrance = "JEE";
         maxMarks = 360;
         branches = new HashSet<>();
-        branches.add(new Branch("CS",300,300));
+        branches.add(new Branch("COMP",300,300));
         branches.add(new Branch("ENTC",150,250));
         branches.add(new Branch("CHEM",200,200));
         branches.add(new Branch("CIVIL",200,180));
@@ -22,6 +22,19 @@ public class University extends Data {
         branchQueues = new ArrayList<>();
         for(Branch branch:branches){
             branchQueues.add(new BranchQueue(branch.name));
+        }
+
+        //syncSeatData();
+        for(Applicant applicant : shortlisted.values()){
+            ApplicationForm applicationForm = applicant.getApplicationForm();
+            Branch branch = getBranch(applicationForm.getBranchName());
+            branch.lockedSeats++;
+        }
+        for(Applicant applicant : enrolled){
+            ApplicationForm applicationForm = applicant.getApplicationForm();
+            Branch branch = getBranch(applicationForm.getBranchName());
+            branch.lockedSeats++;
+            branch.allocatedSeats++;
         }
     }
 
@@ -48,11 +61,18 @@ public class University extends Data {
         branches.add(branch);
     }
 
-    public static String generateApplicationId(Applicant newApplicant){
+    public static String generateApplicationId(){
         Date date = Calendar.getInstance().getTime();
         String prefix = new SimpleDateFormat("ddMMyyyy").format(date);
         String suffix = String.format("%05d",applicants.size()+shortlisted.size()+1);
         return "I"+prefix+suffix;
+    }
+
+    public static String generateEnrollmentId(Branch branch){
+        Date date = Calendar.getInstance().getTime();
+        String prefix = new SimpleDateFormat("yy").format(date);
+        String suffix = String.format("%03d",branch.allocatedSeats+1);
+        return branch.getName()+"2K"+prefix+suffix;
     }
 
     public static boolean addApplicant(Applicant applicant){
@@ -71,12 +91,29 @@ public class University extends Data {
             applicant = applicants.get(id);
         else if(shortlisted.containsKey(id))
             applicant = shortlisted.get(id);
+        else if(enrolledContainsKey(id))
+            applicant = enrolledGet(id);
         else
             return null;
 
         if(applicant.matchPassword(password))
             return applicant;
         else return null;
+    }
+
+    private static boolean enrolledContainsKey(String id){
+        for(Applicant applicant : enrolled)
+            if(applicant.getApplicationId().equals(id))
+                return true;
+
+        return false;
+    }
+    private static Applicant enrolledGet(String id){
+        for(Applicant applicant : enrolled)
+            if(applicant.getApplicationId().equals(id))
+                return applicant;
+
+        return null;
     }
 
     public static Admin accessAdmin(String username, String password){
@@ -203,11 +240,38 @@ public class University extends Data {
                 branchQueue.clear();
         }
 
+        public boolean enrollApplicant(String id){
+            Applicant applicant = shortlisted.get(id);
+            if(applicant == null)
+                return false;
+            if(applicant.getStatus() != Applicant.Status.UNDER_VERIFICATION)
+                return false;
+
+            ApplicationForm applicationForm = applicant.getApplicationForm();
+            String branchName = applicationForm.getBranchName();
+            Branch branch = getBranch(branchName);
+
+            String enrollmentID = generateEnrollmentId(branch);
+            applicant.setEnrollmentId(enrollmentID);
+
+            shortlisted.remove(id);
+            enrolled.add(applicant);
+            applicant.setStatus(Applicant.Status.ENROLLED);
+            applicant.setEnrollmentForm(null);
+            branch.allocateSeat();
+
+            storeShortlisted();
+            storeEnrolled();
+            return true;
+        }
+
         public Applicant.Status checkStatus(String id){
             if(applicants.containsKey(id))
                 return applicants.get(id).getStatus();
             else if(shortlisted.containsKey(id))
                 return shortlisted.get(id).getStatus();
+            else if(enrolledContainsKey(id))
+                return enrolledGet(id).getStatus();
             else
                 return Applicant.Status.NOT_FOUND;
         }
@@ -217,6 +281,24 @@ public class University extends Data {
         }
         public void listShortlisted(){
             Data.listShortlisted();
+        }
+
+        public void viewSeatStatus(){
+            for(Branch branch : branches){
+                System.out.print(branch.getName());
+                System.out.print("\tTotal: "+branch.seats);
+                System.out.print("\tLocked: "+branch.lockedSeats);
+                System.out.println("\tAllocated: "+branch.allocatedSeats);
+            }
+        }
+
+        public void viewEnrollmentForms(){
+            for(Applicant applicant : shortlisted.values()){
+                if(applicant.getStatus() == Applicant.Status.UNDER_VERIFICATION) {
+                    System.out.println(applicant.getApplicationId());
+                    System.out.println("\t" + applicant.getEnrollmentForm().getPlaceholder() + "\n");
+                }
+            }
         }
 
         public void registerNewAdmin(String username, String password){
@@ -243,5 +325,6 @@ public class University extends Data {
             return username;
         }
     }
+
 }
 
