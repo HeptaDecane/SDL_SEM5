@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class ApplicationForm implements Serializable {
+public class ApplicationForm extends Form implements Serializable {
     private Applicant.Name name;
     private Applicant.UniqueId id;
     private String uniqueIdNo;
