@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         StudentPortal studentPortal = new StudentPortal();
 
-//        System.out.println("Applicant ID: "+studentPortal.register());
+        System.out.println("Applicant ID: "+studentPortal.register());
 
 //        System.out.println(studentPortal.checkStatus("I2508202000001"));
 
