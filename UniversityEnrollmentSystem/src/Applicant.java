@@ -21,7 +21,6 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         enrollmentForm = null;
     }
 
-// GETTER
     public Status getStatus() {
         return status;
     }
@@ -39,11 +38,6 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         return enrollmentId;
     }
 
-    //    public String getPassword() {
-//        return password;
-//    }
-
-    // SETTER
     public void setStatus(Status status){
         this.status = status;
     }
@@ -56,7 +50,6 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         this.enrollmentId = enrollmentId;
     }
 
-    // APPLY INTERFACE
     public void setApplicationForm(ApplicationForm applicationForm) {
         this.applicationForm = applicationForm;
     }
@@ -102,7 +95,6 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         return this.password.equals(password);
     }
 
-// METHODS
     @Override
     public String toString() {
         if(applicationId==null)

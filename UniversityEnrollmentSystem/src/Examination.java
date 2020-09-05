@@ -12,7 +12,6 @@ public class Examination implements Serializable {
         this.maxMarks = maxMarks;
     }
 
-// GETTERS
     public String getTitle() {
         return title;
     }
@@ -29,7 +28,6 @@ public class Examination implements Serializable {
         return percentile;
     }
 
-// SETTERS
     public void setTitle(String title) {
         this.title = title;
     }
@@ -68,6 +66,5 @@ public class Examination implements Serializable {
         return false;
     }
 
-    //equals,hashcodes
 
 }

@@ -12,7 +12,6 @@ public class ApplicationForm extends Form implements Serializable {
 
 
 
-// SETTERS
     public void setName(Applicant.Name name){
         this.name = name;
     }
@@ -36,7 +35,7 @@ public class ApplicationForm extends Form implements Serializable {
         this.examination = examination;
     }
 
-    // GETTERS
+
     public Applicant.Name getName() {
         return name;
     }
