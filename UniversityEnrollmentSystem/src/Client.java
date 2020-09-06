@@ -52,13 +52,13 @@ public class Client {
                     if(validCredentials)
                         adminView();
                     else
-                        System.out.println("Incorrect ApplicantId, Password. Try Again");
+                        System.out.println(ANSI.CYAN+"Incorrect ApplicantId, Password. Try Again"+ANSI.RESET);
 
                     break;
 
                 default:
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
             }
             System.out.println("\nHOME PAGE");
             System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
@@ -91,7 +91,7 @@ public class Client {
                     if(validCredentials)
                         applicantView();
                     else
-                        System.out.println("Incorrect ApplicantId, Password. Try Again");
+                        System.out.println(ANSI.CYAN+"Incorrect ApplicantId, Password. Try Again"+ANSI.RESET);
 
                     break;
 
@@ -99,12 +99,12 @@ public class Client {
                     scanner.nextLine();
                     fillApplicationForm();
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
                     break;
 
                 default:
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
             }
             System.out.println("\nAPPLICANT PORTAL");
             System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
@@ -118,7 +118,7 @@ public class Client {
     public static void applicantView() throws Exception{
         System.out.println("APPLICANTS PAGE");
         response = inputStream.readUTF();
-        System.out.println(response);
+        System.out.println(ANSI.CYAN+response+ANSI.RESET);
 
         printApplicantOptions();
         System.out.print("\ninput> ");
@@ -133,15 +133,15 @@ public class Client {
                         scanner.nextLine();
                         fillEnrollmentForm();
                         response = inputStream.readUTF();
-                        System.out.println(response);
+                        System.out.println(ANSI.CYAN+response+ANSI.RESET);
                     }
                     else
-                        System.out.println("Enrollment Form Not Issued");
+                        System.out.println(ANSI.CYAN+"Enrollment Form Not Issued"+ANSI.RESET);
                 break ;
 
                 default:
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
             }
 
             printApplicantOptions();
@@ -155,7 +155,7 @@ public class Client {
     public static void adminView() throws Exception{
         System.out.println("ADMINS PAGE");
         response = inputStream.readUTF();
-        System.out.println(response);
+        System.out.println(ANSI.CYAN+response+ANSI.RESET);
 
         printAdminOptions();
         System.out.print("\ninput> ");
@@ -172,7 +172,7 @@ public class Client {
                     String id = scanner.nextLine();
                     outputStream.writeUTF(id);
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
                 break;
 
                 case 5:
@@ -186,12 +186,12 @@ public class Client {
                     outputStream.writeUTF(password);
 
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
                 break;
 
                 default:
                     response = inputStream.readUTF();
-                    System.out.println(response);
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
 
             }
             printAdminOptions();
@@ -222,11 +222,11 @@ public class Client {
             boolean validPassword = inputStream.readBoolean();
             if(validPassword)
                 break;
-            System.out.println("Password must be at least 8 characters long");
+            System.out.println(ANSI.CYAN+"Password must be at least 8 characters long"+ANSI.RESET);
         }
 
         response = inputStream.readUTF();
-        System.out.println(response);
+        System.out.println(ANSI.CYAN+response+ANSI.RESET);
         System.out.print("Reg No: ");
         outputStream.writeUTF(scanner.nextLine());
         System.out.print("Obtained Marks: ");
@@ -245,14 +245,14 @@ public class Client {
         scanner.nextLine();
         System.out.println("Branches Offered: ");
         response = inputStream.readUTF();
-        System.out.println(response);
+        System.out.println(ANSI.CYAN+response+ANSI.RESET);
         while (true){
             System.out.print("Select: ");
             outputStream.writeUTF(scanner.nextLine());
             boolean validBranch = inputStream.readBoolean();
             if(validBranch)
                 break;
-            System.out.println("Invalid Selection");
+            System.out.println(ANSI.CYAN+"Invalid Selection"+ANSI.RESET);
         }
     }
 

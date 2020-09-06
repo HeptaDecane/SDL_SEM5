@@ -202,7 +202,6 @@ public class Server extends StudentPortal {
     public static void adminView() throws Exception {
         System.out.println("\nadmins-page/");
         ack = "\nLogged in as: "+admin.getUsername();
-        System.out.println(ack);
         outputStream.writeUTF(ack);
 
         int choice = inputStream.readInt();
@@ -242,7 +241,7 @@ public class Server extends StudentPortal {
                     System.out.println("password: "+ new String("*").repeat(password.length()));
                     if(password.length()<8){
                         System.out.println(ANSI.RED+"400 bad request"+ANSI.RESET);
-                        outputStream.writeUTF("Invalid Password");
+                        outputStream.writeUTF("Password must be at least 8 characters long");
                     }
                     else {
                         admin.registerNewAdmin(username, password);
