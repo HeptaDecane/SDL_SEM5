@@ -1,6 +1,8 @@
 import java.io.Serializable;
 
 public class Applicant implements Comparable<Applicant>,Serializable {
+    private static final long serialVersionUID = 73L;
+
     private String applicationId;
     private String password;
     private ApplicationForm applicationForm;
@@ -150,6 +152,8 @@ public class Applicant implements Comparable<Applicant>,Serializable {
     }
 
     final static class Name implements Serializable{
+        private static final long serialVersionUID = 73L;
+
         private String first;
         private String middle;
         private String last;

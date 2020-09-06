@@ -1,6 +1,8 @@
 import java.io.Serializable;
 
-public class ApplicationForm extends Form implements Serializable {
+public class ApplicationForm implements Serializable {
+    private static final long serialVersionUID = 73L;
+
     private Applicant.Name name;
     private Applicant.UniqueId id;
     private String uniqueIdNo;
@@ -80,6 +82,8 @@ public class ApplicationForm extends Form implements Serializable {
     }
 
     public static class HSC extends Examination implements Serializable{
+        private static final long serialVersionUID = 73L;
+
         private String board;
         private double percentage;
 

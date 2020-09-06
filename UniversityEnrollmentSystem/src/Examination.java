@@ -1,6 +1,8 @@
 import java.io.Serializable;
 
 public class Examination implements Serializable {
+    private static final long serialVersionUID = 73L;
+
     private String title;
     private String regNo;
     private double maxMarks;

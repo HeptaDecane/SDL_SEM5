@@ -1,6 +1,8 @@
 import java.io.Serializable;
 
-public class EnrollmentForm extends Form implements Serializable {
+public class EnrollmentForm implements Serializable {
+    private static final long serialVersionUID = 73L;
+
     private String placeholder="";
 
     public String getPlaceholder() {

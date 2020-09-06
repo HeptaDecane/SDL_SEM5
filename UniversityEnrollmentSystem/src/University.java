@@ -129,6 +129,8 @@ public class University extends Data {
 
 
     public static class Branch implements Serializable {
+        private static final long serialVersionUID = 73L;
+
         String name;
         int seats;
         int lockedSeats;
@@ -276,29 +278,33 @@ public class University extends Data {
                 return Applicant.Status.NOT_FOUND;
         }
 
-        public void listApplicants(){
-            Data.listApplicants();
+        public String listApplicants(){
+            return Data.listApplicants();
         }
-        public void listShortlisted(){
-            Data.listShortlisted();
+        public String listShortlisted(){
+            return Data.listShortlisted();
         }
 
-        public void viewSeatStatus(){
+        public String viewSeatStatus(){
+            String result = "STATS:\n";
             for(Branch branch : branches){
-                System.out.print(branch.getName());
-                System.out.print("\tTotal: "+branch.seats);
-                System.out.print("\tLocked: "+branch.lockedSeats);
-                System.out.println("\tAllocated: "+branch.allocatedSeats);
+                result += branch.getName();
+                result += "\tTotal: "+branch.seats;
+                result += "\tLocked: "+branch.lockedSeats;
+                result += "\tAllocated: "+branch.allocatedSeats+"\n";
             }
+            return result;
         }
 
-        public void viewEnrollmentForms(){
+        public String viewEnrollmentForms(){
+            String result = "ENROLLMENT FORMS:\n";
             for(Applicant applicant : shortlisted.values()){
                 if(applicant.getStatus() == Applicant.Status.UNDER_VERIFICATION) {
-                    System.out.println(applicant.getApplicationId());
-                    System.out.println("\t" + applicant.getEnrollmentForm().getPlaceholder() + "\n");
+                    result += applicant.getApplicationId() + "\n";
+                    result += "\t" + applicant.getEnrollmentForm().getPlaceholder() + "\n";
                 }
             }
+            return result;
         }
 
         public void registerNewAdmin(String username, String password){

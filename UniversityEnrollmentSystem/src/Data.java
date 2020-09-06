@@ -133,29 +133,31 @@ public abstract class Data {
         return false;
     }
 
-    public static void listApplicants() {
-        System.out.println("\nAPPLICANTS:");
+    public static String listApplicants() {
+        String result = "\nAPPLICANTS:";
         for(Applicant applicant:applicants.values()){
-            System.out.println("Applicant ID: "+applicant.getApplicationId());
-            System.out.println("\tName: "+applicant.getApplicationForm().getName());
-            System.out.println("\tEmail: "+applicant.getApplicationForm().getEmail());
-            System.out.println("\tPhone: "+applicant.getApplicationForm().getPhNo());
-            System.out.println("\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo());
-            System.out.println("\tOpted for: "+applicant.getApplicationForm().getBranchName());
-            System.out.println();
+            result += "\nApplicant ID: "+applicant.getApplicationId();
+            result += "\n\tName: "+applicant.getApplicationForm().getName();
+            result += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
+            result += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
+            result += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
+            result += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
+            result += "\n";
         }
+        return result;
     }
-    public static void listShortlisted() {
-        System.out.println("\nSHORTLISTED:");
+    public static String listShortlisted() {
+        String result = "\nSHORTLISTED:";
         for(Applicant applicant:shortlisted.values()){
-            System.out.println("Applicant ID: "+applicant.getApplicationId());
-            System.out.println("\tName: "+applicant.getApplicationForm().getName());
-            System.out.println("\tEmail: "+applicant.getApplicationForm().getEmail());
-            System.out.println("\tPhone: "+applicant.getApplicationForm().getPhNo());
-            System.out.println("\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo());
-            System.out.println("\tOpted for: "+applicant.getApplicationForm().getBranchName());
-            System.out.println();
+            result += "\nApplicant ID: "+applicant.getApplicationId();
+            result += "\n\tName: "+applicant.getApplicationForm().getName();
+            result += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
+            result += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
+            result += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
+            result += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
+            result += "\n";
         }
+        return result;
     }
 
 
