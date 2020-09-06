@@ -332,5 +332,10 @@ public class University extends Data {
         }
     }
 
+    public static void main(String[] args) {
+        Admin admin = new Admin("admin");
+        admin.registerNewAdmin("superuser","testpass");
+    }
+
 }
 

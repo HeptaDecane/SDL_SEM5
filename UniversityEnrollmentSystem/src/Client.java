@@ -16,7 +16,7 @@ public class Client {
             System.out.println(ANSI.GREEN+"connected: "+socket.getInetAddress()+":"+socket.getPort()+ANSI.RESET);
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
-            homePage();
+            homeView();
         }catch (SocketException e){
             System.out.println(ANSI.RED+"500 internal server error"+ANSI.RESET);
         }catch (Exception e){
@@ -24,9 +24,9 @@ public class Client {
         }
     }
 
-    public static void homePage() throws Exception{
+    public static void homeView() throws Exception{
         System.out.println("\nHOME PAGE");
-        System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
+        System.out.println("1. Student Portal\n2. Admin Login\n3. Help Center\n0. Exit");
         System.out.print("\ninput> ");
         int choice = scanner.nextInt();
         outputStream.writeInt(choice);
@@ -52,16 +52,21 @@ public class Client {
                     if(validCredentials)
                         adminView();
                     else
-                        System.out.println(ANSI.CYAN+"Incorrect ApplicantId, Password. Try Again"+ANSI.RESET);
+                        System.out.println(ANSI.CYAN+"Incorrect Username, Password. Try Again"+ANSI.RESET);
 
                     break;
+
+                case 3:
+                    scanner.nextLine();
+                    helpCenter();
+                break;
 
                 default:
                     response = inputStream.readUTF();
                     System.out.println(ANSI.CYAN+response+ANSI.RESET);
             }
             System.out.println("\nHOME PAGE");
-            System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
+            System.out.println("1. Student Portal\n2. Admin Login\n3. Help Center\n0. Exit");
             System.out.print("\ninput> ");
             choice = scanner.nextInt();
             outputStream.writeInt(choice);
@@ -254,6 +259,44 @@ public class Client {
                 break;
             System.out.println(ANSI.CYAN+"Invalid Selection"+ANSI.RESET);
         }
+    }
+
+    public static void helpCenter() throws Exception{
+        System.out.println("HELP CENTER");
+        String name, isRegistered, applicationId, admin;
+        System.out.print("Name: ");
+        name = scanner.nextLine();
+        applicationId = "NULL";
+        System.out.print("Registered applicant (yes/no)? ");
+        isRegistered = scanner.nextLine();
+        if(isRegistered.equalsIgnoreCase("yes")){
+            System.out.print("Application ID: ");
+            applicationId = scanner.nextLine();
+        }
+
+        String message = "";
+        outputStream.writeUTF("Name: "+name+"\nApplication ID: "+applicationId);
+        outputStream.writeUTF(name);
+
+        System.out.println("Waiting for Admin to Connect...");
+        admin = inputStream.readUTF();
+        System.out.println(ANSI.GREEN+"\nConnected to Admin ("+admin+")"+ANSI.RESET);
+        System.out.println(ANSI.CYAN+"Type 'exit()' to leave"+ANSI.RESET);
+
+        System.out.println("\n"+ANSI.YELLOW+admin+": "+ANSI.CYAN+"hi! how can i help you?"+ANSI.RESET);
+        while (true){
+            System.out.print("You: ");
+            message = scanner.nextLine();
+            outputStream.writeUTF(message);
+            if(message.equals("exit()"))
+                break;
+            System.out.print(ANSI.YELLOW+admin+": ..."+ANSI.RESET);
+            response = inputStream.readUTF();
+            System.out.println("\b\b\b"+ANSI.CYAN+response+ANSI.RESET);
+            if(response.equals("exit()"))
+                break;
+        }
+
     }
 
     public static void fillEnrollmentForm() throws Exception{

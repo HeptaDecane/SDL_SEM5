@@ -1,10 +1,14 @@
+import java.io.Console;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Server extends StudentPortal {
+    public static Scanner scanner = new Scanner(System.in);
+
     private static DataOutputStream outputStream = null;
     private static DataInputStream inputStream = null;
     private static Socket clientSocket = null;
@@ -61,6 +65,10 @@ public class Server extends StudentPortal {
                         System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                         adminView();
                     }
+                break;
+
+                case 3:
+                    helpCenter();
                 break;
 
                 default:
@@ -291,6 +299,44 @@ public class Server extends StudentPortal {
         System.out.println("\nhome/");
     }
 
+    public static void helpCenter() throws Exception{
+        System.out.println("\nHELP CENTER");
+        String client;
+        System.out.println(ANSI.CYAN+"Client: ");
+        response = inputStream.readUTF();
+        System.out.println(response+ANSI.RESET);
+        client = inputStream.readUTF();
+
+        String username,password,message;
+        System.out.println("\nAdmin Credentials Required:");
+        while (true) {
+            System.out.print("username: ");
+            username = scanner.nextLine();
+            System.out.print("password: ");
+            password = readPassword();
+            admin = University.accessAdmin(username,password);
+            if(admin == null)
+                System.out.println(ANSI.CYAN+"Incorrect Username, Password. Try Again"+ANSI.RESET);
+            else
+                break;
+        }
+        outputStream.writeUTF(admin.getUsername());
+        System.out.println(ANSI.GREEN+"\nConnected to Client ("+client+")\n"+ANSI.RESET);
+        while (true){
+            System.out.print(ANSI.YELLOW+client+": ..."+ANSI.RESET);
+            response = inputStream.readUTF();
+            System.out.println("\b\b\b"+ANSI.CYAN+response+ANSI.RESET);
+            if(response.equals("exit()"))
+                break;
+            System.out.print("You: ");
+            message = scanner.nextLine();
+            outputStream.writeUTF(message);
+            if(message.equals("exit()"))
+                break;
+        }
+        System.out.println("home/");
+    }
+
     public static void applicantRegistration() throws Exception{
         firstName = inputStream.readUTF();
         lastName = inputStream.readUTF();
@@ -328,5 +374,16 @@ public class Server extends StudentPortal {
         placeholder = inputStream.readUTF();
     }
 
+    public static String readPassword() {
+        Console console = System.console();
 
+        String password = null;
+        try{
+            char[] ch = console.readPassword();
+            password = new String(ch);
+        }catch(Exception e){
+            password = scanner.nextLine();
+        }
+        return password;
+    }
 }
