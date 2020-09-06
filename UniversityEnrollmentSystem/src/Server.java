@@ -28,7 +28,7 @@ public class Server extends StudentPortal {
                 outputStream = new DataOutputStream(clientSocket.getOutputStream());
                 homePage();
             }catch (EOFException e){
-                System.out.println(ANSI.RED+"connection interrupted."+ANSI.RESET);
+                System.out.println(ANSI.RED+"499 client closed request"+ANSI.RESET);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -54,17 +54,17 @@ public class Server extends StudentPortal {
                     admin = University.accessAdmin(username,password);
                     if(admin == null) {
                         outputStream.writeBoolean(false);
-                        System.out.println("401 unauthorized");
+                        System.out.println(ANSI.RED+"401 unauthorized"+ANSI.RESET);
                     }
                     else {
                         outputStream.writeBoolean(true);
-                        System.out.println("200 ok");
+                        System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                         adminView();
                     }
                 break;
 
                 default:
-                    System.out.println("404 not found");
+                    System.out.println(ANSI.RED+"404 not found"+ANSI.RESET);
                     outputStream.writeUTF("Invalid Selection");
             }
             choice = inputStream.readInt();
@@ -85,10 +85,10 @@ public class Server extends StudentPortal {
                     applicant = studentPortal.fetchApplicant(id,password);
                     if(applicant == null) {
                         outputStream.writeBoolean(false);
-                        System.out.println("401 unauthorized");
+                        System.out.println(ANSI.RED+"401 unauthorized"+ANSI.RESET);
                     }
                     else {
-                        System.out.println("200 ok");
+                        System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                         outputStream.writeBoolean(true);
                         applicantView();
                     }
@@ -99,17 +99,17 @@ public class Server extends StudentPortal {
                     applicantRegistration();
                     String applicantId = studentPortal.register();
                     if(applicantId == null) {
-                        System.out.println("400 bad request");
-                        outputStream.writeUTF("Registration Failed\nInvalid/Duplicate Credentials");
+                        System.out.println(ANSI.RED+"400 bad request"+ANSI.RESET);
+                        outputStream.writeUTF("\nRegistration Failed\nInvalid/Duplicate Credentials");
                     }
                     else {
-                        System.out.println("201 created");
-                        outputStream.writeUTF("Registration Successful\nApplicantID: " + applicantId);
+                        System.out.println(ANSI.GREEN+"201 created"+ANSI.RESET);
+                        outputStream.writeUTF("\nRegistration Successful\nApplicantID: " + applicantId);
                     }
                     break;
 
                 default:
-                    System.out.println("404 not found");
+                    System.out.println(ANSI.RED+"404 not found"+ANSI.RESET);
                     outputStream.writeUTF("Invalid Selection");
             }
             choice = inputStream.readInt();
@@ -135,18 +135,18 @@ public class Server extends StudentPortal {
                 case 1:
                     System.out.println("/check-status");
                     outputStream.writeUTF("Status: "+applicant.getStatus());
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                     break;
 
                 case 2:
                     System.out.println("/float-seat");
                     status = applicant.hover();
                     if(status != Applicant.Status.FLOATED) {
-                        System.out.println("403 forbidden");
+                        System.out.println(ANSI.RED+"403 forbidden"+ANSI.RESET);
                         outputStream.writeUTF("Status SHORTLISTED Required");
                     }
                     else {
-                        System.out.println("200 ok");
+                        System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                         outputStream.writeUTF("Success\nStatus: " + status);
                     }
                     break;
@@ -155,11 +155,11 @@ public class Server extends StudentPortal {
                     System.out.println("/lock-seat");
                     status = applicant.lock();
                     if(status != Applicant.Status.LOCKED) {
-                        System.out.println("403 forbidden");
+                        System.out.println(ANSI.RED+"403 forbidden"+ANSI.RESET);
                         outputStream.writeUTF("Status SHORTLISTED/FLOATED Required");
                     }
                     else {
-                        System.out.println("200 ok");
+                        System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                         outputStream.writeUTF("Success\nStatus: " + status);
                     }
                     break;
@@ -167,18 +167,18 @@ public class Server extends StudentPortal {
                 case 4:
                     System.out.println("/fill-enrollment-details");
                     if(applicant.getEnrollmentForm() == null) {
-                        System.out.println("403 forbidden");
+                        System.out.println(ANSI.RED+"403 forbidden"+ANSI.RESET);
                         outputStream.writeBoolean(false);
                     }
                     else {
                         outputStream.writeBoolean(true);
                         fillEnrollmentForm();
                         if(studentPortal.submitEnrollmentForm(applicant)) {
-                            System.out.println("202 accepted");
+                            System.out.println(ANSI.GREEN+"202 accepted"+ANSI.RESET);
                             outputStream.writeUTF("Submitted Enrollment Form");
                         }
                         else {
-                            System.out.println("400 bad request");
+                            System.out.println(ANSI.RED+"400 bad request"+ANSI.RESET);
                             outputStream.writeUTF("Invalid Enrollment Details");
                         }
                     }
@@ -187,11 +187,11 @@ public class Server extends StudentPortal {
                 case 5:
                     System.out.println("/enrollment-details");
                     outputStream.writeUTF("Enrollment ID: "+applicant.getEnrollmentId());
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                     break;
 
                 default:
-                    System.out.println("404 not found");
+                    System.out.println(ANSI.RED+"404 not found"+ANSI.RESET);
                     outputStream.writeUTF("Invalid Selection");
             }
             choice = inputStream.readInt();
@@ -211,27 +211,27 @@ public class Server extends StudentPortal {
                 case 1:
                     System.out.println("/list-applicants");
                     outputStream.writeUTF(admin.listApplicants());
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 2:
                     System.out.println("/list-shortlisted");
                     outputStream.writeUTF(admin.listShortlisted());
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 3:
                     System.out.println("/shortlist");
                     admin.shortlistApplicants();
                     outputStream.writeUTF("Applicants Shortlisted");
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 4:
                     System.out.println("/check-status");
                     String id = inputStream.readUTF();
                     outputStream.writeUTF("Status: "+admin.checkStatus(id));
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 5:
@@ -241,12 +241,12 @@ public class Server extends StudentPortal {
                     String password = inputStream.readUTF();
                     System.out.println("password: "+ new String("*").repeat(password.length()));
                     if(password.length()<8){
-                        System.out.println("400 bad request");
+                        System.out.println(ANSI.RED+"400 bad request"+ANSI.RESET);
                         outputStream.writeUTF("Invalid Password");
                     }
                     else {
                         admin.registerNewAdmin(username, password);
-                        System.out.println("201 created");
+                        System.out.println(ANSI.GREEN+"201 created"+ANSI.RESET);
                         outputStream.writeUTF("Success\nNew Admin " + username + " Registered");
                     }
                 break;
@@ -255,36 +255,36 @@ public class Server extends StudentPortal {
                     System.out.println("/issue-enrollment-forms");
                     admin.issueEnrollmentForms();
                     outputStream.writeUTF("Success\nIssued Enrollment-Forms to LOCKED Applicants");
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 7:
                     System.out.println("/view-stats");
                     outputStream.writeUTF(admin.viewSeatStatus());
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 8:
                     System.out.println("/list-enrollment-forms");
                     outputStream.writeUTF(admin.viewEnrollmentForms());
-                    System.out.println("200 ok");
+                    System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                 break;
 
                 case 9:
                     System.out.println("/enroll");
                     String applicantId = inputStream.readUTF();
                     if(admin.enrollApplicant(applicantId)) {
-                        System.out.println("200 ok");
+                        System.out.println(ANSI.GREEN+"200 ok"+ANSI.RESET);
                         outputStream.writeUTF("Success\nEnrolled: " + applicantId);
                     }
                     else {
-                        System.out.println("403 forbidden");
+                        System.out.println(ANSI.RED+"403 forbidden"+ANSI.RESET);
                         outputStream.writeUTF("Invalid Status for " + applicantId);
                     }
                 break;
 
                 default:
-                    System.out.println("404 not found");
+                    System.out.println(ANSI.RED+"404 not found"+ANSI.RESET);
                     outputStream.writeUTF("Invalid Selection");
             }
             choice = inputStream.readInt();

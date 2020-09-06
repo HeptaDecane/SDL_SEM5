@@ -18,14 +18,14 @@ public class Client {
             inputStream = new DataInputStream(socket.getInputStream());
             homePage();
         }catch (SocketException e){
-            System.out.println(ANSI.RED+"server error: 500"+ANSI.RESET);
+            System.out.println(ANSI.RED+"500 internal server error"+ANSI.RESET);
         }catch (Exception e){
             System.out.println(e);
         }
     }
 
     public static void homePage() throws Exception{
-        System.out.println("\nHOME");
+        System.out.println("\nHOME PAGE");
         System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
         System.out.print("\ninput> ");
         int choice = scanner.nextInt();
@@ -60,7 +60,7 @@ public class Client {
                     response = inputStream.readUTF();
                     System.out.println(response);
             }
-            System.out.println("\nMAIN PAGE");
+            System.out.println("\nHOME PAGE");
             System.out.println("1. Student Portal\n2. Admin Login\n0. Exit");
             System.out.print("\ninput> ");
             choice = scanner.nextInt();
@@ -106,7 +106,7 @@ public class Client {
                     response = inputStream.readUTF();
                     System.out.println(response);
             }
-            System.out.println("\nSTUDENT PORTAL");
+            System.out.println("\nAPPLICANT PORTAL");
             System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
             System.out.print("\ninput> ");
             choice = scanner.nextInt();
@@ -116,6 +116,7 @@ public class Client {
     }
 
     public static void applicantView() throws Exception{
+        System.out.println("APPLICANTS PAGE");
         response = inputStream.readUTF();
         System.out.println(response);
 
@@ -152,6 +153,7 @@ public class Client {
     }
 
     public static void adminView() throws Exception{
+        System.out.println("ADMINS PAGE");
         response = inputStream.readUTF();
         System.out.println(response);
 
