@@ -4,7 +4,8 @@ public class Main {
     public static final Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        System.out.println("Hi!");
+        System.out.println("1. run Server.main()");
+        System.out.println("2. run Client.main()");
 //        StudentPortal studentPortal = new StudentPortal();
 //
 //        System.out.println("Applicant ID: "+studentPortal.register());

@@ -64,7 +64,7 @@ public class University extends Data {
     public static String generateApplicationId(){
         Date date = Calendar.getInstance().getTime();
         String prefix = new SimpleDateFormat("ddMMyyyy").format(date);
-        String suffix = String.format("%05d",applicants.size()+shortlisted.size()+1);
+        String suffix = String.format("%05d",applicants.size()+shortlisted.size()+enrolled.size()+1);
         return "I"+prefix+suffix;
     }
 
@@ -285,7 +285,7 @@ public class University extends Data {
             return Data.listShortlisted();
         }
 
-        public String viewSeatStatus(){
+        public String viewStats(){
             String result = "STATS:\n";
             for(Branch branch : branches){
                 result += branch.getName();
