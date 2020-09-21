@@ -6,9 +6,9 @@ public class StudentPortal {
 
     private ApplicationForm applicationForm;
     private Applicant applicant;
-    protected static String firstName,password,lastName,uniqueId,email,phNo,regNo,branchName,hscBoard,hscReg;
-    protected static Double percentile,obtainedMarks,hscPercentage;
-    protected static String placeholder;
+    protected String firstName,password,lastName,uniqueId,email,phNo,regNo,branchName,hscBoard,hscReg;
+    protected Double percentile,obtainedMarks,hscPercentage;
+    protected String placeholder;
     private Examination examination;
     protected static Set<University.Branch> branches;
 
