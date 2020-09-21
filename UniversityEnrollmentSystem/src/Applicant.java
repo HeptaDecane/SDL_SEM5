@@ -35,6 +35,9 @@ public class Applicant implements Comparable<Applicant>,Serializable {
     public String getApplicationId(){
         return applicationId;
     }
+    protected String getPassword(){
+        return password;
+    }
 
     public String getEnrollmentId() {
         return enrollmentId;
@@ -155,7 +158,7 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         private static final long serialVersionUID = 73L;
 
         private String first;
-        private String middle;
+        private String middle = "";
         private String last;
 
         public Name(String first,String last){
@@ -179,10 +182,7 @@ public class Applicant implements Comparable<Applicant>,Serializable {
 
         @Override
         public String toString() {
-            if (middle == null)
-                return first + " " + last;
-            else
-                return first + " " + middle + " " + last;
+            return first + " " + middle + " " + last;
         }
     }
 }

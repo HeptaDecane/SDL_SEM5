@@ -80,8 +80,9 @@ public class University extends Data {
             return false;
         String key = applicant.getApplicationId();
         applicant.setStatus(Applicant.Status.APPLIED);
-        applicants.put(key,applicant);
-        storeApplicants();
+//        applicants.put(key,applicant);
+        Database.addApplicant(applicant);
+//        storeApplicants();
         return false;
     }
 

@@ -97,6 +97,9 @@ public class ApplicationForm implements Serializable {
         public double getPercentage() {
             return percentage;
         }
+        public String getBoard() {
+            return board;
+        }
     }
 
 }

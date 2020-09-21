@@ -62,7 +62,7 @@ public class ServerThread extends Thread{
                     String username = dataInputStream.readUTF();
                     System.out.println("["+port+"] username: "+username);
                     String password = dataInputStream.readUTF();
-                    System.out.println("["+port+"] password: "+ new String("*").repeat(password.length()));
+                    System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
                     admin = University.accessAdmin(username,password);
                     if(admin == null) {
                         dataOutputStream.writeBoolean(false);
@@ -97,7 +97,7 @@ public class ServerThread extends Thread{
                     String id = dataInputStream.readUTF();
                     System.out.println("["+port+"] id: "+id);
                     String password = dataInputStream.readUTF();
-                    System.out.println("["+port+"] password: "+ new String("*").repeat(password.length()));
+                    System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
                     applicant = studentPortal.fetchApplicant(id,password);
                     if(applicant == null) {
                         dataOutputStream.writeBoolean(false);
@@ -254,7 +254,7 @@ public class ServerThread extends Thread{
                     String username = dataInputStream.readUTF();
                     System.out.println("["+port+"] username: "+username);
                     String password = dataInputStream.readUTF();
-                    System.out.println("["+port+"] password: "+ new String("*").repeat(password.length()));
+                    System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
                     if(password.length()<8){
                         System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
                         dataOutputStream.writeUTF("Password must be at least 8 characters long");
