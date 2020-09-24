@@ -2,8 +2,6 @@ import java.sql.*;
 
 public abstract class Database {
     static Connection connection = null;
-    static Statement statement = null;
-    static ResultSet resultSet = null;
 
     static final String username = "31165";
     static final String password = "31165@mysql";
@@ -12,7 +10,6 @@ public abstract class Database {
     static {
         try {
             connection = DriverManager.getConnection(url,username,password);
-            statement = connection.createStatement();
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -24,6 +21,7 @@ public abstract class Database {
 
     public static ResultSet executeQuery(String sql){
         try {
+            Statement statement = connection.createStatement();
             return statement.executeQuery(sql);
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -33,6 +31,7 @@ public abstract class Database {
 
     public static int executeUpdate(String sql){
         try{
+            Statement statement = connection.createStatement();
             return statement.executeUpdate(sql);
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -42,6 +41,7 @@ public abstract class Database {
 
     public static boolean execute(String sql){
         try {
+            Statement statement = connection.createStatement();
             return statement.execute(sql);
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -85,9 +85,10 @@ public abstract class Database {
 
         String applicant_id = applicant.getApplicationId();
         String password = applicant.getPassword();
+        Applicant.Status status = applicant.getStatus();
         sql = String.format(
-            "insert into applicant (applicant_id, password, unique_id) " +
-            "values ('%s','%s','%s')",applicant_id,password,unique_id
+            "insert into applicant (applicant_id, password, unique_id, status) " +
+            "values ('%s','%s','%s','%s')",applicant_id,password,unique_id,status
         );
         executeUpdate(sql);
 
@@ -95,7 +96,8 @@ public abstract class Database {
 
     public static void main(String[] args) {
         try {
-            resultSet = statement.executeQuery("select version()");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select version()");
             System.out.println("Database connected");
             while(resultSet.next())
                 System.out.println("MySQL: "+resultSet.getString(1));
