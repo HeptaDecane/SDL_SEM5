@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 public class ServerThread extends Thread{
     public Scanner scanner = new Scanner(System.in);
@@ -71,7 +73,7 @@ public class ServerThread extends Thread{
                     else {
                         dataOutputStream.writeBoolean(true);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        adminView();
+                        adminView(SessionHandler.getOrCreateAdminSession(admin.getUsername()));
                     }
                 break;
 
@@ -106,7 +108,7 @@ public class ServerThread extends Thread{
                     else {
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         dataOutputStream.writeBoolean(true);
-                        applicantView();
+                        applicantView(SessionHandler.getOrCreateApplicantSession(applicant.getApplicationId()));
                     }
                 break;
 
@@ -133,178 +135,199 @@ public class ServerThread extends Thread{
         System.out.println("\n"+"["+port+"] home/");
     }
 
-    public void applicantView() throws Exception{
-        System.out.println("\n"+"["+port+"] applicants-page/");
-        ack="";
-        ack += "\nLogged in as:";
-        ack += "\nApplicant ID: "+applicant.getApplicationId();
-        ack += "\n\tName: "+applicant.getApplicationForm().getName();
-        ack += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
-        ack += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
-        ack += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
-        ack += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
-        dataOutputStream.writeUTF(ack);
+    public void applicantView(Session session) throws Exception{
+        Lock lock = session.getLock();
+        if(lock.tryLock(5000L, TimeUnit.MILLISECONDS)){
+            System.out.println("\n"+"["+port+"] applicants-page/");
+            ack="";
+            ack += "\nLogged in as:";
+            ack += "\nApplicant ID: "+applicant.getApplicationId();
+            ack += "\n\tName: "+applicant.getApplicationForm().getName();
+            ack += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
+            ack += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
+            ack += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
+            ack += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
+            dataOutputStream.writeUTF(ack);
 
-        int choice = dataInputStream.readInt();
-        while (choice!=0){
-            switch (choice){
-                case 1:
-                    System.out.println("["+port+"] /check-status");
-                    dataOutputStream.writeUTF("Status: "+applicant.getStatus());
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                    break;
-
-                case 2:
-                    System.out.println("["+port+"] /float-seat");
-                    status = applicant.hover();
-                    if(status != Applicant.Status.FLOATED) {
-                        System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Status SHORTLISTED Required");
-                    }
-                    else {
+            int choice = dataInputStream.readInt();
+            while (choice!=0){
+                switch (choice){
+                    case 1:
+                        System.out.println("["+port+"] /check-status");
+                        dataOutputStream.writeUTF("Status: "+applicant.getStatus());
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Success\nStatus: " + status);
-                    }
-                    break;
+                        break;
 
-                case 3:
-                    System.out.println("["+port+"] /lock-seat");
-                    status = applicant.lock();
-                    if(status != Applicant.Status.LOCKED) {
-                        System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Status SHORTLISTED/FLOATED Required");
-                    }
-                    else {
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Success\nStatus: " + status);
-                    }
-                    break;
-
-                case 4:
-                    System.out.println("["+port+"] /fill-enrollment-details");
-                    if(applicant.getEnrollmentForm() == null) {
-                        System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                        dataOutputStream.writeBoolean(false);
-                    }
-                    else {
-                        dataOutputStream.writeBoolean(true);
-                        fillEnrollmentForm();
-                        if(studentPortal.submitEnrollmentForm(applicant)) {
-                            System.out.println(ANSI.GREEN+"["+port+"] 202 accepted"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Submitted Enrollment Form");
+                    case 2:
+                        System.out.println("["+port+"] /float-seat");
+                        status = applicant.hover();
+                        if(status != Applicant.Status.FLOATED) {
+                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Status SHORTLISTED Required");
                         }
                         else {
-                            System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Invalid Enrollment Details");
+                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Success\nStatus: " + status);
                         }
-                    }
-                    break;
+                        break;
 
-                case 5:
-                    System.out.println("["+port+"] /enrollment-details");
-                    dataOutputStream.writeUTF("Enrollment ID: "+applicant.getEnrollmentId());
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                    break;
+                    case 3:
+                        System.out.println("["+port+"] /lock-seat");
+                        status = applicant.lock();
+                        if(status != Applicant.Status.LOCKED) {
+                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Status SHORTLISTED/FLOATED Required");
+                        }
+                        else {
+                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Success\nStatus: " + status);
+                        }
+                        break;
 
-                default:
-                    System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
-                    dataOutputStream.writeUTF("Invalid Selection");
+                    case 4:
+                        System.out.println("["+port+"] /fill-enrollment-details");
+                        if(applicant.getEnrollmentForm() == null) {
+                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
+                            dataOutputStream.writeBoolean(false);
+                        }
+                        else {
+                            dataOutputStream.writeBoolean(true);
+                            fillEnrollmentForm();
+                            if(studentPortal.submitEnrollmentForm(applicant)) {
+                                System.out.println(ANSI.GREEN+"["+port+"] 202 accepted"+ANSI.RESET);
+                                dataOutputStream.writeUTF("Submitted Enrollment Form");
+                            }
+                            else {
+                                System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
+                                dataOutputStream.writeUTF("Invalid Enrollment Details");
+                            }
+                        }
+                        break;
+
+                    case 5:
+                        System.out.println("["+port+"] /enrollment-details");
+                        dataOutputStream.writeUTF("Enrollment ID: "+applicant.getEnrollmentId());
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    default:
+                        System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                        dataOutputStream.writeUTF("Invalid Selection");
+                }
+                choice = dataInputStream.readInt();
             }
-            choice = dataInputStream.readInt();
+            System.out.println("\n"+"["+port+"] applicants-portal/");
+            lock.unlock();
+            SessionHandler.deleteApplicantSession(applicant.getApplicationId());
+        }else {
+            ack="409 conflict";
+            System.out.println(ANSI.RED+"["+port+"] "+ack+ANSI.RESET);
+            dataOutputStream.writeUTF(ack);
         }
-        System.out.println("\n"+"["+port+"] applicants-portal/");
     }
 
-    public void adminView() throws Exception {
-        System.out.println("\n"+"["+port+"] admins-page/");
-        ack = "\nLogged in as: "+admin.getUsername();
-        dataOutputStream.writeUTF(ack);
+    public void adminView(Session session) throws Exception {
+        Lock lock = session.getLock();
+        if(lock.tryLock(5000L,TimeUnit.MILLISECONDS)){
+            System.out.println("\n"+"["+port+"] admins-page/");
+            ack = "\nLogged in as: "+admin.getUsername();
+            dataOutputStream.writeUTF(ack);
 
-        int choice = dataInputStream.readInt();
-        while (choice != 0){
-            switch (choice){
-                case 1:
-                    System.out.println("["+port+"] /list-applicants");
-                    dataOutputStream.writeUTF(admin.listApplicants());
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 2:
-                    System.out.println("["+port+"] /list-shortlisted");
-                    dataOutputStream.writeUTF(admin.listShortlisted());
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 3:
-                    System.out.println("["+port+"] /shortlist");
-                    admin.shortlistApplicants();
-                    dataOutputStream.writeUTF("Applicants Shortlisted");
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 4:
-                    System.out.println("["+port+"] /check-status");
-                    String id = dataInputStream.readUTF();
-                    dataOutputStream.writeUTF("Status: "+admin.checkStatus(id));
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 5:
-                    System.out.println("["+port+"] /register-admin");
-                    String username = dataInputStream.readUTF();
-                    System.out.println("["+port+"] username: "+username);
-                    String password = dataInputStream.readUTF();
-                    System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
-                    if(password.length()<8){
-                        System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Password must be at least 8 characters long");
-                    }
-                    else {
-                        admin.registerNewAdmin(username, password);
-                        System.out.println(ANSI.GREEN+"["+port+"] 201 created"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Success\nNew Admin " + username + " Registered");
-                    }
-                break;
-
-                case 6:
-                    System.out.println("["+port+"] /issue-enrollment-forms");
-                    admin.issueEnrollmentForms();
-                    dataOutputStream.writeUTF("Success\nIssued Enrollment-Forms to LOCKED Applicants");
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 7:
-                    System.out.println("["+port+"] /view-stats");
-                    dataOutputStream.writeUTF(admin.viewStats());
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 8:
-                    System.out.println("["+port+"] /list-enrollment-forms");
-                    dataOutputStream.writeUTF(admin.viewEnrollmentForms());
-                    System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                break;
-
-                case 9:
-                    System.out.println("["+port+"] /enroll");
-                    String applicantId = dataInputStream.readUTF();
-                    if(admin.enrollApplicant(applicantId)) {
+            int choice = dataInputStream.readInt();
+            while (choice != 0){
+                switch (choice){
+                    case 1:
+                        System.out.println("["+port+"] /list-applicants");
+                        dataOutputStream.writeUTF(admin.listApplicants());
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Success\nEnrolled: " + applicantId);
-                    }
-                    else {
-                        System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                        dataOutputStream.writeUTF("Invalid Status for " + applicantId);
-                    }
-                break;
+                        break;
 
-                default:
-                    System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
-                    dataOutputStream.writeUTF("Invalid Selection");
+                    case 2:
+                        System.out.println("["+port+"] /list-shortlisted");
+                        dataOutputStream.writeUTF(admin.listShortlisted());
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    case 3:
+                        System.out.println("["+port+"] /shortlist");
+                        admin.shortlistApplicants();
+                        dataOutputStream.writeUTF("Applicants Shortlisted");
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    case 4:
+                        System.out.println("["+port+"] /check-status");
+                        String id = dataInputStream.readUTF();
+                        dataOutputStream.writeUTF("Status: "+admin.checkStatus(id));
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    case 5:
+                        System.out.println("["+port+"] /register-admin");
+                        String username = dataInputStream.readUTF();
+                        System.out.println("["+port+"] username: "+username);
+                        String name = dataInputStream.readUTF();
+                        System.out.println("["+port+"] name: "+name);
+                        String password = dataInputStream.readUTF();
+                        System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
+                        if(password.length()<8){
+                            System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Password must be at least 8 characters long");
+                        }
+                        else {
+                            admin.registerNewAdmin(username,name,password);
+                            System.out.println(ANSI.GREEN+"["+port+"] 201 created"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Success\nNew Admin " + username + " Registered");
+                        }
+                        break;
+
+                    case 6:
+                        System.out.println("["+port+"] /issue-enrollment-forms");
+                        admin.issueEnrollmentForms();
+                        dataOutputStream.writeUTF("Success\nIssued Enrollment-Forms to LOCKED Applicants");
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    case 7:
+                        System.out.println("["+port+"] /view-stats");
+                        dataOutputStream.writeUTF(admin.viewStats());
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    case 8:
+                        System.out.println("["+port+"] /list-enrollment-forms");
+                        dataOutputStream.writeUTF(admin.viewEnrollmentForms());
+                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        break;
+
+                    case 9:
+                        System.out.println("["+port+"] /enroll");
+                        String applicantId = dataInputStream.readUTF();
+                        if(admin.enrollApplicant(applicantId)) {
+                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Success\nEnrolled: " + applicantId);
+                        }
+                        else {
+                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
+                            dataOutputStream.writeUTF("Invalid Status for " + applicantId);
+                        }
+                        break;
+
+                    default:
+                        System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                        dataOutputStream.writeUTF("Invalid Selection");
+                }
+                choice = dataInputStream.readInt();
             }
-            choice = dataInputStream.readInt();
+            System.out.println("\n"+"["+port+"] home/");
+            lock.unlock();
+            SessionHandler.deleteAdminSession(admin.getUsername());
         }
-        System.out.println("\n"+"["+port+"] home/");
+        else{
+            ack="409 conflict";
+            System.out.println(ANSI.RED+"["+port+"] "+ack+ANSI.RESET);
+            dataOutputStream.writeUTF(ack);
+        }
     }
 
     public void helpCenter() throws Exception{

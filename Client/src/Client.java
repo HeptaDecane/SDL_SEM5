@@ -123,14 +123,21 @@ public class Client {
     }
 
     public static void applicantView() throws Exception{
-        System.out.println("APPLICANTS PAGE");
         response = dataInputStream.readUTF();
-        System.out.println(ANSI.CYAN+response+ANSI.RESET);
-
-        printApplicantOptions();
-        System.out.print("\ninput> ");
-        int choice = scanner.nextInt();
-        dataOutputStream.writeInt(choice);
+        int choice;
+        if(response.equals("409 conflict")) {
+            System.out.println(ANSI.RED+"Multiple sessions detected"+ANSI.RESET);
+            System.out.println(ANSI.CYAN+"Try logout from active session"+ANSI.RESET);
+            choice = 0;
+        }
+        else {
+            System.out.println("APPLICANTS PAGE");
+            System.out.println(ANSI.CYAN+response+ANSI.RESET);
+            printApplicantOptions();
+            System.out.print("\ninput> ");
+            choice = scanner.nextInt();
+            dataOutputStream.writeInt(choice);
+        }
 
         while (choice != 0){
             switch (choice){
@@ -160,14 +167,21 @@ public class Client {
     }
 
     public static void adminView() throws Exception{
-        System.out.println("ADMINS PAGE");
         response = dataInputStream.readUTF();
-        System.out.println(ANSI.CYAN+response+ANSI.RESET);
-
-        printAdminOptions();
-        System.out.print("\ninput> ");
-        int choice = scanner.nextInt();
-        dataOutputStream.writeInt(choice);
+        int choice;
+        if(response.equals("409 conflict")) {
+            System.out.println(ANSI.RED+"Multiple sessions detected"+ANSI.RESET);
+            System.out.println(ANSI.CYAN+"Try logout from active session"+ANSI.RESET);
+            choice = 0;
+        }
+        else {
+            System.out.println("ADMINS PAGE");
+            System.out.println(ANSI.CYAN+response+ANSI.RESET);
+            printAdminOptions();
+            System.out.print("\ninput> ");
+            choice = scanner.nextInt();
+            dataOutputStream.writeInt(choice);
+        }
 
         while (choice != 0){
             switch (choice){
@@ -187,6 +201,10 @@ public class Client {
                     System.out.print("Username: ");
                     String username = scanner.nextLine();
                     dataOutputStream.writeUTF(username);
+
+                    System.out.print("Name: ");
+                    String name = scanner.nextLine();
+                    dataOutputStream.writeUTF(name);
 
                     System.out.print("Password: ");
                     String password = readPassword();

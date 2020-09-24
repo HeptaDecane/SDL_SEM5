@@ -1,5 +1,3 @@
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -120,16 +118,9 @@ public class University extends Data {
     }
 
     public static Applicant fetchApplicant(String id,String password){
-        Applicant applicant;
-        if(applicants.containsKey(id))
-            applicant = applicants.get(id);
-        else if(shortlisted.containsKey(id))
-            applicant = shortlisted.get(id);
-        else if(enrolledContainsKey(id))
-            applicant = enrolledGet(id);
-        else
+        Applicant applicant = Database.getApplicantObject(id);
+        if(applicant==null)
             return null;
-
         if(applicant.matchPassword(password))
             return applicant;
         else return null;
@@ -151,10 +142,19 @@ public class University extends Data {
     }
 
     public static Admin accessAdmin(String username, String password){
-        if(authenticateAdmin(username,password))
-            return new Admin(username);
-        else
+        try{
+            sql = String.format("select * from admin where username='%s' and password='%s'",username,password);
+            ResultSet resultSet = Database.executeQuery(sql);
+            if(resultSet.next()){
+                String name = resultSet.getString("name");
+                Admin admin = new Admin(username,name,password);
+                return admin;
+            }
             return null;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -225,13 +225,27 @@ public class University extends Data {
 
     public static class Admin{
         private final String username;
+        private final String name;
+        private final String password;
 
-        private Admin(String username){
+        private Admin(){
+            this.username = null;
+            this.name = null;
+            this.password = null;
+        }
+
+        private Admin(String username,String name, String password){
             this.username = username;
+            this.name = name;
+            this.password = password;
         }
 
         public String getUsername() {
             return username;
+        }
+
+        public String getName() {
+            return name;
         }
 
         public void shortlistApplicants(){
@@ -344,16 +358,12 @@ public class University extends Data {
             return result;
         }
 
-        public void registerNewAdmin(String username, String password){
-            try(
-                FileOutputStream file = new FileOutputStream("admin.dat",true);
-                DataOutputStream oStream = new DataOutputStream(file)
-            ){
-                oStream.writeUTF(username);
-                oStream.writeUTF(password);
-            }catch (Exception e){
-                System.out.println(e);
-            }
+        public void registerNewAdmin(String username,String name,String password){
+            sql = String.format(
+                "insert into admin (username, name, password) " +
+                "values ('%s','%s','%s')",username,name,password
+            );
+            Database.executeUpdate(sql);
         }
 
         public void issueEnrollmentForms(){
@@ -367,23 +377,8 @@ public class University extends Data {
     }
 
     public static void main(String[] args) {
-        Admin admin = new Admin("admin");
-//        admin.registerNewAdmin("superuser","testpass");
-//        admin.shortlistApplicants();
-//        System.out.println(admin.enrollApplicant("I2409202000012"));
-//        System.out.println(generateEnrollmentId(getBranch("COMP")));
-
-
-//        Applicant applicant = Database.getApplicantObject("I2409202000004");
-//        if (applicant != null) {
-//            System.out.println(applicant.getApplicationForm().getName());
-//            System.out.println(applicant.getEnrollmentForm());
-//        }
-//        else
-//            System.out.println(Applicant.Status.NOT_FOUND);
-
-//        admin.issueEnrollmentForms();
-        System.out.println(admin.viewStats());
+        Admin admin = new Admin();
+        admin.registerNewAdmin("heptadecane","Sooraj VS","testpass");
     }
 
 }
