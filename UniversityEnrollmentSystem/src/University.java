@@ -126,21 +126,6 @@ public class University extends Data {
         else return null;
     }
 
-    private static boolean enrolledContainsKey(String id){
-        for(Applicant applicant : enrolled)
-            if(applicant.getApplicationId().equals(id))
-                return true;
-
-        return false;
-    }
-    private static Applicant enrolledGet(String id){
-        for(Applicant applicant : enrolled)
-            if(applicant.getApplicationId().equals(id))
-                return applicant;
-
-        return null;
-    }
-
     public static Admin accessAdmin(String username, String password){
         try{
             sql = String.format("select * from admin where username='%s' and password='%s'",username,password);
@@ -319,21 +304,69 @@ public class University extends Data {
 
 
         public Applicant.Status checkStatus(String id){
-            if(applicants.containsKey(id))
-                return applicants.get(id).getStatus();
-            else if(shortlisted.containsKey(id))
-                return shortlisted.get(id).getStatus();
-            else if(enrolledContainsKey(id))
-                return enrolledGet(id).getStatus();
-            else
+            try{
+                sql = String.format(
+                    "select status from applicant "+
+                    "where applicant_id='%s'",id
+                );
+                ResultSet resultSet = Database.executeQuery(sql);
+                if(resultSet.next())
+                    return Applicant.Status.valueOf(resultSet.getString("status"));
                 return Applicant.Status.NOT_FOUND;
+            }catch (SQLException e){
+                e.printStackTrace();
+                return Applicant.Status.NOT_FOUND;
+            }
         }
 
         public String listApplicants(){
-            return Data.listApplicants();
+            try {
+                ResultSet resultSet = Database.executeQuery(
+                "select applicant_id from applicant where status='APPLIED' or status='REJECTED'"
+                );
+                String result = "\nAPPLICANTS:";
+                Applicant applicant;
+                while (resultSet.next()){
+                    String applicant_id = resultSet.getString("applicant_id");
+                    applicant = Database.getApplicantObject(applicant_id);
+                    result += "\nApplicant ID: "+applicant.getApplicationId();
+                    result += "\n\tName: "+applicant.getApplicationForm().getName();
+                    result += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
+                    result += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
+                    result += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
+                    result += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
+                    result += "\n";
+                }
+                return result;
+            }catch (SQLException e){
+                e.printStackTrace();
+                return "\nAPPLICANTS:";
+            }
+
         }
         public String listShortlisted(){
-            return Data.listShortlisted();
+            try {
+                ResultSet resultSet = Database.executeQuery(
+                "select applicant_id from applicant where status='SHORTLISTED'"
+                );
+                String result = "\nSHORTLISTED:";
+                Applicant applicant;
+                while (resultSet.next()){
+                    String applicant_id = resultSet.getString("applicant_id");
+                    applicant = Database.getApplicantObject(applicant_id);
+                    result += "\nApplicant ID: "+applicant.getApplicationId();
+                    result += "\n\tName: "+applicant.getApplicationForm().getName();
+                    result += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
+                    result += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
+                    result += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
+                    result += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
+                    result += "\n";
+                }
+                return result;
+            }catch (SQLException e){
+                e.printStackTrace();
+                return "\nSHORTLISTED:";
+            }
         }
 
         public String viewStats(){
@@ -348,14 +381,18 @@ public class University extends Data {
         }
 
         public String viewEnrollmentForms(){
-            String result = "ENROLLMENT FORMS:\n";
-            for(Applicant applicant : shortlisted.values()){
-                if(applicant.getStatus() == Applicant.Status.UNDER_VERIFICATION) {
-                    result += applicant.getApplicationId() + "\n";
-                    result += "\t" + applicant.getEnrollmentForm().getPlaceholder() + "\n";
+            try{
+                String result = "ENROLLMENT FORMS:\n";
+                ResultSet resultSet = Database.executeQuery("select * from enrollment_form");
+                while (resultSet.next()){
+                    result += resultSet.getString("applicant_id") + "\n";
+                    result += "\t" + resultSet.getString("placeholder") + "\n";
                 }
+                return result;
+            }catch (SQLException e){
+                e.printStackTrace();
+                return "ENROLLMENT FORMS:\n";
             }
-            return result;
         }
 
         public void registerNewAdmin(String username,String name,String password){
