@@ -13,6 +13,10 @@ public class Examination implements Serializable {
         this.title = title;
         this.maxMarks = maxMarks;
     }
+    public Examination(){
+        this.title = "JEE";
+        this.maxMarks = 360;
+    }
 
     public String getTitle() {
         return title;

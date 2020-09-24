@@ -59,6 +59,10 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         this.applicationForm = applicationForm;
     }
 
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
     public void setEnrollmentForm(EnrollmentForm enrollmentForm) {
         this.enrollmentForm = enrollmentForm;
         Data.storeShortlisted();
@@ -182,6 +186,8 @@ public class Applicant implements Comparable<Applicant>,Serializable {
 
         @Override
         public String toString() {
+            if (middle.length()==0)
+                return first + " " + last;
             return first + " " + middle + " " + last;
         }
     }

@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public abstract class Database {
+public abstract class Database implements AutoCloseable{
     static Connection connection = null;
 
     static final String username = "31165";
@@ -94,6 +94,94 @@ public abstract class Database {
 
     }
 
+    public static Applicant getApplicantObject(String id){
+        try {
+            String applicant_id, password, enrollment_id, unique_id, board, placeholder;
+            String first_name, middle_name, last_name, email, phone, entrance_reg_no, hsc_reg_no, branch_name;
+            double percentage,percentile,score;
+            Applicant.Status status;
+            Applicant.UniqueId id_type;
+
+            String sql = String.format("select * from applicant where applicant_id='%s'",id);
+            ResultSet resultSet = executeQuery(sql);
+            if(resultSet.next()){
+                applicant_id = resultSet.getString("applicant_id");
+                status = Applicant.Status.valueOf(resultSet.getString("status"));
+                password = resultSet.getString("password");
+                enrollment_id = resultSet.getString("enrollment_id");
+                unique_id = resultSet.getString("unique_id");
+            }
+            else return null;
+
+            sql = String.format("select * from application_form where unique_id='%s'",unique_id);
+            resultSet = executeQuery(sql);
+            if(resultSet.next()){
+                id_type = Applicant.UniqueId.valueOf(resultSet.getString("id_type"));
+                first_name = resultSet.getString("first_name");
+                middle_name = resultSet.getString("middle_name");
+                last_name = resultSet.getString("last_name");
+                email = resultSet.getString("email");
+                phone = resultSet.getString("phone");
+                entrance_reg_no = resultSet.getString("entrance_reg_no");
+                hsc_reg_no = resultSet.getString("hsc_reg_no");
+                branch_name = resultSet.getString("branch_name");
+
+            }
+            else return null;
+
+            sql = String.format("select * from hsc where hsc_reg_no='%s'",hsc_reg_no);
+            resultSet = executeQuery(sql);
+            if(resultSet.next()){
+                board = resultSet.getString("board");
+                percentage = resultSet.getDouble("percentage");
+            }
+            else return null;
+
+            sql = String.format("select * from entrance where entrance_reg_no='%s'",entrance_reg_no);
+            resultSet = executeQuery(sql);
+            if(resultSet.next()){
+                percentile = resultSet.getDouble("percentile");
+                score = resultSet.getDouble("score");
+            }
+            else return null;
+
+            Examination entrance = new Examination();
+            entrance.setPercentile(percentile);
+            entrance.setObtainedMarks(score);
+
+            ApplicationForm applicationForm = new ApplicationForm();
+            applicationForm.setId(id_type,unique_id);
+            applicationForm.setName(new Applicant.Name(first_name,middle_name,last_name));
+            applicationForm.setEmail(email);
+            applicationForm.setPhNo(phone);
+            applicationForm.setExamination(entrance);
+            applicationForm.setHsc(board,hsc_reg_no,percentage);
+            applicationForm.setBranchName(branch_name);
+
+            Applicant applicant = new Applicant();
+            applicant.setApplicationId(applicant_id);
+            applicant.setApplicationForm(applicationForm);
+            applicant.setStatus(status);
+            applicant.setPassword(password);
+            applicant.setEnrollmentId(enrollment_id);
+            applicant.setEnrollmentForm(null);
+
+            //while issuing EnrollmentForm update enrollment_form with empty place holder
+            sql = String.format("select * from enrollment_form where applicant_id='%s'",applicant_id);
+            resultSet = executeQuery(sql);
+            if(resultSet.next()) {
+                EnrollmentForm enrollmentForm = new EnrollmentForm();
+                placeholder = resultSet.getString("placeholder");
+                enrollmentForm.setPlaceholder(placeholder);
+                applicant.setEnrollmentForm(enrollmentForm);
+            }
+            return applicant;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void main(String[] args) {
         try {
             Statement statement = connection.createStatement();
@@ -105,5 +193,4 @@ public abstract class Database {
             System.out.println(e.getMessage());
         }
     }
-
 }

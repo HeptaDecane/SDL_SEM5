@@ -1,0 +1,68 @@
+public void shortlistApplicants(){
+    for(Applicant applicant:Data.applicants.values()){
+        ApplicationForm applicationForm = applicant.getApplicationForm();
+        Examination examination = applicationForm.getExamination();
+        ApplicationForm.HSC hsc = applicationForm.getHsc();
+        String branchName = applicationForm.getBranchName();
+        Branch branch = getBranch(branchName);
+
+        if(hsc.getPercentage()<75 || examination.getObtainedMarks()<branch.cutOff){
+            applicant.setStatus(Applicant.Status.REJECTED);
+            continue;
+        }
+
+        for(BranchQueue branchQueue: branchQueues) {
+            if (branchQueue.getBranchName().equals(branchName)){
+                branchQueue.add(applicant);
+                break;
+            }
+        }
+    }
+
+    for(BranchQueue branchQueue:branchQueues){
+        Branch branch = getBranch(branchQueue.getBranchName());
+        while(branchQueue.size() > 0){
+            if(branch.lockedSeats >= branch.seats)
+                break;
+            Applicant applicant = branchQueue.poll();
+            String applicantId = applicant.getApplicationId();
+
+            applicant.setStatus(Applicant.Status.SHORTLISTED);
+            shortlisted.put(applicantId,applicant);
+            branch.lockSeat();
+            applicants.remove(applicantId);
+        }
+    }
+    storeApplicants();
+    storeShortlisted();
+
+    for(BranchQueue branchQueue : branchQueues)
+        branchQueue.clear();
+}
+
+
+public boolean enrollApplicant(String id){
+    Applicant applicant = shortlisted.get(id);
+    if(applicant == null)
+        return false;
+    if(applicant.getStatus() != Applicant.Status.UNDER_VERIFICATION)
+        return false;
+
+    ApplicationForm applicationForm = applicant.getApplicationForm();
+    String branchName = applicationForm.getBranchName();
+    Branch branch = getBranch(branchName);
+
+    String enrollmentID = generateEnrollmentId(branch);
+    applicant.setEnrollmentId(enrollmentID);
+
+    shortlisted.remove(id);
+    enrolled.add(applicant);
+    applicant.setStatus(Applicant.Status.ENROLLED);
+    applicant.setEnrollmentForm(null);
+    branch.allocateSeat();
+
+    storeShortlisted();
+    storeEnrolled();
+    return true;
+}
+

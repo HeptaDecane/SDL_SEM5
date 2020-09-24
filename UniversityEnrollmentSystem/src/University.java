@@ -235,53 +235,11 @@ public class University extends Data {
         }
 
         public void shortlistApplicants(){
-            for(Applicant applicant:Data.applicants.values()){
-                ApplicationForm applicationForm = applicant.getApplicationForm();
-                Examination examination = applicationForm.getExamination();
-                ApplicationForm.HSC hsc = applicationForm.getHsc();
-                String branchName = applicationForm.getBranchName();
-                Branch branch = getBranch(branchName);
-
-                if(hsc.getPercentage()<75 || examination.getObtainedMarks()<branch.cutOff){
-                    applicant.setStatus(Applicant.Status.REJECTED);
-                    continue;
-                }
-
-                for(BranchQueue branchQueue: branchQueues) {
-                    if (branchQueue.getBranchName().equals(branchName)){
-                        branchQueue.add(applicant);
-                        break;
-                    }
-                }
-            }
-
-            for(BranchQueue branchQueue:branchQueues){
-                Branch branch = getBranch(branchQueue.getBranchName());
-                while(branchQueue.size() > 0){
-                    if(branch.lockedSeats >= branch.seats)
-                        break;
-                    Applicant applicant = branchQueue.poll();
-                    String applicantId = applicant.getApplicationId();
-
-                    applicant.setStatus(Applicant.Status.SHORTLISTED);
-                    shortlisted.put(applicantId,applicant);
-                    branch.lockSeat();
-                    applicants.remove(applicantId);
-                }
-            }
-            storeApplicants();
-            storeShortlisted();
-
-            for(BranchQueue branchQueue : branchQueues)
-                branchQueue.clear();
-        }
-
-        public void shortlistApplicants0(){
             try {
                 ResultSet resultSet = Database.executeQuery(
                 "select applicant_id,score,percentage,branch_name from " +
                     "applicant natural join application_form natural join entrance natural join hsc " +
-                    "where status = 'PENDING' order by branch_name, score desc"
+                    "where status = 'APPLIED' order by branch_name, score desc"
                 );
                 while (resultSet.next()){
                     String applicantId = resultSet.getString("applicant_id");
@@ -312,31 +270,6 @@ public class University extends Data {
         }
 
         public boolean enrollApplicant(String id){
-            Applicant applicant = shortlisted.get(id);
-            if(applicant == null)
-                return false;
-            if(applicant.getStatus() != Applicant.Status.UNDER_VERIFICATION)
-                return false;
-
-            ApplicationForm applicationForm = applicant.getApplicationForm();
-            String branchName = applicationForm.getBranchName();
-            Branch branch = getBranch(branchName);
-
-            String enrollmentID = generateEnrollmentId(branch);
-            applicant.setEnrollmentId(enrollmentID);
-
-            shortlisted.remove(id);
-            enrolled.add(applicant);
-            applicant.setStatus(Applicant.Status.ENROLLED);
-            applicant.setEnrollmentForm(null);
-            branch.allocateSeat();
-
-            storeShortlisted();
-            storeEnrolled();
-            return true;
-        }
-
-        public boolean enrollApplicant0(String id){
             try {
                 sql = String.format(
                     "select status,branch_name from applicant natural join application_form " +
@@ -353,8 +286,8 @@ public class University extends Data {
                 if(status != Applicant.Status.UNDER_VERIFICATION)
                     return false;
 
-//                if(branch.lockedSeats <= branch.allocatedSeats)
-//                    return false;
+                if(branch.lockedSeats <= branch.allocatedSeats)
+                    return false;
 
                 String enrollmentID = generateEnrollmentId(branch);
                 sql = String.format(
@@ -424,10 +357,7 @@ public class University extends Data {
         }
 
         public void issueEnrollmentForms(){
-            for(Applicant applicant : shortlisted.values()){
-                if(applicant.getStatus() == Applicant.Status.LOCKED)
-                    applicant.setEnrollmentForm(new EnrollmentForm());
-            }
+            Database.execute("call issue_enrollment_forms()");
         }
 
         @Override
@@ -439,10 +369,21 @@ public class University extends Data {
     public static void main(String[] args) {
         Admin admin = new Admin("admin");
 //        admin.registerNewAdmin("superuser","testpass");
-//        admin.shortlistApplicants0();
-//        System.out.println(admin.enrollApplicant0("I2309202000008"));
+//        admin.shortlistApplicants();
+//        System.out.println(admin.enrollApplicant("I2409202000012"));
 //        System.out.println(generateEnrollmentId(getBranch("COMP")));
 
+
+//        Applicant applicant = Database.getApplicantObject("I2409202000004");
+//        if (applicant != null) {
+//            System.out.println(applicant.getApplicationForm().getName());
+//            System.out.println(applicant.getEnrollmentForm());
+//        }
+//        else
+//            System.out.println(Applicant.Status.NOT_FOUND);
+
+//        admin.issueEnrollmentForms();
+        System.out.println(admin.viewStats());
     }
 
 }
