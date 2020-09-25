@@ -32,7 +32,8 @@ public class University {
             try {
                 sql = String.format(
                     "select count(applicant_id) from applicant natural join application_form " +
-                    "where (status='SHORTLISTED' or status='ENROLLED') and branch_name='%s'",branch.name
+                    "where status in ('SHORTLISTED','FLOATED','LOCKED','UNDER_VERIFICATION','ENROLLED') " +
+                    "and branch_name='%s'",branch.name
                 );
                 ResultSet resultSet = Database.executeQuery(sql);
                 if(resultSet.next())
@@ -313,6 +314,7 @@ public class University {
                     "where applicant_id='%s'",enrollmentID,id
                 );
                 Database.executeUpdate(sql);
+                branch.allocateSeat();
                 return true;
 
             }catch (SQLException e){

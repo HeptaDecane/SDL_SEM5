@@ -43,6 +43,20 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         return applicationForm;
     }
     public EnrollmentForm getEnrollmentForm() {
+        try{
+            String sql = String.format(
+                "select * from enrollment_form " +
+                "where applicant_id='%s'",applicationId
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+            if(resultSet.next()){
+                String placeholder = resultSet.getString("placeholder");
+                enrollmentForm = new EnrollmentForm();
+                enrollmentForm.setPlaceholder(placeholder);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return enrollmentForm;
     }
     public String getApplicationId(){
@@ -53,6 +67,18 @@ public class Applicant implements Comparable<Applicant>,Serializable {
     }
 
     public String getEnrollmentId() {
+        try{
+            String sql = String.format(
+                "select enrollment_id from applicant " +
+                "where applicant_id='%s'",applicationId
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+            if(resultSet.next())
+                enrollmentId = resultSet.getString("enrollment_id");
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return enrollmentId;
     }
 
