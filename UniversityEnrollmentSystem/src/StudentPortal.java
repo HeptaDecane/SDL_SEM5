@@ -67,8 +67,9 @@ public class StudentPortal {
         if(!enrollmentForm.isValid())
             return false;
 
-        applicant.setStatus(Applicant.Status.UNDER_VERIFICATION);
         applicant.setEnrollmentForm(enrollmentForm);
+        applicant.setStatus(Applicant.Status.UNDER_VERIFICATION);
+        applicant.commitStatus();
         return true;
     }
 }

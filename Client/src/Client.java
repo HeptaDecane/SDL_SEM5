@@ -126,7 +126,7 @@ public class Client {
         response = dataInputStream.readUTF();
         int choice;
         if(response.equals("409 conflict")) {
-            System.out.println(ANSI.RED+"Multiple sessions detected"+ANSI.RESET);
+            System.out.println(ANSI.CYAN+"Multiple sessions detected"+ANSI.RESET);
             System.out.println(ANSI.CYAN+"Try logout from active session"+ANSI.RESET);
             choice = 0;
         }
@@ -170,7 +170,7 @@ public class Client {
         response = dataInputStream.readUTF();
         int choice;
         if(response.equals("409 conflict")) {
-            System.out.println(ANSI.RED+"Multiple sessions detected"+ANSI.RESET);
+            System.out.println(ANSI.CYAN+"Multiple sessions detected"+ANSI.RESET);
             System.out.println(ANSI.CYAN+"Try logout from active session"+ANSI.RESET);
             choice = 0;
         }

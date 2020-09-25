@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Applicant implements Comparable<Applicant>,Serializable {
     private static final long serialVersionUID = 73L;
@@ -24,6 +26,17 @@ public class Applicant implements Comparable<Applicant>,Serializable {
     }
 
     public Status getStatus() {
+        try{
+            String sql = String.format(
+                "select status from applicant " +
+                "where applicant_id='%s'",applicationId
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+            if(resultSet.next())
+                status = Status.valueOf(resultSet.getString("status"));
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return status;
     }
     public ApplicationForm getApplicationForm(){
@@ -65,7 +78,13 @@ public class Applicant implements Comparable<Applicant>,Serializable {
 
     public void setEnrollmentForm(EnrollmentForm enrollmentForm) {
         this.enrollmentForm = enrollmentForm;
-        Data.storeShortlisted();
+        if (enrollmentForm!=null) {
+            String sql = String.format(
+                "update enrollment_form set placeholder='%s' " +
+                "where applicant_id='%s'", enrollmentForm.getPlaceholder(), applicationId
+            );
+            Database.executeUpdate(sql);
+        }
     }
 
 
@@ -77,31 +96,42 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         applicationId = University.generateApplicationId();
         University.addApplicant(this);
         status = Status.APPLIED;
+        commitStatus();
         return status;
     }
 
 
     public Status hover(){
-        if(status == Status.SHORTLISTED)
+        getStatus();
+        if(status == Status.SHORTLISTED) {
             status = Status.FLOATED;
-
-        Data.storeShortlisted();
+            commitStatus();
+        }
         return status;
     }
 
     public Status lock(){
-        if(status==Status.SHORTLISTED || status==Status.FLOATED)
+        getStatus();
+        if(status==Status.SHORTLISTED || status==Status.FLOATED) {
             status = Status.LOCKED;
-
-        Data.storeShortlisted();
+            commitStatus();
+        }
         return status;
     }
 
-
-
-
     public boolean matchPassword(String password){
         return this.password.equals(password);
+    }
+
+    public void commitStatus(){
+        String applicant_id = this.applicationId;
+        String status = this.status.toString();
+
+        String sql = String.format(
+            "update applicant set status='%s' " +
+            "where applicant_id='%s'",status,applicant_id
+        );
+        Database.executeUpdate(sql);
     }
 
     @Override

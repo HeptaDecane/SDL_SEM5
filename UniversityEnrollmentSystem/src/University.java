@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class University extends Data {
+public class University {
 
     protected static Set<Branch> branches;
     public static String entrance;
@@ -52,11 +52,30 @@ public class University extends Data {
     }
 
     public static boolean isUnique(Applicant newApplicant){
-        for(Applicant applicant:applicants.values()){
-            if(newApplicant.equals(applicant))
-                return false;
+        String unique_id = newApplicant.getApplicationForm().getUniqueIdNo();
+        String email = newApplicant.getApplicationForm().getEmail();
+        String phone = newApplicant.getApplicationForm().getPhNo();
+        String entrance_reg_no = newApplicant.getApplicationForm().getExamination().getRegNo();
+        String hsc_reg_no = newApplicant.getApplicationForm().getHsc().getRegNo();
+
+        try{
+            sql = String.format(
+                "select count(*) from application_form " +
+                "where unique_id='%s' " +
+                "or email='%s' " +
+                "or phone='%s' " +
+                "or entrance_reg_no='%s' " +
+                "or hsc_reg_no='%s'",
+                unique_id,email,phone,entrance_reg_no,hsc_reg_no
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+            if(resultSet.next())
+                return resultSet.getInt(1)==0;
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public static Set<Branch> getBranches(){

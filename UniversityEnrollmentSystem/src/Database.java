@@ -146,6 +146,7 @@ public abstract class Database implements AutoCloseable{
             else return null;
 
             Examination entrance = new Examination();
+            entrance.setRegNo(entrance_reg_no);
             entrance.setPercentile(percentile);
             entrance.setObtainedMarks(score);
 

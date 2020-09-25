@@ -5,7 +5,7 @@ begin
     declare end_of_table bool default false;
 
     declare record_pointer cursor for
-        select applicant_id from applicant where status='SHORTLISTED';
+        select applicant_id from applicant where status='LOCKED';
 
     declare continue handler for not found
     set end_of_table = true;
