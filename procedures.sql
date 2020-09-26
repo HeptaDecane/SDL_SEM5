@@ -58,7 +58,7 @@ create table conversation(
     message text not null,
     ticket_no varchar(16) not null,
     sent_at timestamp not null,
-    sent_by_admin bool not null default(false)
+    sent_by_admin bool not null default false
 );
 
 alter table application_form add constraint application_form_FK_hsc_reg_no
@@ -91,5 +91,5 @@ foreign key(ticket_no) references connection(ticket_no)
 on delete cascade;
 
 alter table conversation auto_increment = 0;
-alter table conversation modify column sent_at timestamp not null default (current_timestamp);
+alter table conversation modify column sent_at timestamp not null default current_timestamp;
 
