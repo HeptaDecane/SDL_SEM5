@@ -479,9 +479,39 @@ public class ServerThread extends Thread{
     }
 
     public void fillEnrollmentForm() throws Exception{
-        studentPortal.form = dataInputStream.readUTF();
-        studentPortal.hscMarkSheet = dataInputStream.readUTF();
-        studentPortal.entranceMarkSheet = dataInputStream.readUTF();
+        byte bytes[] = null;
+        FileOutputStream fileOutputStream = null;
+        int size = 0;
+
+        try{
+            bytes = new byte[1024*1024];
+            size = dataInputStream.read(bytes,0,bytes.length);
+            fileOutputStream = new FileOutputStream("media/"+applicant.getApplicationId()+"-form.pdf");
+            fileOutputStream.write(bytes,0,size);
+
+            bytes = new byte[1024*1024];
+            size = dataInputStream.read(bytes,0,bytes.length);
+            fileOutputStream = new FileOutputStream("media/"+applicant.getApplicationId()+"-hsc.pdf");
+            fileOutputStream.write(bytes,0,size);
+
+            bytes = new byte[1024*1024];
+            size = dataInputStream.read(bytes,0,bytes.length);
+            fileOutputStream = new FileOutputStream("media/"+applicant.getApplicationId()+"-entrance.pdf");
+            fileOutputStream.write(bytes,0,size);
+
+            fileOutputStream.close();
+
+            studentPortal.form = "media/"+applicant.getApplicationId()+"-form.pdf";
+            studentPortal.hscMarkSheet = "media/"+applicant.getApplicationId()+"-hsc.pdf";
+            studentPortal.entranceMarkSheet = "media/"+applicant.getApplicationId()+"-entrance.pdf";
+
+            dataOutputStream.writeBoolean(true);
+        } catch (Exception e){
+            studentPortal.form = "EMPTY";
+            studentPortal.hscMarkSheet = "EMPTY";
+            studentPortal.entranceMarkSheet = "EMPTY";
+            dataOutputStream.writeBoolean(false);
+        }
     }
 
     public String readPassword() {

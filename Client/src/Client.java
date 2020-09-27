@@ -28,7 +28,7 @@ public class Client {
 
     public static void homeView() throws Exception{
         System.out.println("\nHOME PAGE");
-        System.out.println("1. Applicant Portal\n2. Admin Login\n3. Help Center\n0. Exit");
+        System.out.println("01. Applicant Portal\n02. Admin Login\n03. Help Center\n00. Exit");
         System.out.print("\ninput> ");
         int choice = scanner.nextInt();
         dataOutputStream.writeInt(choice);
@@ -59,7 +59,6 @@ public class Client {
                     break;
 
                 case 3:
-                    scanner.nextLine();
                     helpCenter();
                 break;
 
@@ -68,7 +67,7 @@ public class Client {
                     System.out.println(ANSI.CYAN+response+ANSI.RESET);
             }
             System.out.println("\nHOME PAGE");
-            System.out.println("1. Applicant Portal\n2. Admin Login\n3. Help Center\n0. Exit");
+            System.out.println("01. Applicant Portal\n02. Admin Login\n03. Help Center\n00. Exit");
             System.out.print("\ninput> ");
             choice = scanner.nextInt();
             dataOutputStream.writeInt(choice);
@@ -77,7 +76,7 @@ public class Client {
 
     public static void applicantPortalView() throws Exception{
         System.out.println("\nAPPLICANT PORTAL");
-        System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
+        System.out.println("01. Applicant Login\n02. Applicant Register\n00. Back");
         System.out.print("\ninput> ");
         int choice = scanner.nextInt();
         dataOutputStream.writeInt(choice);
@@ -114,7 +113,7 @@ public class Client {
                     System.out.println(ANSI.CYAN+response+ANSI.RESET);
             }
             System.out.println("\nAPPLICANT PORTAL");
-            System.out.println("1. Applicant Login\n2. Applicant Register\n0. Back");
+            System.out.println("01. Applicant Login\n02. Applicant Register\n00. Back");
             System.out.print("\ninput> ");
             choice = scanner.nextInt();
             dataOutputStream.writeInt(choice);
@@ -145,9 +144,12 @@ public class Client {
                     boolean enrollmentForm = dataInputStream.readBoolean();
                     if(enrollmentForm) {
                         scanner.nextLine();
-                        fillEnrollmentForm();
+                        boolean success = fillEnrollmentForm();
                         response = dataInputStream.readUTF();
-                        System.out.println(ANSI.CYAN+response+ANSI.RESET);
+                        if(success)
+                            System.out.println(ANSI.CYAN+response+ANSI.RESET);
+                        else
+                            System.out.println(ANSI.CYAN+"File Upload Error"+ANSI.RESET);
                     }
                     else
                         System.out.println(ANSI.CYAN+"Enrollment Form Not Issued"+ANSI.RESET);
@@ -214,6 +216,11 @@ public class Client {
                     System.out.println(ANSI.CYAN+response+ANSI.RESET);
                 break;
 
+                case 10:
+                    scanner.nextLine();
+                    support();
+                    break;
+
                 default:
                     response = dataInputStream.readUTF();
                     System.out.println(ANSI.CYAN+response+ANSI.RESET);
@@ -225,6 +232,27 @@ public class Client {
             dataOutputStream.writeInt(choice);
         }
 
+    }
+
+    public static void support() throws Exception{
+        response = dataInputStream.readUTF();
+        System.out.println(ANSI.CYAN+response+ANSI.RESET);
+        while (true) {
+            System.out.print("Ticket No: ");
+            String ticketNo = scanner.nextLine();
+            dataOutputStream.writeUTF(ticketNo);
+            if (ticketNo.equals("exit()")) return;
+            if(dataInputStream.readBoolean()) break;
+        }
+        System.out.println("\nConversation:");
+        response = dataInputStream.readUTF();
+        System.out.print(response);
+        while (true){
+            System.out.print("You: ");
+            String message = scanner.nextLine();
+            dataOutputStream.writeUTF(message);
+            if(message.equals("exit()")) break;
+        }
     }
 
     public static void fillApplicationForm() throws Exception{
@@ -248,71 +276,160 @@ public class Client {
     }
 
     public static void helpCenter() throws Exception{
-        System.out.println("HELP CENTER");
-        String name, isRegistered, applicationId, admin;
-        System.out.print("Name: ");
-        name = scanner.nextLine();
-        applicationId = "NULL";
+        System.out.println("\nHELP CENTER");
+        System.out.println("01. New Support Ticket\n02. Existing Support Ticket\n00. Back");
+        System.out.print("\ninput> ");
+        int choice = scanner.nextInt();
+        dataOutputStream.writeInt(choice);
+        while (choice != 0) {
+            switch (choice){
+                case 1:
+                    scanner.nextLine();
+                    newSupportTicket();
+                break;
+
+                case 2:
+                    scanner.nextLine();
+                    System.out.print("Ticket No: ");
+                    String ticketNo = scanner.nextLine();
+                    existingSupportTicket(ticketNo);
+                break;
+
+                default:
+                    response = dataInputStream.readUTF();
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
+            }
+            System.out.println("\nHELP CENTER");
+            System.out.println("01. New Support Ticket\n02. Existing Support Ticket\n00. Back");
+            System.out.print("\ninput> ");
+            choice = scanner.nextInt();
+            dataOutputStream.writeInt(choice);
+        }
+    }
+
+    public static void newSupportTicket() throws Exception{
+        String isRegistered,applicantId,clientName;
+        System.out.println("\nTICKET CREATION");
         System.out.print("Registered applicant (yes/no)? ");
         isRegistered = scanner.nextLine();
+        dataOutputStream.writeUTF(isRegistered);
         if(isRegistered.equalsIgnoreCase("yes")){
-            System.out.print("Application ID: ");
-            applicationId = scanner.nextLine();
+            System.out.print("Applicant ID: ");
+            applicantId = scanner.nextLine();
+            dataOutputStream.writeUTF(applicantId);
+            if(!dataInputStream.readBoolean()) {
+                System.out.println(ANSI.CYAN+"Invalid Applicant ID"+ANSI.RESET);
+                return;
+            }
         }
+        else {
+            System.out.print("Name: ");
+            clientName = scanner.nextLine();
+            dataOutputStream.writeUTF(clientName);
+        }
+        String ticketNo = dataInputStream.readUTF();
+        System.out.println(ANSI.CYAN+"Ticket No: "+ticketNo+ANSI.RESET);
+        System.out.println(ANSI.CYAN+"Note this for further reference"+ANSI.RESET);
+        existingSupportTicket(ticketNo);
+    }
 
-        String message = "";
-        dataOutputStream.writeUTF("Name: "+name+"\nApplication ID: "+applicationId);
-        dataOutputStream.writeUTF(name);
+    public static void existingSupportTicket(String ticketNo) throws Exception{
+        dataOutputStream.writeUTF(ticketNo);
+        if(dataInputStream.readBoolean()){
+            System.out.println(ANSI.CYAN+"Invalid Ticket No."+ANSI.RESET);
+            return;
+        }
+        System.out.println(ANSI.CYAN+"\nTICKET: "+ticketNo+ANSI.RESET);
+        System.out.println("01. Conversation\n02. Mark Resolved\n00. Back");
+        System.out.print("\ninput> ");
+        int choice = scanner.nextInt();
+        dataOutputStream.writeInt(choice);
+        while (choice!=0){
+            switch (choice){
+                case 1:
+                    System.out.print(dataInputStream.readUTF());
+                    scanner.nextLine();
+                    if (dataInputStream.readBoolean())
+                        System.out.print(ANSI.CYAN+"\nEND"+ANSI.RESET);
+                    else
+                        while (true){
+                            System.out.print("You: ");
+                            String message = scanner.nextLine();
+                            dataOutputStream.writeUTF(message);
+                            if(message.equals("exit()")) break;
+                        }
 
-        System.out.println("Waiting for Admin to Connect...");
-        admin = dataInputStream.readUTF();
-        System.out.println(ANSI.GREEN+"\nConnected to Admin ("+admin+")"+ANSI.RESET);
-        System.out.println(ANSI.CYAN+"Type 'exit()' to leave"+ANSI.RESET);
-
-        System.out.println("\n"+ANSI.YELLOW+admin+": "+ANSI.CYAN+"hi! how can i help you?"+ANSI.RESET);
-        while (true){
-            System.out.print("You: ");
-            message = scanner.nextLine();
-            dataOutputStream.writeUTF(message);
-            if(message.equals("exit()"))
                 break;
-            System.out.print(ANSI.YELLOW+admin+": ..."+ANSI.RESET);
-            response = dataInputStream.readUTF();
-            System.out.println("\b\b\b"+ANSI.CYAN+response+ANSI.RESET);
-            if(response.equals("exit()"))
-                break;
+
+                default:
+                    response = dataInputStream.readUTF();
+                    System.out.println(ANSI.CYAN+response+ANSI.RESET);
+            }
+            System.out.println("\n01. Conversation\n02. Mark Resolved\n00. Back");
+            System.out.print("\ninput> ");
+            choice = scanner.nextInt();
+            dataOutputStream.writeInt(choice);
         }
 
     }
 
-    public static void fillEnrollmentForm() throws Exception{
-
+    public static boolean fillEnrollmentForm() throws Exception{
         System.out.println("\nENROLLMENT FORM");
-        System.out.print("Placeholder: ");
-        dataOutputStream.writeUTF(scanner.nextLine());
+
+        System.out.print("Form: ");
+        String form = scanner.nextLine();
+
+        System.out.print("HSC Mark Sheet: ");
+        String hscMarkSheet = scanner.nextLine();
+
+        System.out.print("Entrance Mark Sheet: ");
+        String entranceMarkSheet = scanner.nextLine();
+
+        byte[] bytes = null;
+        FileInputStream fileInputStream = null;
+        int size = 0;
+
+        fileInputStream = new FileInputStream(form);
+        bytes = new byte[1024*1024];
+        size = fileInputStream.read(bytes,0,bytes.length);
+        dataOutputStream.write(bytes,0,size);
+
+        fileInputStream = new FileInputStream(hscMarkSheet);
+        bytes = new byte[1024*1024];
+        size = fileInputStream.read(bytes,0,bytes.length);
+        dataOutputStream.write(bytes,0,size);
+
+        fileInputStream = new FileInputStream(entranceMarkSheet);
+        bytes = new byte[1024*1024];
+        size = fileInputStream.read(bytes,0,bytes.length);
+        dataOutputStream.write(bytes,0,size);
+
+        fileInputStream.close();
+        return dataInputStream.readBoolean();
     }
 
     public static void printAdminOptions(){
         System.out.println("\nADMIN PAGE");
-        System.out.println("1. List Applicants");
-        System.out.println("2. List Shortlisted");
-        System.out.println("3. Shortlist Applicants");
-        System.out.println("4. Check Applicant Status");
-        System.out.println("5. Register New Admin");
-        System.out.println("6. Issue Enrollment Forms");
-        System.out.println("7. View Stats");
-        System.out.println("8. View Enrollment Forms");
-        System.out.println("9. Enroll Applicant");
-        System.out.println("0. Logout");
+        System.out.println("01. List Applicants");
+        System.out.println("02. List Shortlisted");
+        System.out.println("03. Shortlist Applicants");
+        System.out.println("04. Check Applicant Status");
+        System.out.println("05. Register New Admin");
+        System.out.println("06. Issue Enrollment Forms");
+        System.out.println("07. View Stats");
+        System.out.println("08. View Enrollment Forms");
+        System.out.println("09. Enroll Applicant");
+        System.out.println("10. Client Support");
+        System.out.println("00. Logout");
     }
     public static void printApplicantOptions(){
         System.out.println("\nAPPLICANT PAGE");
-        System.out.println("1. Check Status");
-        System.out.println("2. Float Seat");
-        System.out.println("3. Lock Seat");
-        System.out.println("4. Fill/Update Enrollment Details");
-        System.out.println("5. View Enrollment ID");
-        System.out.println("0. Logout");
+        System.out.println("01. Check Status");
+        System.out.println("02. Float Seat");
+        System.out.println("03. Lock Seat");
+        System.out.println("04. Fill/Update Enrollment Details");
+        System.out.println("05. View Enrollment ID");
+        System.out.println("00. Logout");
     }
 
     public static String readPassword() {

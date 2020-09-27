@@ -17,8 +17,8 @@ create table application_form(
     middle_name varchar(16),
     last_name varchar(16) not null,
     email varchar(64) not null,
-    phone varchar(12) not null,
-    caste enum ('GEN','OBC','SC/ST','NT') default 'GEN',
+    phone varchar(14) not null,
+    category enum ('GEN','OBC','SC/ST','NT') default 'GEN',
     entrance_reg_no varchar(8) not null unique ,
     hsc_reg_no varchar(8) not null unique ,
     branch_name varchar(8) not null
@@ -36,7 +36,9 @@ create table applicant(
 
 create table enrollment_form(
     applicant_id varchar(16) not null primary key ,
-    placeholder varchar(16) not null
+    form text not null,
+    hsc_mark_sheet text not null,
+    entrance_mark_sheet text not null
 
 );
 
@@ -46,19 +48,51 @@ create table admin(
     password varchar(16) not null
 );
 
-alter table application_form add constraint fk_hsc_reg_no
+create table connection(
+    ticket_no varchar(16) primary key not null,
+    username varchar(16),
+    client_name varchar(32) not null,
+    applicant_id varchar(16),
+    resolved bool default false
+);
+
+create table conversation(
+    id int primary key not null auto_increment,
+    message text not null,
+    ticket_no varchar(16) not null,
+    sent_at timestamp not null,
+    sent_by_admin bool not null default false
+);
+
+alter table application_form add constraint application_form_FK_hsc_reg_no
 foreign key(hsc_reg_no) references hsc(hsc_reg_no)
 on delete cascade;
 
-alter table application_form add constraint fk_entrance_reg_no
+alter table application_form add constraint application_form_FK_entrance_reg_no
 foreign key(entrance_reg_no) references entrance(entrance_reg_no)
 on delete cascade;
 
-alter table applicant add constraint fk_unique_id
+alter table applicant add constraint applicant_FK_unique_id
 foreign key(unique_id) references application_form(unique_id)
 on delete cascade;
 
-alter table enrollment_form add constraint fk_applicant_id
+
+alter table enrollment_form add constraint enrollment_form_FK_applicant_id
 foreign key(applicant_id) references applicant(applicant_id)
 on delete cascade;
+
+alter table connection add constraint connection_FK_username
+foreign key(username) references admin(username)
+on delete set null;
+
+alter table connection add constraint connection_FK_applicant_id
+foreign key(applicant_id) references applicant(applicant_id)
+on delete cascade;
+
+alter table conversation add constraint conversation_FK_ticket_no
+foreign key(ticket_no) references connection(ticket_no)
+on delete cascade;
+
+alter table conversation auto_increment = 0;
+alter table conversation modify column sent_at timestamp not null default current_timestamp;
 
