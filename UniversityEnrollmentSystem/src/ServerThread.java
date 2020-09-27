@@ -19,7 +19,7 @@ public class ServerThread extends Thread{
     private boolean adminAuthenticated = false;
     private boolean studentAuthenticated = false;
     private Applicant.Status status = null;
-    private University.Admin admin = null;
+    private Admin admin = null;
 
     private String ack,response;
     private int port;
@@ -65,7 +65,7 @@ public class ServerThread extends Thread{
                     System.out.println("["+port+"] username: "+username);
                     String password = dataInputStream.readUTF();
                     System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
-                    admin = University.accessAdmin(username,password);
+                    admin = Admin.accessAdmin(username,password);
                     if(admin == null) {
                         dataOutputStream.writeBoolean(false);
                         System.out.println(ANSI.RED+"["+port+"] 401 unauthorized"+ANSI.RESET);
@@ -313,6 +313,10 @@ public class ServerThread extends Thread{
                         }
                         break;
 
+                    case 10:
+                        support();
+                        break;
+
                     default:
                         System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
                         dataOutputStream.writeUTF("Invalid Selection");
@@ -330,42 +334,114 @@ public class ServerThread extends Thread{
         }
     }
 
-    public void helpCenter() throws Exception{
-        System.out.println("\nHELP CENTER");
-        String client;
-        System.out.println(ANSI.CYAN+"Client: ");
-        response = dataInputStream.readUTF();
-        System.out.println(response+ANSI.RESET);
-        client = dataInputStream.readUTF();
-
-        String username,password,message;
-        System.out.println("\nAdmin Credentials Required:");
-        while (true) {
-            System.out.print("username: ");
-            username = scanner.nextLine();
-            System.out.print("password: ");
-            password = readPassword();
-            admin = University.accessAdmin(username,password);
-            if(admin == null)
-                System.out.println(ANSI.CYAN+"Incorrect Username, Password. Try Again"+ANSI.RESET);
-            else
-                break;
-        }
-        dataOutputStream.writeUTF(admin.getUsername());
-        System.out.println(ANSI.GREEN+"\nConnected to Client ("+client+")\n"+ANSI.RESET);
+    public void support() throws Exception{
+        Support support = null;
+        String ticketNo;
+        System.out.println("\n"+"["+port+"] support/");
+        dataOutputStream.writeUTF(admin.listQueries());
         while (true){
-            System.out.print(ANSI.YELLOW+client+": ..."+ANSI.RESET);
-            response = dataInputStream.readUTF();
-            System.out.println("\b\b\b"+ANSI.CYAN+response+ANSI.RESET);
-            if(response.equals("exit()"))
+            ticketNo = dataInputStream.readUTF();
+            if(ticketNo.equals("exit()")) {
+                System.out.println(ticketNo);
+                System.out.println("\n"+"["+port+"] admins-page/");
+                return;
+            }
+            support = Database.getSupportObject(ticketNo);
+            if(support != null){
+                dataOutputStream.writeBoolean(true);
                 break;
-            System.out.print("You: ");
-            message = scanner.nextLine();
-            dataOutputStream.writeUTF(message);
-            if(message.equals("exit()"))
-                break;
+            }
+            dataOutputStream.writeBoolean(false);
         }
+        dataOutputStream.writeUTF(support.getConversation(true));
+        while (true){
+            String message = dataInputStream.readUTF();
+            if (message.equals("exit()")) {
+                System.out.println(message);
+                break;
+            }
+            if(support.getAdminUsername() == null)
+                support.setAdminUsername(admin.getUsername());
+            support.post(message,true);
+        }
+        System.out.println("\n"+"["+port+"] admins-page/");
+    }
+
+    public void helpCenter() throws Exception{
+        System.out.println("\n"+"["+port+"] help-center/");
+        int choice = dataInputStream.readInt();
+        while (choice!=0){
+            switch (choice){
+                case 1:
+                    newSupportTicket();
+                break;
+
+                case 2:
+                    existingSupportTicket();
+                break;
+
+                default:
+                    System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                    dataOutputStream.writeUTF("Invalid Selection");
+
+            }
+            choice = dataInputStream.readInt();
+        }
+
         System.out.println("["+port+"] home/");
+    }
+
+    public void newSupportTicket() throws Exception{
+        Support support = new Support();
+        String isRegistered = dataInputStream.readUTF();
+        if(isRegistered.equalsIgnoreCase("yes")){
+            String applicantId = dataInputStream.readUTF();
+            boolean validApplicantId = support.setApplicantId(applicantId);
+            dataOutputStream.writeBoolean(validApplicantId);
+            if(!validApplicantId) return;
+        }
+        else
+            support.setClientName(dataInputStream.readUTF());
+
+        support.generateTicketNo();
+        Database.addSupportObject(support);
+        dataOutputStream.writeUTF(support.getTicketNo());
+        existingSupportTicket();
+    }
+    public void existingSupportTicket() throws Exception{
+        String ticketNo = dataInputStream.readUTF();
+        Support support = Database.getSupportObject(ticketNo);
+        dataOutputStream.writeBoolean(support == null);
+        if(support == null) return;
+        int choice = dataInputStream.readInt();
+        while (choice!=0){
+            switch (choice){
+                case 1:
+                    dataOutputStream.writeUTF(support.getConversation(false));
+                    dataOutputStream.writeBoolean(support.isResolved());
+                    if(!support.isResolved())
+                        while (true){
+                            String message = dataInputStream.readUTF();
+                            if(message.equals("exit()")){
+                                System.out.println(message);
+                                break;
+                            }
+                            support.post(message,false);
+                        }
+                break;
+
+                case 2:
+                    if(!support.isResolved())
+                        support.setResolved(true);
+                    dataOutputStream.writeUTF("Ticket No: "+ticketNo+" Marked Resolved");
+                break;
+
+                default:
+                    System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                    dataOutputStream.writeUTF("Invalid Selection");
+            }
+            choice = dataInputStream.readInt();
+        }
     }
 
     public void applicantRegistration() throws Exception{
@@ -403,7 +479,9 @@ public class ServerThread extends Thread{
     }
 
     public void fillEnrollmentForm() throws Exception{
-        studentPortal.placeholder = dataInputStream.readUTF();
+        studentPortal.form = dataInputStream.readUTF();
+        studentPortal.hscMarkSheet = dataInputStream.readUTF();
+        studentPortal.entranceMarkSheet = dataInputStream.readUTF();
     }
 
     public String readPassword() {

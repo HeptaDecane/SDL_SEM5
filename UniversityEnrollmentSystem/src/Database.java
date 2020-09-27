@@ -49,7 +49,7 @@ public abstract class Database implements AutoCloseable{
         }
     }
 
-    public static void addApplicant(Applicant applicant){
+    public static void addApplicantObject(Applicant applicant){
         String sql;
 
         String hsc_reg_no = applicant.getApplicationForm().getHsc().getRegNo();
@@ -96,7 +96,7 @@ public abstract class Database implements AutoCloseable{
 
     public static Applicant getApplicantObject(String id){
         try {
-            String applicant_id, password, enrollment_id, unique_id, board, placeholder;
+            String applicant_id, password, enrollment_id, unique_id, board, form, hsc_mark_sheet, entrance_mark_sheet;
             String first_name, middle_name, last_name, email, phone, entrance_reg_no, hsc_reg_no, branch_name;
             double percentage,percentile,score;
             Applicant.Status status;
@@ -172,8 +172,12 @@ public abstract class Database implements AutoCloseable{
             resultSet = executeQuery(sql);
             if(resultSet.next()) {
                 EnrollmentForm enrollmentForm = new EnrollmentForm();
-                placeholder = resultSet.getString("placeholder");
-                enrollmentForm.setPlaceholder(placeholder);
+                form = resultSet.getString("form");
+                hsc_mark_sheet = resultSet.getString("hsc_mark_sheet");
+                entrance_mark_sheet = resultSet.getString("entrance_mark_sheet");
+                enrollmentForm.setForm(form);
+                enrollmentForm.setHscMarkSheet(hsc_mark_sheet);
+                enrollmentForm.setEntranceMarkSheet(entrance_mark_sheet);
                 applicant.setEnrollmentForm(enrollmentForm);
             }
             return applicant;
@@ -181,6 +185,56 @@ public abstract class Database implements AutoCloseable{
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public static Support getSupportObject(String ticketNo){
+        try {
+            String sql = String.format(
+                "select * from connection " +
+                 "where ticket_no='%s'",ticketNo
+            );
+            ResultSet resultSet = executeQuery(sql);
+            if(resultSet.next()){
+                Support support = new Support();
+                String ticket_no = resultSet.getString("ticket_no");
+                String applicant_id = resultSet.getString("applicant_id");
+                String client_name = resultSet.getString("client_name");
+                String username = resultSet.getString("username");
+                boolean resolved = resultSet.getBoolean("resolved");
+
+                support.setTicketNo(ticket_no);
+                if(username != null)
+                    support.setAdminUsername(username);
+                support.setClientName(client_name);
+                support.setResolved(resolved);
+                if(applicant_id != null)
+                    support.setApplicantId(applicant_id);
+                return support;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void addSupportObject(Support support){
+        String ticket_no = support.getTicketNo();
+        String applicant_id = support.getApplicantId();
+        String client_name = support.getClientName();
+        String username = support.getAdminUsername();
+        boolean resolved = support.isResolved();
+        String sql = "";
+        if(applicant_id == null)
+            sql = String.format(
+                "insert into connection (ticket_no, client_name) " +
+                "values ('%s','%s')",ticket_no,client_name,applicant_id
+            );
+        else
+            sql = String.format(
+                "insert into connection (ticket_no, client_name, applicant_id) " +
+                "values ('%s','%s','%s')",ticket_no,client_name,applicant_id
+            );
+        executeUpdate(sql);
     }
 
     public static void main(String[] args) {

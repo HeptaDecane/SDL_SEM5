@@ -8,7 +8,7 @@ public class StudentPortal {
     private Applicant applicant;
     protected String firstName,password,lastName,uniqueId,email,phNo,regNo,branchName,hscBoard,hscReg;
     protected Double percentile,obtainedMarks,hscPercentage;
-    protected String placeholder;
+    protected String form,hscMarkSheet,entranceMarkSheet;
     private Examination examination;
     protected static Set<University.Branch> branches;
 
@@ -63,7 +63,9 @@ public class StudentPortal {
         if(enrollmentForm == null)
             return false;
 
-        enrollmentForm.setPlaceholder(placeholder);
+        enrollmentForm.setForm(form);
+        enrollmentForm.setHscMarkSheet(hscMarkSheet);
+        enrollmentForm.setEntranceMarkSheet(entranceMarkSheet);
         if(!enrollmentForm.isValid())
             return false;
 

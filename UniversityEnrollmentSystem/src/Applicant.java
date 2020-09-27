@@ -50,9 +50,13 @@ public class Applicant implements Comparable<Applicant>,Serializable {
             );
             ResultSet resultSet = Database.executeQuery(sql);
             if(resultSet.next()){
-                String placeholder = resultSet.getString("placeholder");
+                String form = resultSet.getString("form");
+                String hsc_mark_sheet = resultSet.getString("hsc_mark_sheet");
+                String entrance_mark_sheet = resultSet.getString("entrance_mark_sheet");
                 enrollmentForm = new EnrollmentForm();
-                enrollmentForm.setPlaceholder(placeholder);
+                enrollmentForm.setForm(form);
+                enrollmentForm.setHscMarkSheet(hsc_mark_sheet);
+                enrollmentForm.setEntranceMarkSheet(entrance_mark_sheet);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -106,8 +110,9 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         this.enrollmentForm = enrollmentForm;
         if (enrollmentForm!=null) {
             String sql = String.format(
-                "update enrollment_form set placeholder='%s' " +
-                "where applicant_id='%s'", enrollmentForm.getPlaceholder(), applicationId
+                "update enrollment_form set form='%s', hsc_mark_sheet='%s', entrance_mark_sheet='%s' " +
+                "where applicant_id='%s'",
+                enrollmentForm.getForm(),enrollmentForm.getHscMarkSheet(),enrollmentForm.getEntranceMarkSheet(),applicationId
             );
             Database.executeUpdate(sql);
         }
