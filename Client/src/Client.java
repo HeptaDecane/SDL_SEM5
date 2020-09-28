@@ -385,27 +385,24 @@ public class Client {
         System.out.print("Entrance Mark Sheet: ");
         String entranceMarkSheet = scanner.nextLine();
 
-        byte[] bytes = null;
-        FileInputStream fileInputStream = null;
-        int size = 0;
-
-        fileInputStream = new FileInputStream(form);
-        bytes = new byte[1024*1024];
-        size = fileInputStream.read(bytes,0,bytes.length);
-        dataOutputStream.write(bytes,0,size);
-
-        fileInputStream = new FileInputStream(hscMarkSheet);
-        bytes = new byte[1024*1024];
-        size = fileInputStream.read(bytes,0,bytes.length);
-        dataOutputStream.write(bytes,0,size);
-
-        fileInputStream = new FileInputStream(entranceMarkSheet);
-        bytes = new byte[1024*1024];
-        size = fileInputStream.read(bytes,0,bytes.length);
-        dataOutputStream.write(bytes,0,size);
-
-        fileInputStream.close();
+        sendFile(form);
+        sendFile(hscMarkSheet);
+        sendFile(entranceMarkSheet);
         return dataInputStream.readBoolean();
+    }
+
+    private static void sendFile(String path) throws Exception{
+        int bytes = 0;
+        File file = new File(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        dataOutputStream.writeLong(file.length());
+        byte[] buffer = new byte[4*1024];
+        while ((bytes=fileInputStream.read(buffer))!=-1){
+            dataOutputStream.write(buffer,0,bytes);
+            dataOutputStream.flush();
+        }
+        fileInputStream.close();
     }
 
     public static void printAdminOptions(){

@@ -484,23 +484,9 @@ public class ServerThread extends Thread{
         int size = 0;
 
         try{
-            bytes = new byte[1024*1024];
-            size = dataInputStream.read(bytes,0,bytes.length);
-            fileOutputStream = new FileOutputStream("media/"+applicant.getApplicationId()+"-form.pdf");
-            fileOutputStream.write(bytes,0,size);
-
-            bytes = new byte[1024*1024];
-            size = dataInputStream.read(bytes,0,bytes.length);
-            fileOutputStream = new FileOutputStream("media/"+applicant.getApplicationId()+"-hsc.pdf");
-            fileOutputStream.write(bytes,0,size);
-
-            bytes = new byte[1024*1024];
-            size = dataInputStream.read(bytes,0,bytes.length);
-            fileOutputStream = new FileOutputStream("media/"+applicant.getApplicationId()+"-entrance.pdf");
-            fileOutputStream.write(bytes,0,size);
-
-            fileOutputStream.close();
-
+            receiveFile(applicant.getApplicationId()+"-form.pdf");
+            receiveFile(applicant.getApplicationId()+"-hsc.pdf");
+            receiveFile(applicant.getApplicationId()+"-entrance.pdf");
             studentPortal.form = "media/"+applicant.getApplicationId()+"-form.pdf";
             studentPortal.hscMarkSheet = "media/"+applicant.getApplicationId()+"-hsc.pdf";
             studentPortal.entranceMarkSheet = "media/"+applicant.getApplicationId()+"-entrance.pdf";
@@ -512,6 +498,19 @@ public class ServerThread extends Thread{
             studentPortal.entranceMarkSheet = "EMPTY";
             dataOutputStream.writeBoolean(false);
         }
+    }
+
+    private void receiveFile(String fileName) throws Exception{
+        int bytes = 0;
+        FileOutputStream fileOutputStream = new FileOutputStream("media/"+fileName);
+
+        long size = dataInputStream.readLong();
+        byte[] buffer = new byte[4*1024];
+        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+            fileOutputStream.write(buffer,0,bytes);
+            size -= bytes;
+        }
+        fileOutputStream.close();
     }
 
     public String readPassword() {
