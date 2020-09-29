@@ -1,18 +1,22 @@
+import java.util.Date;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Session {
     private final String identifier;
     private final Lock lock;
+    private  Date lastActivity;
 
     public Session(){
         this.identifier = null;
         lock = new ReentrantLock();
+        lastActivity = new Date();
     }
 
     public Session(String identifier) {
         this.identifier = identifier;
         lock = new ReentrantLock();
+        lastActivity = new Date();
     }
 
     public String getIdentifier() {
@@ -21,6 +25,14 @@ public class Session {
 
     public Lock getLock() {
         return lock;
+    }
+
+    public Date getLastActivity() {
+        return lastActivity;
+    }
+
+    public void updateLastActivity(){
+        lastActivity = new Date();
     }
 
     @Override

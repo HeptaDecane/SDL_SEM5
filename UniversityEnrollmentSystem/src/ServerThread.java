@@ -150,6 +150,7 @@ public class ServerThread extends Thread{
             dataOutputStream.writeUTF(ack);
 
             int choice = dataInputStream.readInt();
+            session.updateLastActivity();
             while (choice!=0){
                 switch (choice){
                     case 1:
@@ -215,6 +216,7 @@ public class ServerThread extends Thread{
                         dataOutputStream.writeUTF("Invalid Selection");
                 }
                 choice = dataInputStream.readInt();
+                session.updateLastActivity();
             }
             System.out.println("\n"+"["+port+"] applicants-portal/");
             lock.unlock();
@@ -234,6 +236,7 @@ public class ServerThread extends Thread{
             dataOutputStream.writeUTF(ack);
 
             int choice = dataInputStream.readInt();
+            session.updateLastActivity();
             while (choice != 0){
                 switch (choice){
                     case 1:
@@ -314,7 +317,7 @@ public class ServerThread extends Thread{
                         break;
 
                     case 10:
-                        support();
+                        support(session);
                         break;
 
                     default:
@@ -322,6 +325,7 @@ public class ServerThread extends Thread{
                         dataOutputStream.writeUTF("Invalid Selection");
                 }
                 choice = dataInputStream.readInt();
+                session.updateLastActivity();
             }
             System.out.println("\n"+"["+port+"] home/");
             lock.unlock();
@@ -334,15 +338,15 @@ public class ServerThread extends Thread{
         }
     }
 
-    public void support() throws Exception{
+    public void support(Session session) throws Exception{
         Support support = null;
         String ticketNo;
         System.out.println("\n"+"["+port+"] support/");
         dataOutputStream.writeUTF(admin.listQueries());
         while (true){
             ticketNo = dataInputStream.readUTF();
+            session.updateLastActivity();
             if(ticketNo.equals("exit()")) {
-                System.out.println(ticketNo);
                 System.out.println("\n"+"["+port+"] admins-page/");
                 return;
             }
@@ -356,8 +360,9 @@ public class ServerThread extends Thread{
         dataOutputStream.writeUTF(support.getConversation(true));
         while (true){
             String message = dataInputStream.readUTF();
+            session.updateLastActivity();
             if (message.equals("exit()")) {
-                System.out.println(message);
+                System.out.println("\n"+"["+port+"] admins-page/");
                 break;
             }
             if(support.getAdminUsername() == null)
@@ -422,10 +427,8 @@ public class ServerThread extends Thread{
                     if(!support.isResolved())
                         while (true){
                             String message = dataInputStream.readUTF();
-                            if(message.equals("exit()")){
-                                System.out.println(message);
+                            if(message.equals("exit()"))
                                 break;
-                            }
                             support.post(message,false);
                         }
                 break;

@@ -1,7 +1,8 @@
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SessionHandler {
+public class SessionHandler implements Runnable {
     private static final Map<String,Session> applicantSessions;
     private static final Map<String,Session> adminSessions;
 
@@ -40,5 +41,27 @@ public class SessionHandler {
 
     public static void deleteAdminSession(String username){
         adminSessions.remove(username);
+    }
+
+    @Override
+    public void run() {
+        for (String identifier : adminSessions.keySet()) {
+            Session session = adminSessions.get(identifier);
+            long inactiveTime = (new Date().getTime() - session.getLastActivity().getTime())/1000;
+            if (inactiveTime>900) {
+                System.out.println(session + " inactive");
+                adminSessions.remove(identifier);
+            }
+
+        }
+
+        for (String identifier : applicantSessions.keySet()) {
+            Session session = applicantSessions.get(identifier);
+            long inactiveTime = (new Date().getTime() - session.getLastActivity().getTime())/1000;
+            if (inactiveTime>900) {
+                System.out.println(session + " inactive");
+                applicantSessions.remove(identifier);
+            }
+        }
     }
 }
