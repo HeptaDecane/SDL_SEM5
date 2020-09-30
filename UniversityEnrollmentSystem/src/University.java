@@ -10,8 +10,6 @@ public class University {
     public static String entrance;
     public static double maxMarks;
     private static String sql;
-    protected static List<BranchQueue> branchQueues;
-
 
     static {
         entrance = "JEE";
@@ -21,11 +19,6 @@ public class University {
         branches.add(new Branch("ENTC",150,250));
         branches.add(new Branch("CHEM",200,200));
         branches.add(new Branch("CIVIL",200,180));
-
-        branchQueues = new ArrayList<>();
-        for(Branch branch:branches){
-            branchQueues.add(new BranchQueue(branch.name));
-        }
 
         //syncSeatData();
         for(Branch branch : branches){
