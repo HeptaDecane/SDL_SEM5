@@ -1,8 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Scanner;
 
 public class Main {
-    static JFrame frame = new JFrame();
+    protected static Scanner scanner = new Scanner(System.in);
+    protected static JFrame frame = new JFrame();
+    protected static DataOutputStream dataOutputStream = null;
+    protected static DataInputStream dataInputStream = null;
+    protected static ObjectOutputStream objectOutputStream = null;
+    protected static ObjectInputStream objectInputStream = null;
 
     static {
         try {
@@ -21,8 +30,27 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        frame.setContentPane(new LandingPage());
-        frame.setSize(new LandingPage().getPreferredSize());
+        try(Socket socket = new Socket("localhost",5000)){
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+            frame.setContentPane(new LandingPage());
+            frame.setSize(new LandingPage().getPreferredSize());
+            frame.setVisible(true);
+
+            scanner.nextLine();
+        }catch (SocketException | EOFException e) {
+            Main.raiseErrorPage(new ErrorPage(500,e));
+        }catch (Exception e){
+            Main.raiseErrorPage(new ErrorPage(e));
+        }
+    }
+
+    public static void raiseErrorPage(ErrorPage errorPage){
+        frame.getContentPane().removeAll();
+        frame.setContentPane(errorPage);
+        frame.setSize(errorPage.getPreferredSize());
         frame.setVisible(true);
     }
 }

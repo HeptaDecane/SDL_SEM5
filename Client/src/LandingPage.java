@@ -6,12 +6,14 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.EOFException;
+import java.net.SocketException;
 
 /**
  *
  * @author near
  */
-public class LandingPage extends javax.swing.JPanel {
+public class LandingPage extends javax.swing.JPanel{
 
     /**
      * Creates new form LandingPage
@@ -89,20 +91,29 @@ public class LandingPage extends javax.swing.JPanel {
 
     private void addEventListeners(){
         jButton1.addActionListener(e -> {
-            Main.frame.getContentPane().removeAll();
-            Main.frame.setContentPane(new AdminLogin());
-            Main.frame.setSize(new AdminLogin().getPreferredSize());
-            Main.frame.setVisible(true);
+            try {
+                Main.frame.getContentPane().removeAll();
+                Main.frame.setContentPane(new AdminLogin());
+                Main.frame.setSize(new AdminLogin().getPreferredSize());
+                Main.frame.setVisible(true);
+                test();
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
         });
 
-        jButton2.addActionListener(e ->{
+        jButton2.addActionListener(e -> {
             Main.frame.getContentPane().removeAll();
             Main.frame.setContentPane(new ApplicantLogin());
             Main.frame.setSize(new ApplicantLogin().getPreferredSize());
             Main.frame.setVisible(true);
         });
     }
-
+    private void test() throws Exception {
+        Main.dataOutputStream.writeInt(1);
+    }
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
