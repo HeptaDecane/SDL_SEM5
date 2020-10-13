@@ -5,6 +5,8 @@
  */
 
 import java.awt.*;
+import java.io.EOFException;
+import java.net.SocketException;
 
 /**
  *
@@ -111,12 +113,37 @@ public class ApplicantLogin extends javax.swing.JPanel {
     }// </editor-fold>
 
     private void addEventListeners(){
+        // Back
         jButton1.addActionListener(e -> {
             Main.frame.getContentPane().removeAll();
             Main.frame.setContentPane(new LandingPage());
             Main.frame.setSize(new LandingPage().getPreferredSize());
             Main.frame.setVisible(true);
         });
+
+        // Login
+        jButton2.addActionListener(e -> {
+            try {
+                Main.dataOutputStream.writeInt(2);
+                String username = jTextField1.getText();
+                String password = String.valueOf(jPasswordField1.getPassword());
+                login(username,password);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+    }
+
+    private void login(String username,String password) throws Exception{
+        Main.dataOutputStream.writeUTF(username);
+        Main.dataOutputStream.writeUTF(password);
+        status = Main.dataInputStream.readInt();
+        if(status>=200 && status<=299){
+            jLabel4.setText("Success");
+        }else if (status==401)
+            jLabel4.setText("Invalid username or password");
     }
 
     // Variables declaration - do not modify
@@ -128,5 +155,6 @@ public class ApplicantLogin extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
+    private int status;
     // End of variables declaration
 }

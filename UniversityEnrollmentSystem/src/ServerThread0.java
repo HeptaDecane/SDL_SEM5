@@ -21,7 +21,7 @@ public class ServerThread0 extends Thread{
     private Applicant.Status status = null;
     private Admin admin = null;
 
-    private String ack,response;
+    private String ack,response,password;
     private int port;
 
     public ServerThread0(Socket clientSocket) {
@@ -56,63 +56,41 @@ public class ServerThread0 extends Thread{
         while (choice !=0){
             switch (choice){
                 case 1:
-                    applicantPortalView();
-                break;
-
-                case 2:
                     System.out.println("\n"+"["+port+"] /admin-login");
                     String username = dataInputStream.readUTF();
                     System.out.println("["+port+"] username: "+username);
-                    String password = dataInputStream.readUTF();
+                    password = dataInputStream.readUTF();
                     System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
                     admin = Admin.accessAdmin(username,password);
                     if(admin == null) {
-                        dataOutputStream.writeBoolean(false);
+                        dataOutputStream.writeInt(401);
                         System.out.println(ANSI.RED+"["+port+"] 401 unauthorized"+ANSI.RESET);
                     }
                     else {
-                        dataOutputStream.writeBoolean(true);
+                        dataOutputStream.writeInt(200);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         adminView(SessionHandler.getOrCreateAdminSession(admin.getUsername()));
                     }
-                break;
-
-                case 3:
-                    helpCenter();
-                break;
-
-                default:
-                    System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
-                    dataOutputStream.writeUTF("Invalid Selection");
-            }
-            choice = dataInputStream.readInt();
-        }
-    }
-
-    public void applicantPortalView() throws Exception{
-        System.out.println("\n"+"["+port+"] applicants-portal/");
-        int choice = dataInputStream.readInt();
-        while (choice!=0){
-            switch (choice){
-                case 1:
+                    break;
+                case 2:
                     System.out.println("\n"+"["+port+"] /applicant-login");
                     String id = dataInputStream.readUTF();
                     System.out.println("["+port+"] id: "+id);
-                    String password = dataInputStream.readUTF();
+                    password = dataInputStream.readUTF();
                     System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
                     applicant = studentPortal.fetchApplicant(id,password);
                     if(applicant == null) {
-                        dataOutputStream.writeBoolean(false);
+                        dataOutputStream.writeInt(401);
                         System.out.println(ANSI.RED+"["+port+"] 401 unauthorized"+ANSI.RESET);
                     }
                     else {
+                        dataOutputStream.writeInt(200);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        dataOutputStream.writeBoolean(true);
                         applicantView(SessionHandler.getOrCreateApplicantSession(applicant.getApplicationId()));
                     }
                 break;
 
-                case 2:
+                case 3:
                     System.out.println("\n"+"["+port+"] /applicant-registration");
                     applicantRegistration();
                     String applicantId = studentPortal.register();
@@ -124,7 +102,11 @@ public class ServerThread0 extends Thread{
                         System.out.println(ANSI.GREEN+"["+port+"] 201 created"+ANSI.RESET);
                         dataOutputStream.writeUTF("\nRegistration Successful\nApplicantID: " + applicantId);
                     }
-                    break;
+                break;
+
+                case 4:
+                    helpCenter();
+                break;
 
                 default:
                     System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
@@ -132,7 +114,6 @@ public class ServerThread0 extends Thread{
             }
             choice = dataInputStream.readInt();
         }
-        System.out.println("\n"+"["+port+"] home/");
     }
 
     public void applicantView(Session session) throws Exception{

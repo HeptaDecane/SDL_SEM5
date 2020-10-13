@@ -6,8 +6,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.EOFException;
-import java.net.SocketException;
 
 /**
  *
@@ -44,11 +42,11 @@ public class LandingPage extends javax.swing.JPanel{
         jButton2.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
         jButton2.setText("Registered Applicant");
 
-        jButton4.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
-        jButton4.setText("Help and Support");
-
         jButton3.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
         jButton3.setText("New Applicant");
+
+        jButton4.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton4.setText("Help and Support");
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
@@ -90,20 +88,15 @@ public class LandingPage extends javax.swing.JPanel{
     }// </editor-fold>
 
     private void addEventListeners(){
+        // Admin Login
         jButton1.addActionListener(e -> {
-            try {
-                Main.frame.getContentPane().removeAll();
-                Main.frame.setContentPane(new AdminLogin());
-                Main.frame.setSize(new AdminLogin().getPreferredSize());
-                Main.frame.setVisible(true);
-                test();
-            }catch (SocketException | EOFException exception) {
-                Main.raiseErrorPage(new ErrorPage(500,exception));
-            }catch (Exception exception){
-                Main.raiseErrorPage(new ErrorPage(exception));
-            }
+            Main.frame.getContentPane().removeAll();
+            Main.frame.setContentPane(new AdminLogin());
+            Main.frame.setSize(new AdminLogin().getPreferredSize());
+            Main.frame.setVisible(true);
         });
 
+        // Applicant Login
         jButton2.addActionListener(e -> {
             Main.frame.getContentPane().removeAll();
             Main.frame.setContentPane(new ApplicantLogin());
@@ -111,14 +104,12 @@ public class LandingPage extends javax.swing.JPanel{
             Main.frame.setVisible(true);
         });
     }
-    private void test() throws Exception {
-        Main.dataOutputStream.writeInt(1);
-    }
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
+    private int status;
     // End of variables declaration
 }
