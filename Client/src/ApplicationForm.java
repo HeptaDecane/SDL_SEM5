@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+
 /**
  *
  * @author near
@@ -15,6 +19,7 @@ public class ApplicationForm extends javax.swing.JPanel {
      */
     public ApplicationForm() {
         initComponents();
+        addAncestorListeners();
     }
 
     /**
@@ -464,6 +469,93 @@ public class ApplicationForm extends javax.swing.JPanel {
                                                 .addContainerGap(73, Short.MAX_VALUE))))
         );
     }// </editor-fold>
+
+    private void addAncestorListeners(){
+        jButton3.addActionListener(e -> {
+            formIsValid();
+        });
+
+        jButton4.addActionListener(e -> {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG Images","jpg","png");
+            Main.jFileChooser.setFileFilter(filter);
+            if(Main.jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+                jTextField12.setText(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+                ImageIcon image = new ImageIcon(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+                ImageIcon icon = new ImageIcon(image.getImage().getScaledInstance(140,160, Image.SCALE_SMOOTH));
+                jLabelPhotograph.setText("");
+                jLabelPhotograph.setIcon(icon);
+            }
+
+        });
+
+        jButton6.addActionListener(e -> {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG Images","jpg","png");
+            Main.jFileChooser.setFileFilter(filter);
+            if(Main.jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                jTextField13.setText(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+                ImageIcon image = new ImageIcon(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+                ImageIcon icon = new ImageIcon(image.getImage().getScaledInstance(140,160, Image.SCALE_SMOOTH));
+                jLabelSignature.setText("");
+                jLabelSignature.setIcon(icon);
+
+            }
+        });
+
+        jButton8.addActionListener(e -> {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG Images","jpg","png");
+            Main.jFileChooser.setFileFilter(filter);
+            if(Main.jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                jTextField14.setText(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+                ImageIcon image = new ImageIcon(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+                ImageIcon icon = new ImageIcon(image.getImage().getScaledInstance(290,160, Image.SCALE_SMOOTH));
+                jLabelID.setText("");
+                jLabelID.setIcon(icon);
+
+            }
+        });
+
+        jButton5.addActionListener(e -> {
+            jLabelPhotograph.setIcon(null);
+            jLabelPhotograph.setText("Photograph");
+            jTextField12.setText("");
+        });
+
+        jButton7.addActionListener(e -> {
+            jLabelSignature.setIcon(null);
+            jLabelSignature.setText("Signature");
+            jTextField13.setText("");
+        });
+
+        jButton9.addActionListener(e -> {
+            jLabelID.setIcon(null);
+            jLabelID.setText("ID Proof");
+            jTextField14.setText("");
+        });
+
+    }
+
+    private boolean formIsValid(){
+        boolean flag = true;
+        String firstName = jTextField1.getText();
+        String lastName = jTextField2.getText();
+        String uniqueId = jTextField3.getText();
+        String email = jTextField4.getText();
+        String phone = jTextField5.getText();
+        String password1 = String.valueOf(jPasswordField1.getPassword());
+        String password2 = String.valueOf(jPasswordField2.getPassword());
+        String regNo = jTextField7.getText();
+        String percentile = jTextField8.getText();
+        String obtainedMarks = jTextField9.getText();
+        String board = jComboBox2.getSelectedItem().toString();
+        String hscRegNo = jTextField10.getText();
+        String hscPercentage = jTextField11.getText();
+        String branchName = jComboBox3.getSelectedItem().toString();
+        String photograph = jTextField12.getText();
+        String signature = jTextField13.getText();
+        String idProof = jTextField14.getText();
+        System.out.println(idProof);
+        return true;
+    }
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
