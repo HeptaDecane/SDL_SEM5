@@ -103,6 +103,17 @@ public class LandingPage extends javax.swing.JPanel{
             Main.frame.setSize(new ApplicantLogin().getPreferredSize());
             Main.frame.setVisible(true);
         });
+
+        jButton3.addActionListener(e->{
+//            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG Images","jpg","png");
+//            Main.jFileChooser.setFileFilter(filter);
+//            if(Main.jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+//                jButton3.setText(Main.jFileChooser.getSelectedFile().getAbsolutePath());
+            Main.frame.getContentPane().removeAll();
+            Main.frame.setContentPane(new ApplicationForm());
+            Main.frame.setSize(new ApplicationForm().getPreferredSize());
+            Main.frame.setVisible(true);
+        });
     }
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;

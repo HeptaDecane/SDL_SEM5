@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Main {
     protected static Scanner scanner = new Scanner(System.in);
     protected static JFrame frame = new JFrame();
+    protected static JFileChooser jFileChooser = new JFileChooser();
     protected static DataOutputStream dataOutputStream = null;
     protected static DataInputStream dataInputStream = null;
     protected static ObjectOutputStream objectOutputStream = null;
@@ -25,8 +26,7 @@ public class Main {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         ImageIcon icon = new ImageIcon(new ImageIcon("static/logo.png").getImage().getScaledInstance(512,512, Image.SCALE_SMOOTH));
         frame.setIconImage(icon.getImage());
-
-
+        jFileChooser.setAcceptAllFileFilterUsed(false);
     }
 
     public static void main(String[] args) throws Exception {
