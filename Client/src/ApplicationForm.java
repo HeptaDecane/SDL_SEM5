@@ -7,6 +7,8 @@
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.EOFException;
+import java.net.SocketException;
 
 /**
  *
@@ -207,7 +209,7 @@ public class ApplicationForm extends javax.swing.JPanel {
         jTextField14.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
-        jButton1.setForeground(javax.swing.UIManager.getDefaults().getColor("Actions.Red"));
+        jButton1.setForeground(new Color(13063248));
         jButton1.setText("Back");
 
         jButton2.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
@@ -468,11 +470,59 @@ public class ApplicationForm extends javax.swing.JPanel {
                                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addContainerGap(73, Short.MAX_VALUE))))
         );
+        for(String branch : Main.branches)
+            jComboBox3.addItem(branch);
+        jLabel10.setText(Main.entrance+" Details ");
+        jLabel12.setText("Score (out of "+(int)Main.maxMarks+"):");
     }// </editor-fold>
 
     private void addAncestorListeners(){
+        jButton1.addActionListener(e -> {
+            Main.frame.getContentPane().removeAll();
+            Main.frame.setContentPane(new LandingPage());
+            Main.frame.setSize(new LandingPage().getPreferredSize());
+            Main.frame.setVisible(true);
+        });
+
+        jButton2.addActionListener(e -> {
+            Main.frame.getContentPane().removeAll();
+            Main.frame.setContentPane(new ApplicationForm());
+            Main.frame.setSize(new ApplicationForm().getPreferredSize());
+            Main.frame.setVisible(true);
+        });
+
         jButton3.addActionListener(e -> {
-            formIsValid();
+            try {
+                if (formIsValid()) {
+                    jLabelMessage.setForeground(Color.RED);
+                    jLabelMessage.setText("");
+                    Main.dataOutputStream.writeInt(3);
+                    prepareApplicationForm();
+                    Main.objectOutputStream.writeObject(applicationForm);
+                    Main.dataOutputStream.writeUTF(extension1);
+                    Main.dataOutputStream.writeUTF(extension2);
+                    Main.dataOutputStream.writeUTF(extension3);
+                    Main.sendFile(photograph);
+                    Main.sendFile(signature);
+                    Main.sendFile(idProof);
+                    status = Main.dataInputStream.readInt();
+                    if(status>=200 && status<=299){
+                        String applicantID = Main.dataInputStream.readUTF();
+                        RegistrationDialogBox dialogBox = new RegistrationDialogBox(Main.frame,true,applicantID);
+                        dialogBox.setVisible(true);
+                    }else {
+                        RegistrationDialogBox dialogBox = new RegistrationDialogBox(Main.frame, true);
+                        dialogBox.setVisible(true);
+                    }
+                } else {
+                    jLabelMessage.setForeground(Color.GRAY);
+                    jLabelMessage.setText("Invalid Form Fields.");
+                }
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
         });
 
         jButton4.addActionListener(e -> {
@@ -536,25 +586,159 @@ public class ApplicationForm extends javax.swing.JPanel {
 
     private boolean formIsValid(){
         boolean flag = true;
-        String firstName = jTextField1.getText();
-        String lastName = jTextField2.getText();
-        String uniqueId = jTextField3.getText();
-        String email = jTextField4.getText();
-        String phone = jTextField5.getText();
-        String password1 = String.valueOf(jPasswordField1.getPassword());
-        String password2 = String.valueOf(jPasswordField2.getPassword());
-        String regNo = jTextField7.getText();
-        String percentile = jTextField8.getText();
-        String obtainedMarks = jTextField9.getText();
-        String board = jComboBox2.getSelectedItem().toString();
-        String hscRegNo = jTextField10.getText();
-        String hscPercentage = jTextField11.getText();
-        String branchName = jComboBox3.getSelectedItem().toString();
-        String photograph = jTextField12.getText();
-        String signature = jTextField13.getText();
-        String idProof = jTextField14.getText();
-        System.out.println(idProof);
-        return true;
+        firstName = jTextField1.getText();
+        lastName = jTextField2.getText();
+        uniqueId = jTextField3.getText();
+        email = jTextField4.getText();
+        phone = jTextField5.getText();
+        password1 = String.valueOf(jPasswordField1.getPassword());
+        password2 = String.valueOf(jPasswordField2.getPassword());
+        regNo = jTextField7.getText();
+        percentile = jTextField8.getText();
+        obtainedMarks = jTextField9.getText();
+        board = jComboBox2.getSelectedItem().toString();
+        hscRegNo = jTextField10.getText();
+        hscPercentage = jTextField11.getText();
+        branchName = jComboBox3.getSelectedItem().toString();
+        photograph = jTextField12.getText();
+        signature = jTextField13.getText();
+        idProof = jTextField14.getText();
+
+        if(Validators.isAlpha(firstName)){
+            jTextField1.setBorder(null);
+        }else{
+            jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isAlpha(lastName)){
+            jTextField2.setBorder(null);
+        }else{
+            jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isAlNum(uniqueId,8,16)){
+            jTextField3.setBorder(null);
+        }else {
+            jTextField3.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isEmail(email)){
+            jTextField4.setBorder(null);
+        }else{
+            jTextField4.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isNum(phone,10,10)){
+            jTextField5.setBorder(null);
+        }else{
+            jTextField5.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isValidPassword(password1,password2,8)){
+            jPasswordField1.setBorder(null);
+            jPasswordField2.setBorder(null);
+        }else {
+            jPasswordField1.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            jPasswordField2.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if (Validators.isAlNum(regNo,8,16)){
+            jTextField7.setBorder(null);
+        }else {
+            jTextField7.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isFloat(obtainedMarks,0,360)){
+            jTextField9.setBorder(null);
+        }else{
+            jTextField9.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isFloat(percentile,0,100)){
+            jTextField8.setBorder(null);
+        }else {
+            jTextField8.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if (Validators.isAlNum(hscRegNo,8,16)){
+            jTextField10.setBorder(null);
+        }else {
+            jTextField10.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(Validators.isFloat(hscPercentage,0,100)){
+            jTextField11.setBorder(null);
+        }else {
+            jTextField11.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }
+
+        if(photograph.isBlank()){
+            jTextField12.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            jLabelPhotograph.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }else{
+            jTextField12.setBorder(null);
+            jLabelPhotograph.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 187, 187)));
+        }
+
+        if(signature.isBlank()){
+            jTextField13.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            jLabelSignature.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }else{
+            jTextField13.setBorder(null);
+            jLabelSignature.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 187, 187)));
+        }
+
+        if(idProof.isBlank()){
+            jTextField14.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            jLabelID.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }else{
+            jTextField14.setBorder(null);
+            jLabelID.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 187, 187)));
+        }
+
+        if(branchName.equalsIgnoreCase("not selected")){
+            jComboBox3.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
+            flag = false;
+        }else {
+            jComboBox3.setBorder(null);
+        }
+
+        return flag;
+    }
+
+    private void prepareApplicationForm() throws Exception {
+        applicationForm = (SerializedApplicationForm) Main.objectInputStream.readObject();
+        applicationForm.setFirstName(firstName);
+        applicationForm.setLastName(lastName);
+        applicationForm.setUniqueId(uniqueId);
+        applicationForm.setEmail(email);
+        applicationForm.setPhNo(phone);
+        applicationForm.setPassword(password1);
+        applicationForm.setRegNo(regNo);
+        applicationForm.setObtainedMarks(Double.parseDouble(obtainedMarks));
+        applicationForm.setPercentile(Double.parseDouble(percentile));
+        applicationForm.setHscBoard(board);
+        applicationForm.setHscRegNo(hscRegNo);
+        applicationForm.setHscPercentage(Double.parseDouble(hscPercentage));
+        applicationForm.setBranchName(branchName);
+
+        extension1 = photograph.substring(photograph.lastIndexOf('.') + 1);
+        extension2 = signature.substring(signature.lastIndexOf('.') + 1);
+        extension3 = idProof.substring(idProof.lastIndexOf('.') + 1);
     }
 
     // Variables declaration - do not modify
@@ -613,5 +797,15 @@ public class ApplicationForm extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private SerializedApplicationForm applicationForm;
     // End of variables declaration
+
+    String firstName, lastName, uniqueId, email, phone, password1, password2;
+    String regNo, percentile, obtainedMarks;
+    String board, hscRegNo, hscPercentage;
+    String branchName;
+    String photograph, signature, idProof;
+    String extension1, extension2, extension3;
+
+    private int status;
 }

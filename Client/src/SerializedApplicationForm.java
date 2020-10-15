@@ -64,8 +64,60 @@ public class SerializedApplicationForm implements Serializable {
         return hscPercentage;
     }
 
-    public void setExam(String entranceExam) {
-        this.entrance = entranceExam;
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhNo(String phNo) {
+        this.phNo = phNo;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setExam(String entrance) {
+        this.entrance = entrance;
+    }
+
+    public void setRegNo(String regNo) {
+        this.regNo = regNo;
+    }
+
+    public void setObtainedMarks(double obtainedMarks) {
+        this.obtainedMarks = obtainedMarks;
+    }
+
+    public void setPercentile(double percentile) {
+        this.percentile = percentile;
+    }
+
+    public void setHscBoard(String hscBoard) {
+        this.hscBoard = hscBoard;
+    }
+
+    public void setHscRegNo(String hscRegNo) {
+        this.hscRegNo = hscRegNo;
+    }
+
+    public void setHscPercentage(double hscPercentage) {
+        this.hscPercentage = hscPercentage;
     }
 
     public void setBranchName(String branchName) {
@@ -113,7 +165,7 @@ public class SerializedApplicationForm implements Serializable {
     @Override
     public String toString() {
         String publicPassword = new String("*").repeat(password.length());
-        return "    {" +
+        return "{" +
                 "\n\tfirstName: '" + firstName + '\'' +
                 ",\n\tlastName: '" + lastName + '\'' +
                 ",\n\tuniqueId: '" + uniqueId + '\'' +
@@ -128,6 +180,6 @@ public class SerializedApplicationForm implements Serializable {
                 ",\n\thscRegNo: '" + hscRegNo + '\'' +
                 ",\n\thscPercentage: " + hscPercentage +
                 ",\n\tbranchName: '" + branchName + '\'' +
-                "\n    }";
+                "\n}";
     }
 }

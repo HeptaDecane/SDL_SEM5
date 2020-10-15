@@ -3,6 +3,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Main {
@@ -13,6 +14,10 @@ public class Main {
     protected static DataInputStream dataInputStream = null;
     protected static ObjectOutputStream objectOutputStream = null;
     protected static ObjectInputStream objectInputStream = null;
+
+    protected static HashSet<String> branches;
+    protected static String entrance;
+    protected static double maxMarks;
 
     static {
         try {
@@ -35,6 +40,7 @@ public class Main {
             dataInputStream = new DataInputStream(socket.getInputStream());
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectInputStream = new ObjectInputStream(socket.getInputStream());
+            acceptDetails();
             frame.setContentPane(new LandingPage());
             frame.setSize(new LandingPage().getPreferredSize());
             frame.setVisible(true);
@@ -52,5 +58,28 @@ public class Main {
         frame.setContentPane(errorPage);
         frame.setSize(errorPage.getPreferredSize());
         frame.setVisible(true);
+    }
+
+    public static void acceptDetails() throws Exception{
+        entrance = dataInputStream.readUTF();
+        maxMarks = dataInputStream.readDouble();
+        int n = dataInputStream.readInt();
+        branches = new HashSet<>();
+        for(int i=0;i<n;i++)
+            branches.add(dataInputStream.readUTF());
+    }
+
+    public static void sendFile(String path) throws Exception{
+        int bytes = 0;
+        File file = new File(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        dataOutputStream.writeLong(file.length());
+        byte[] buffer = new byte[4*1024];
+        while ((bytes=fileInputStream.read(buffer))!=-1){
+            dataOutputStream.write(buffer,0,bytes);
+            dataOutputStream.flush();
+        }
+        fileInputStream.close();
     }
 }

@@ -37,6 +37,7 @@ public class ServerThread0 extends Thread{
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
             objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+            passDetails();
             homePage();
         }catch (EOFException | SocketException e){
             System.out.println(ANSI.RED+"["+port+"] 499 client closed request"+ANSI.RESET);
@@ -95,12 +96,13 @@ public class ServerThread0 extends Thread{
                     applicantRegistration();
                     String applicantId = studentPortal.register();
                     if(applicantId == null) {
+                        dataOutputStream.writeInt(400);
                         System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
-                        dataOutputStream.writeUTF("\nRegistration Failed\nInvalid/Duplicate Credentials");
                     }
                     else {
+                        dataOutputStream.writeInt(201);
                         System.out.println(ANSI.GREEN+"["+port+"] 201 created"+ANSI.RESET);
-                        dataOutputStream.writeUTF("\nRegistration Successful\nApplicantID: " + applicantId);
+                        dataOutputStream.writeUTF(applicantId);
                     }
                 break;
 
@@ -120,15 +122,8 @@ public class ServerThread0 extends Thread{
         Lock lock = session.getLock();
         if(lock.tryLock(5000L, TimeUnit.MILLISECONDS)){
             System.out.println("\n"+"["+port+"] applicants-page/");
-            ack="";
-            ack += "\nLogged in as:";
-            ack += "\nApplicant ID: "+applicant.getApplicationId();
-            ack += "\n\tName: "+applicant.getApplicationForm().getName();
-            ack += "\n\tEmail: "+applicant.getApplicationForm().getEmail();
-            ack += "\n\tPhone: "+applicant.getApplicationForm().getPhNo();
-            ack += "\n\tUIDAI: "+applicant.getApplicationForm().getUniqueIdNo();
-            ack += "\n\tOpted for: "+applicant.getApplicationForm().getBranchName();
-            dataOutputStream.writeUTF(ack);
+            SerializedApplicant serializedApplicant = new SerializedApplicant(applicant);
+            objectOutputStream.writeObject(serializedApplicant);
 
             int choice = dataInputStream.readInt();
             session.updateLastActivity();
@@ -446,19 +441,16 @@ public class ServerThread0 extends Thread{
         studentPortal.hscBoard = applicationForm.getHscBoard();
         studentPortal.hscReg = applicationForm.getHscRegNo();
         studentPortal.hscPercentage = applicationForm.getHscPercentage();
+        studentPortal.branchName = applicationForm.getBranchName();
 
-        ack = "";
-        for(University.Branch branch:StudentPortal.branches)
-            ack += "\t"+branch+"\n";
-        dataOutputStream.writeUTF(ack);
-        while (true){
-            studentPortal.branchName = dataInputStream.readUTF();
-            dataOutputStream.writeBoolean(studentPortal.validBranch());
-            if (studentPortal.validBranch())
-                break;
-        }
+        // accept files from applicant
+        String ext1 = dataInputStream.readUTF();
+        String ext2 = dataInputStream.readUTF();
+        String ext3 = dataInputStream.readUTF();
+        receiveFile(studentPortal.uniqueId+"_photograph."+ext1);
+        receiveFile(studentPortal.uniqueId+"_signature."+ext2);
+        receiveFile(studentPortal.uniqueId+"_id_proof."+ext3);
 
-        applicationForm.setBranchName(studentPortal.branchName);
         System.out.println(ANSI.CYAN+applicationForm+ANSI.RESET);
     }
 
@@ -468,12 +460,12 @@ public class ServerThread0 extends Thread{
         int size = 0;
 
         try{
-            receiveFile(applicant.getApplicationId()+"-form.pdf");
-            receiveFile(applicant.getApplicationId()+"-hsc.pdf");
-            receiveFile(applicant.getApplicationId()+"-entrance.pdf");
-            studentPortal.form = "media/"+applicant.getApplicationId()+"-form.pdf";
-            studentPortal.hscMarkSheet = "media/"+applicant.getApplicationId()+"-hsc.pdf";
-            studentPortal.entranceMarkSheet = "media/"+applicant.getApplicationId()+"-entrance.pdf";
+            receiveFile(applicant.getApplicationId()+"_form.pdf");
+            receiveFile(applicant.getApplicationId()+"_hsc.pdf");
+            receiveFile(applicant.getApplicationId()+"_entrance.pdf");
+            studentPortal.form = "media/"+applicant.getApplicationId()+"_form.pdf";
+            studentPortal.hscMarkSheet = "media/"+applicant.getApplicationId()+"_hsc.pdf";
+            studentPortal.entranceMarkSheet = "media/"+applicant.getApplicationId()+"_entrance.pdf";
 
             dataOutputStream.writeBoolean(true);
         } catch (Exception e){
@@ -508,5 +500,14 @@ public class ServerThread0 extends Thread{
             password = scanner.nextLine();
         }
         return password;
+    }
+
+    public void passDetails() throws Exception{
+        dataOutputStream.writeUTF(University.entrance);
+        dataOutputStream.writeDouble(University.maxMarks);
+        int n = University.branches.size();
+        dataOutputStream.writeInt(n);
+        for(University.Branch branch : University.branches)
+            dataOutputStream.writeUTF(branch.getName());
     }
 }

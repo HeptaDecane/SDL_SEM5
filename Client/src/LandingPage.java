@@ -105,10 +105,6 @@ public class LandingPage extends javax.swing.JPanel{
         });
 
         jButton3.addActionListener(e->{
-//            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG Images","jpg","png");
-//            Main.jFileChooser.setFileFilter(filter);
-//            if(Main.jFileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-//                jButton3.setText(Main.jFileChooser.getSelectedFile().getAbsolutePath());
             Main.frame.getContentPane().removeAll();
             Main.frame.setContentPane(new ApplicationForm());
             Main.frame.setSize(new ApplicationForm().getPreferredSize());
