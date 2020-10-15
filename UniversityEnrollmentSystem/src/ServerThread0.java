@@ -68,8 +68,8 @@ public class ServerThread0 extends Thread{
                         System.out.println(ANSI.RED+"["+port+"] 401 unauthorized"+ANSI.RESET);
                     }
                     else {
-                        dataOutputStream.writeInt(200);
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        dataOutputStream.writeInt(202);
+                        System.out.println(ANSI.GREEN+"["+port+"] 202 accepted"+ANSI.RESET);
                         adminView(SessionHandler.getOrCreateAdminSession(admin.getUsername()));
                     }
                     break;
@@ -85,8 +85,8 @@ public class ServerThread0 extends Thread{
                         System.out.println(ANSI.RED+"["+port+"] 401 unauthorized"+ANSI.RESET);
                     }
                     else {
-                        dataOutputStream.writeInt(200);
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        dataOutputStream.writeInt(202);
+                        System.out.println(ANSI.GREEN+"["+port+"] 202 accepted"+ANSI.RESET);
                         applicantView(SessionHandler.getOrCreateApplicantSession(applicant.getApplicationId()));
                     }
                 break;
@@ -121,6 +121,8 @@ public class ServerThread0 extends Thread{
     public void applicantView(Session session) throws Exception{
         Lock lock = session.getLock();
         if(lock.tryLock(5000L, TimeUnit.MILLISECONDS)){
+            dataOutputStream.writeInt(200);
+            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
             System.out.println("\n"+"["+port+"] applicants-page/");
             SerializedApplicant serializedApplicant = new SerializedApplicant(applicant);
             objectOutputStream.writeObject(serializedApplicant);
@@ -130,38 +132,32 @@ public class ServerThread0 extends Thread{
             while (choice!=0){
                 switch (choice){
                     case 1:
-                        System.out.println("["+port+"] /check-status");
-                        dataOutputStream.writeUTF("Status: "+applicant.getStatus());
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        break;
-
-                    case 2:
                         System.out.println("["+port+"] /float-seat");
                         status = applicant.hover();
                         if(status != Applicant.Status.FLOATED) {
+                            dataOutputStream.writeInt(403);
                             System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Status SHORTLISTED Required");
                         }
                         else {
+                            dataOutputStream.writeInt(200);
                             System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Success\nStatus: " + status);
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("["+port+"] /lock-seat");
+                        status = applicant.lock();
+                        if(status != Applicant.Status.LOCKED) {
+                            dataOutputStream.writeInt(403);
+                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
+                        }
+                        else {
+                            dataOutputStream.writeInt(200);
+                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         }
                         break;
 
                     case 3:
-                        System.out.println("["+port+"] /lock-seat");
-                        status = applicant.lock();
-                        if(status != Applicant.Status.LOCKED) {
-                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Status SHORTLISTED/FLOATED Required");
-                        }
-                        else {
-                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Success\nStatus: " + status);
-                        }
-                        break;
-
-                    case 4:
                         System.out.println("["+port+"] /fill-enrollment-details");
                         if(applicant.getEnrollmentForm() == null) {
                             System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
@@ -181,11 +177,31 @@ public class ServerThread0 extends Thread{
                         }
                         break;
 
+                    case 4:
+                        String password = applicant.getPassword();
+                        String id = applicant.getApplicationId();
+                        applicant = studentPortal.fetchApplicant(id,password);
+                        serializedApplicant = new SerializedApplicant(applicant);
+                        objectOutputStream.writeObject(serializedApplicant);
+                    break;
+
                     case 5:
-                        System.out.println("["+port+"] /enrollment-details");
-                        dataOutputStream.writeUTF("Enrollment ID: "+applicant.getEnrollmentId());
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                        break;
+                        String currentPassword = dataInputStream.readUTF();
+                        String newPassword = dataInputStream.readUTF();
+                        if(applicant.matchPassword(currentPassword)) {
+                            if (newPassword.length() < 8) {
+                                dataOutputStream.writeInt(400);
+                                System.out.println(ANSI.RED + "[" + port + "] 400 bad request" + ANSI.RESET);
+                            } else {
+                                applicant.updatePassword(newPassword);
+                                dataOutputStream.writeInt(200);
+                                System.out.println(ANSI.RED + "[" + port + "] 200 ok" + ANSI.RESET);
+                            }
+                        } else {
+                            dataOutputStream.writeInt(401);
+                            System.out.println(ANSI.RED + "[" + port + "] 401 unauthorized" + ANSI.RESET);
+                        }
+                    break;
 
                     default:
                         System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
@@ -198,9 +214,8 @@ public class ServerThread0 extends Thread{
             lock.unlock();
             SessionHandler.deleteApplicantSession(applicant.getApplicationId());
         }else {
-            ack="409 conflict";
-            System.out.println(ANSI.RED+"["+port+"] "+ack+ANSI.RESET);
-            dataOutputStream.writeUTF(ack);
+            dataOutputStream.writeInt(409);
+            System.out.println(ANSI.RED+"["+port+"] 409 conflict"+ANSI.RESET);
         }
     }
 

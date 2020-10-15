@@ -11,10 +11,7 @@ public class SerializedApplicant implements Serializable {
     private double hscPercentage;
     private String branchName;
     private String status, enrollmentId, applicantId;
-
-    private SerializedApplicant(){
-
-    }
+    private boolean enrollmentForm;
 
     public String getFirstName() {
         return firstName;
@@ -76,6 +73,10 @@ public class SerializedApplicant implements Serializable {
         return applicantId;
     }
 
+    public boolean hasEnrollmentForm() {
+        return enrollmentForm;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -93,6 +94,7 @@ public class SerializedApplicant implements Serializable {
                 ",\n\thscPercentage: " + hscPercentage +
                 ",\n\tbranchName: '" + branchName + '\'' +
                 ",\n\tstatus: '" + status + '\'' +
+                ",\n\thasEnrollmentForm: " + enrollmentForm +
                 ",\n\tenrollmentId: '" + enrollmentId + '\'' +
                 "\n}";
     }

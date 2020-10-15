@@ -11,6 +11,7 @@ public class SerializedApplicant implements Serializable {
     private double hscPercentage;
     private String branchName;
     private String status, enrollmentId, applicantId;
+    private boolean enrollmentForm;
 
     public SerializedApplicant(Applicant applicant) {
         this.firstName = applicant.getApplicationForm().getName().getFirst();
@@ -27,7 +28,8 @@ public class SerializedApplicant implements Serializable {
         this.branchName = applicant.getApplicationForm().getBranchName();
         this.status = applicant.getStatus().name();
         this.applicantId = applicant.getApplicationId();
-        this.enrollmentId = applicant.getApplicationId();
+        this.enrollmentId = applicant.getEnrollmentId();
+        this.enrollmentForm = (applicant.getEnrollmentForm()!=null);
     }
 
     public String getFirstName() {
@@ -90,6 +92,10 @@ public class SerializedApplicant implements Serializable {
         return applicantId;
     }
 
+    public boolean hasEnrollmentForm() {
+        return enrollmentForm;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -107,6 +113,7 @@ public class SerializedApplicant implements Serializable {
                 ",\n\thscPercentage: " + hscPercentage +
                 ",\n\tbranchName: '" + branchName + '\'' +
                 ",\n\tstatus: '" + status + '\'' +
+                ",\n\thasEnrollmentForm: " + enrollmentForm +
                 ",\n\tenrollmentId: '" + enrollmentId + '\'' +
                 "\n}";
     }

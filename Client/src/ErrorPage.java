@@ -114,7 +114,12 @@ public class ErrorPage extends javax.swing.JPanel {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(88, Short.MAX_VALUE))
         );
+        errorMap.put(400,"Bad Request");
+        errorMap.put(401,"Unauthorized");
+        errorMap.put(403,"Forbidden");
+        errorMap.put(404,"Not Found");
         errorMap.put(500,"Internal Server Error");
+
     }// </editor-fold>
 
 

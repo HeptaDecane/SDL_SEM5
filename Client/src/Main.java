@@ -82,4 +82,16 @@ public class Main {
         }
         fileInputStream.close();
     }
+
+    public static enum Status{
+        PENDING,
+        APPLIED,
+        SHORTLISTED,
+        LOCKED,
+        REJECTED,
+        FLOATED,
+        UNDER_VERIFICATION,
+        ENROLLED,NOT_FOUND,
+        FAILED
+    }
 }

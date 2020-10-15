@@ -94,6 +94,16 @@ public class Applicant implements Comparable<Applicant>,Serializable {
         this.password = password;
     }
 
+    public void updatePassword(String password){
+        this.password = password;
+        String applicant_id = this.applicationId;
+        String sql = String.format(
+            "update applicant set password='%s' " +
+            "where applicant_id='%s'",password,applicant_id
+        );
+        Database.executeUpdate(sql);
+    }
+
     public void setEnrollmentId(String enrollmentId) {
         this.enrollmentId = enrollmentId;
     }

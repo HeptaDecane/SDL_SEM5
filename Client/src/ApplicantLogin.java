@@ -141,12 +141,17 @@ public class ApplicantLogin extends javax.swing.JPanel {
         Main.dataOutputStream.writeUTF(password);
         status = Main.dataInputStream.readInt();
         if(status>=200 && status<=299){
-            SerializedApplicant applicant = (SerializedApplicant) Main.objectInputStream.readObject();
-            System.out.println(applicant);
-            Main.frame.getContentPane().removeAll();
-            Main.frame.setContentPane(new ApplicantPage(applicant));
-            Main.frame.setSize(new ApplicantPage().getPreferredSize());
-            Main.frame.setVisible(true);
+            status = Main.dataInputStream.readInt();
+            if(status>=200 && status<=299) {
+                SerializedApplicant applicant = (SerializedApplicant) Main.objectInputStream.readObject();
+                Main.frame.getContentPane().removeAll();
+                Main.frame.setContentPane(new ApplicantPage(applicant));
+                Main.frame.setSize(new ApplicantPage().getPreferredSize());
+                Main.frame.setVisible(true);
+            }else{
+                Dialog dialog = new LoginFailedDialogBox(Main.frame,true);
+                dialog.setVisible(true);
+            }
         }else if (status==401)
             jLabel4.setText("Invalid username or password");
     }
