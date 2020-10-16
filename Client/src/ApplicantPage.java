@@ -510,6 +510,19 @@ public class ApplicantPage extends javax.swing.JPanel {
             }
         });
 
+        jButton4.addActionListener(e -> {
+            if(applicant.hasEnrollmentForm()){
+                Dialog dialog = new EnrollmentFormDialogBox(Main.frame,true);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }else{
+                String message = "Enrollment Forms are not Issued";
+                Dialog dialog = new DialogBox(Main.frame,true,message);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }
+        });
+
         // Update Password
         jButton5.addActionListener(e -> {
             Dialog dialog = new UpdatePasswordDialogBox(Main.frame,true);

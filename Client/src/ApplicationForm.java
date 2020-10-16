@@ -509,9 +509,11 @@ public class ApplicationForm extends javax.swing.JPanel {
                     if(status>=200 && status<=299){
                         String applicantID = Main.dataInputStream.readUTF();
                         RegistrationDialogBox dialogBox = new RegistrationDialogBox(Main.frame,true,applicantID);
+                        dialogBox.setLocationRelativeTo(Main.frame);
                         dialogBox.setVisible(true);
                     }else {
                         RegistrationDialogBox dialogBox = new RegistrationDialogBox(Main.frame, true);
+                        dialogBox.setLocationRelativeTo(Main.frame);
                         dialogBox.setVisible(true);
                     }
                 } else {

@@ -20,6 +20,7 @@ public class ServerThread0 extends Thread{
     private boolean studentAuthenticated = false;
     private Applicant.Status status = null;
     private Admin admin = null;
+    private String ext1,ext2,ext3;
 
     private String ack,response,password;
     private int port;
@@ -100,6 +101,21 @@ public class ServerThread0 extends Thread{
                         System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
                     }
                     else {
+                        File oldFile,newFile;
+                        String uniqueId = studentPortal.uniqueId;
+
+                        oldFile = new File("media/temp_"+uniqueId+"_photograph."+ext1);
+                        newFile = new File("media/"+applicantId+"_photograph."+ext1);
+                        oldFile.renameTo(newFile);
+
+                        oldFile = new File("media/temp_"+uniqueId+"_signature."+ext2);
+                        newFile = new File("media/"+applicantId+"_signature."+ext2);
+                        oldFile.renameTo(newFile);
+
+                        oldFile = new File("media/temp_"+uniqueId+"_id_proof."+ext3);
+                        newFile = new File("media/"+applicantId+"_id_proof."+ext3);
+                        oldFile.renameTo(newFile);
+
                         dataOutputStream.writeInt(201);
                         System.out.println(ANSI.GREEN+"["+port+"] 201 created"+ANSI.RESET);
                         dataOutputStream.writeUTF(applicantId);
@@ -159,21 +175,14 @@ public class ServerThread0 extends Thread{
 
                     case 3:
                         System.out.println("["+port+"] /fill-enrollment-details");
-                        if(applicant.getEnrollmentForm() == null) {
-                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                            dataOutputStream.writeBoolean(false);
+                        boolean flag = fillEnrollmentForm();
+                        if(studentPortal.submitEnrollmentForm(applicant)) {
+                            dataOutputStream.writeInt(202);
+                            System.out.println(ANSI.GREEN+"["+port+"] 202 accepted"+ANSI.RESET);
                         }
                         else {
-                            dataOutputStream.writeBoolean(true);
-                            fillEnrollmentForm();
-                            if(studentPortal.submitEnrollmentForm(applicant)) {
-                                System.out.println(ANSI.GREEN+"["+port+"] 202 accepted"+ANSI.RESET);
-                                dataOutputStream.writeUTF("Submitted Enrollment Form");
-                            }
-                            else {
-                                System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
-                                dataOutputStream.writeUTF("Invalid Enrollment Details");
-                            }
+                            dataOutputStream.writeInt(400);
+                            System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
                         }
                         break;
 
@@ -201,6 +210,10 @@ public class ServerThread0 extends Thread{
                             dataOutputStream.writeInt(401);
                             System.out.println(ANSI.RED + "[" + port + "] 401 unauthorized" + ANSI.RESET);
                         }
+                    break;
+
+                    case 6:
+                        sendFile("assets/EnrollmentForm.pdf");
                     break;
 
                     default:
@@ -459,36 +472,46 @@ public class ServerThread0 extends Thread{
         studentPortal.branchName = applicationForm.getBranchName();
 
         // accept files from applicant
-        String ext1 = dataInputStream.readUTF();
-        String ext2 = dataInputStream.readUTF();
-        String ext3 = dataInputStream.readUTF();
-        receiveFile(studentPortal.uniqueId+"_photograph."+ext1);
-        receiveFile(studentPortal.uniqueId+"_signature."+ext2);
-        receiveFile(studentPortal.uniqueId+"_id_proof."+ext3);
+        ext1 = dataInputStream.readUTF();
+        ext2 = dataInputStream.readUTF();
+        ext3 = dataInputStream.readUTF();
+        receiveFile("temp_"+studentPortal.uniqueId+"_photograph."+ext1);
+        receiveFile("temp_"+studentPortal.uniqueId+"_signature."+ext2);
+        receiveFile("temp_"+studentPortal.uniqueId+"_id_proof."+ext3);
 
         System.out.println(ANSI.CYAN+applicationForm+ANSI.RESET);
     }
 
-    public void fillEnrollmentForm() throws Exception{
-        byte bytes[] = null;
-        FileOutputStream fileOutputStream = null;
-        int size = 0;
+    public boolean fillEnrollmentForm() throws Exception{
 
         try{
             receiveFile(applicant.getApplicationId()+"_form.pdf");
-            receiveFile(applicant.getApplicationId()+"_hsc.pdf");
             receiveFile(applicant.getApplicationId()+"_entrance.pdf");
+            receiveFile(applicant.getApplicationId()+"_hsc.pdf");
             studentPortal.form = "media/"+applicant.getApplicationId()+"_form.pdf";
-            studentPortal.hscMarkSheet = "media/"+applicant.getApplicationId()+"_hsc.pdf";
             studentPortal.entranceMarkSheet = "media/"+applicant.getApplicationId()+"_entrance.pdf";
-
-            dataOutputStream.writeBoolean(true);
+            studentPortal.hscMarkSheet = "media/"+applicant.getApplicationId()+"_hsc.pdf";
+            return true;
         } catch (Exception e){
             studentPortal.form = "EMPTY";
-            studentPortal.hscMarkSheet = "EMPTY";
             studentPortal.entranceMarkSheet = "EMPTY";
-            dataOutputStream.writeBoolean(false);
+            studentPortal.hscMarkSheet = "EMPTY";
+            return false;
         }
+    }
+
+    public void sendFile(String path) throws Exception{
+        int bytes = 0;
+        File file = new File(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        dataOutputStream.writeLong(file.length());
+        byte[] buffer = new byte[4*1024];
+        while ((bytes=fileInputStream.read(buffer))!=-1){
+            dataOutputStream.write(buffer,0,bytes);
+            dataOutputStream.flush();
+        }
+        fileInputStream.close();
     }
 
     private void receiveFile(String fileName) throws Exception{

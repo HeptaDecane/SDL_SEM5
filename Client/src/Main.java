@@ -83,6 +83,19 @@ public class Main {
         fileInputStream.close();
     }
 
+    public static void receiveFile(String fileName) throws Exception{
+        int bytes = 0;
+        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+
+        long size = dataInputStream.readLong();
+        byte[] buffer = new byte[4*1024];
+        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+            fileOutputStream.write(buffer,0,bytes);
+            size -= bytes;
+        }
+        fileOutputStream.close();
+    }
+
     public static enum Status{
         PENDING,
         APPLIED,
