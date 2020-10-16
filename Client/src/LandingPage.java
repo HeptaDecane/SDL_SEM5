@@ -110,6 +110,13 @@ public class LandingPage extends javax.swing.JPanel{
             Main.frame.setSize(new ApplicationForm().getPreferredSize());
             Main.frame.setVisible(true);
         });
+
+        jButton4.addActionListener(e -> {
+            Main.frame.getContentPane().removeAll();
+            Main.frame.setContentPane(new AdminPage());
+            Main.frame.setSize(new AdminPage().getPreferredSize());
+            Main.frame.setVisible(true);
+        });
     }
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;

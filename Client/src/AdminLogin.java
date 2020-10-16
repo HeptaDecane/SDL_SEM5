@@ -140,7 +140,18 @@ public class AdminLogin extends javax.swing.JPanel {
         Main.dataOutputStream.writeUTF(password);
         status = Main.dataInputStream.readInt();
         if(status>=200 && status<=299){
-            jLabel4.setText("Success");
+            status = Main.dataInputStream.readInt();
+            if(status>=200 && status<=299) {
+                String name = Main.dataInputStream.readUTF();
+                Main.frame.getContentPane().removeAll();
+                Main.frame.setContentPane(new AdminPage(name));
+                Main.frame.setSize(new AdminPage().getPreferredSize());
+                Main.frame.setVisible(true);
+            }else{
+                Dialog dialog = new LoginFailedDialogBox(Main.frame,true);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }
         }else if (status==401)
             jLabel4.setText("Invalid username or password");
     }

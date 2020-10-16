@@ -63,7 +63,7 @@ public class DialogBox extends javax.swing.JDialog {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(48, Short.MAX_VALUE))
         );
-
+        setResizable(false);
         pack();
     }// </editor-fold>
 

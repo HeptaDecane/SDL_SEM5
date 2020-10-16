@@ -411,12 +411,12 @@ public class Client {
         System.out.println("02. List Shortlisted");
         System.out.println("03. Shortlist Applicants");
         System.out.println("04. Check Applicant Status");
-        System.out.println("05. Register New Admin");
+        System.out.println("05. Register New Admin");;
         System.out.println("06. Issue Enrollment Forms");
         System.out.println("07. View Stats");
         System.out.println("08. View Enrollment Forms");
         System.out.println("09. Enroll Applicant");
-        System.out.println("10. Client Support");
+        System.out.println("10. Client Support");;
         System.out.println("00. Logout");
     }
     public static void printApplicantOptions(){

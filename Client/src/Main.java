@@ -3,6 +3,10 @@ import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -83,6 +87,16 @@ public class Main {
         fileInputStream.close();
     }
 
+    public static String findFile(String dir, String glob){
+        try(
+            DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(dir), glob)
+        ){
+            return dirStream.iterator().next().toAbsolutePath().toString();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     public static void receiveFile(String fileName) throws Exception{
         int bytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
@@ -108,3 +122,14 @@ public class Main {
         FAILED
     }
 }
+
+//jButton4.addActionListener(e -> {
+//    if (Desktop.isDesktopSupported()) {
+//        try {
+//            File myFile = new File( "/home/near/Placeholders/uidai.png");
+//            Desktop.getDesktop().open(myFile);
+//        } catch (IOException ex) {
+//            // no application registered for PDFs
+//        }
+//    }
+//});

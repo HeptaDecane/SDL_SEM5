@@ -1,5 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Admin extends University{
     private final String username;
@@ -133,7 +135,7 @@ public class Admin extends University{
     public String listApplicants(){
         try {
             ResultSet resultSet = Database.executeQuery(
-                    "select applicant_id from applicant where status='APPLIED' or status='REJECTED'"
+                    "select applicant_id from applicant where status='APPLIED'"
             );
             String result = "\nAPPLICANTS:";
             Applicant applicant;
@@ -154,6 +156,28 @@ public class Admin extends University{
             return "\nAPPLICANTS:";
         }
 
+    }
+    public List<String> getList(String sql){
+        List<String> result = new ArrayList<>();
+        Applicant applicant = null;
+        try {
+            ResultSet resultSet = Database.executeQuery(sql);
+            while (resultSet.next()){
+                String applicant_id = resultSet.getString("applicant_id");
+                applicant = Database.getApplicantObject(applicant_id);
+                result.add(applicant.getApplicationId());
+                result.add(applicant.getApplicationForm().getName().toString());
+                result.add(applicant.getApplicationForm().getEmail());
+                result.add(applicant.getApplicationForm().getPhNo());
+                result.add(applicant.getApplicationForm().getBranchName());
+                result.add(applicant.getApplicationForm().getExamination().getRegNo());
+                result.add(String.valueOf(applicant.getApplicationForm().getExamination().getObtainedMarks()));
+            }
+            return result;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
     public String listShortlisted(){
         try {
@@ -187,6 +211,17 @@ public class Admin extends University{
             result += "\tTotal: "+branch.seats;
             result += "\tLocked: "+branch.lockedSeats;
             result += "\tAllocated: "+branch.allocatedSeats+"\n";
+        }
+        return result;
+    }
+
+    public List<String> getStats(){
+        List<String> result = new ArrayList<>();
+        for(Branch branch : branches){
+            result.add(branch.getName());
+            result.add(String.valueOf(branch.seats));
+            result.add(String.valueOf(branch.lockedSeats));
+            result.add(String.valueOf(branch.allocatedSeats));
         }
         return result;
     }

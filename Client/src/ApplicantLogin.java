@@ -150,6 +150,7 @@ public class ApplicantLogin extends javax.swing.JPanel {
                 Main.frame.setVisible(true);
             }else{
                 Dialog dialog = new LoginFailedDialogBox(Main.frame,true);
+                dialog.setLocationRelativeTo(Main.frame);
                 dialog.setVisible(true);
             }
         }else if (status==401)

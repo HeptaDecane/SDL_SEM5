@@ -1,6 +1,11 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -23,6 +28,8 @@ public class ServerThread0 extends Thread{
     private String ext1,ext2,ext3;
 
     private String ack,response,password;
+    private List<String> stats;
+    private List<String> result;
     private int port;
 
     public ServerThread0(Socket clientSocket) {
@@ -235,9 +242,13 @@ public class ServerThread0 extends Thread{
     public void adminView(Session session) throws Exception {
         Lock lock = session.getLock();
         if(lock.tryLock(5000L,TimeUnit.MILLISECONDS)){
+            dataOutputStream.writeInt(200);
             System.out.println("\n"+"["+port+"] admins-page/");
-            ack = "\nLogged in as: "+admin.getUsername();
-            dataOutputStream.writeUTF(ack);
+            dataOutputStream.writeUTF(admin.getName());
+            stats = admin.getStats();
+            dataOutputStream.writeInt(stats.size());
+            for(String string : stats)
+                dataOutputStream.writeUTF(string);
 
             int choice = dataInputStream.readInt();
             session.updateLastActivity();
@@ -245,14 +256,28 @@ public class ServerThread0 extends Thread{
                 switch (choice){
                     case 1:
                         System.out.println("["+port+"] /list-applicants");
-                        dataOutputStream.writeUTF(admin.listApplicants());
+                        String status = dataInputStream.readUTF();
+                        String sql = String.format("select applicant_id from applicant where status like '%s'",status);
+                        result = admin.getList(sql);
+                        dataOutputStream.writeInt(result.size());
+                        for (String string: result)
+                            dataOutputStream.writeUTF(string);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         break;
 
                     case 2:
-                        System.out.println("["+port+"] /list-shortlisted");
-                        dataOutputStream.writeUTF(admin.listShortlisted());
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        String glob = dataInputStream.readUTF();
+                        String path = findFile("media/",glob);
+                        if(path == null) {
+                            dataOutputStream.writeInt(404);
+                            System.out.println(ANSI.GREEN + "[" + port + "] 404 not found" + ANSI.RESET);
+                        }else {
+                            dataOutputStream.writeInt(200);
+                            String extension = path.substring(path.lastIndexOf('.') + 1);
+                            dataOutputStream.writeUTF(extension);
+                            sendFile(path);
+                            System.out.println(ANSI.GREEN + "[" + port + "] 200 ok" + ANSI.RESET);
+                        }
                         break;
 
                     case 3:
@@ -297,7 +322,10 @@ public class ServerThread0 extends Thread{
 
                     case 7:
                         System.out.println("["+port+"] /view-stats");
-                        dataOutputStream.writeUTF(admin.viewStats());
+                        stats = admin.getStats();
+                        dataOutputStream.writeInt(stats.size());
+                        for(String string : stats)
+                            dataOutputStream.writeUTF(string);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         break;
 
@@ -527,17 +555,14 @@ public class ServerThread0 extends Thread{
         fileOutputStream.close();
     }
 
-    public String readPassword() {
-        Console console = System.console();
-
-        String password = null;
-        try{
-            char[] ch = console.readPassword();
-            password = new String(ch);
-        }catch(Exception e){
-            password = scanner.nextLine();
+    public String findFile(String dir, String glob){
+        try(
+            DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(dir), glob)
+        ){
+            return dirStream.iterator().next().toAbsolutePath().toString();
+        }catch (Exception e){
+            return null;
         }
-        return password;
     }
 
     public void passDetails() throws Exception{
