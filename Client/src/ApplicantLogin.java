@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.EOFException;
 import java.net.SocketException;
@@ -132,6 +134,40 @@ public class ApplicantLogin extends javax.swing.JPanel {
                 Main.raiseErrorPage(new ErrorPage(500,exception));
             }catch (Exception exception){
                 Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                jLabel4.setText("");
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                jLabel4.setText("");
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                jLabel4.setText("");
+            }
+        });
+
+        jPasswordField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                jLabel4.setText("");
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                jLabel4.setText("");
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                jLabel4.setText("");
             }
         });
     }

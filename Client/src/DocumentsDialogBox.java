@@ -5,22 +5,30 @@
  */
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.net.SocketException;
 
 /**
  *
  * @author near
  */
-public class ListDialogBox extends javax.swing.JDialog {
+public class DocumentsDialogBox extends javax.swing.JDialog {
 
     /**
      * Creates new form ListDialogBox
      */
-    public ListDialogBox(java.awt.Frame parent, boolean modal,String status,java.util.List<String> result) {
+    public DocumentsDialogBox(java.awt.Frame parent, boolean modal, String status, java.util.List<String> result) {
         super(parent, modal);
         this.status = status;
         this.result = result;
         initComponents();
         render();
+        addActionListeners();
     }
 
     /**
@@ -82,23 +90,64 @@ public class ListDialogBox extends javax.swing.JDialog {
         };
         jTable1.setModel(model);
         model.addColumn("Applicant ID");
-        model.addColumn("Name");
-        model.addColumn("Email");
-        model.addColumn("Phone");
-        model.addColumn("Branch");
-        model.addColumn("Reg No.");
-        model.addColumn("Score");
+        model.addColumn("Enrollment Form");
+        model.addColumn("Entrance MarkSheet");
+        model.addColumn("HSC MarkSheet");
 
-            for(int i=0,j=0;j<result.size();i++){
-                String id = result.get(j++);
-                String name = result.get(j++);
-                String email = result.get(j++);
-                String phone = result.get(j++);
-                String branch = result.get(j++);
-                String regNo = result.get(j++);
-                String score = result.get(j++);
-                model.insertRow(i,new Object[]{id,name,email,phone,branch,regNo,score});
+            for(int i=0;i<result.size();i++){
+                String id = result.get(i);
+                model.insertRow(i,new Object[]{id,"","",""});
             }
+    }
+
+    private void addActionListeners(){
+        jTable1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = jTable1.rowAtPoint(e.getPoint());
+                int col = jTable1.columnAtPoint(e.getPoint());
+                String id = (String) jTable1.getValueAt(row,0);
+                if(col == 1)
+                    getFile(id,"_form.pdf");
+                else if(col == 2)
+                    getFile(id,"_entrance.pdf");
+                else if(col == 3)
+                    getFile(id,"_hsc.pdf");
+            }
+        });
+    }
+
+    private void getFile(String applicantId,String suffix){
+        try{
+            Main.dataOutputStream.writeInt(2);
+            Main.dataOutputStream.writeUTF(applicantId+suffix);
+            int status = Main.dataInputStream.readInt();
+            if(status>=200 && status<=299){
+                // read extension
+                Main.dataInputStream.readUTF();
+                Main.receiveFile("downloads/"+applicantId+suffix);
+                if (Desktop.isDesktopSupported()) {
+                    try {
+                        File myFile = new File( "downloads/"+applicantId+suffix);
+                        Desktop.getDesktop().open(myFile);
+                    } catch (IOException ex) {
+                        String message = "Saved to downloads/"+applicantId+suffix;
+                        Dialog dialog = new DialogBox(Main.frame,true,message);
+                        dialog.setLocationRelativeTo(Main.frame);
+                        dialog.setVisible(true);
+                    }
+                }
+            }else{
+                String message = "Signature for "+applicantId+" Not Found";
+                Dialog dialog = new DialogBox(Main.frame,true,message);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }
+        }catch (SocketException | EOFException exception) {
+            Main.raiseErrorPage(new ErrorPage(500,exception));
+        }catch (Exception exception){
+            Main.raiseErrorPage(new ErrorPage(exception));
+        }
     }
 
     // Variables declaration - do not modify

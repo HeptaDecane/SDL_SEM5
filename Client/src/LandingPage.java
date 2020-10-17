@@ -112,10 +112,7 @@ public class LandingPage extends javax.swing.JPanel{
         });
 
         jButton4.addActionListener(e -> {
-            Main.frame.getContentPane().removeAll();
-            Main.frame.setContentPane(new AdminPage());
-            Main.frame.setSize(new AdminPage().getPreferredSize());
-            Main.frame.setVisible(true);
+            System.out.println("click");
         });
     }
     // Variables declaration - do not modify

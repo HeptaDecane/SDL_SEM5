@@ -37,6 +37,10 @@ public class Admin extends University{
         }
     }
 
+    public Applicant fetchApplicant(String id){
+        return Database.getApplicantObject(id);
+    }
+
     public String getUsername() {
         return username;
     }
@@ -240,6 +244,20 @@ public class Admin extends University{
         }catch (SQLException e){
             e.printStackTrace();
             return "ENROLLMENT FORMS:\n";
+        }
+    }
+
+    public List<String> getEnrollmentForms(){
+        List<String> result = new ArrayList<>();
+        try {
+            ResultSet resultSet = Database.executeQuery("SELECT applicant_id FROM enrollment_form WHERE form!='EMPTY'");
+            while (resultSet.next()){
+                result.add(resultSet.getString(1));
+            }
+            return result;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 

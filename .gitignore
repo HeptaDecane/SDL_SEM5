@@ -17,9 +17,8 @@
 */.idea/
 
 # Media files
-*-form.pdf
-*-hsc.pdf
-*-entrance.pdf
+downloads/*
+*/downloads/*
 
 # UI Design
 Panels/

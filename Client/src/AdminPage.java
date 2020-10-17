@@ -7,8 +7,6 @@
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.EOFException;
-import java.io.File;
-import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 
@@ -47,6 +45,7 @@ public class AdminPage extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
@@ -68,6 +67,7 @@ public class AdminPage extends javax.swing.JPanel {
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jTextField1 = new javax.swing.JTextField();
 
         jTable1.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
         jTable1.setSelectionBackground(null);
@@ -104,6 +104,7 @@ public class AdminPage extends javax.swing.JPanel {
         jSeparator3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 187, 187)));
 
         jButton1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setForeground(new Color(13063248));
         jButton1.setText("Logout");
 
         jButton2.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
@@ -157,6 +158,8 @@ public class AdminPage extends javax.swing.JPanel {
         jComboBox1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALL", "APPLIED", "SHORTLISTED", "LOCKED", "REJECTED", "FLOATED", "UNDER_VERIFICATION", "ENROLLED" }));
 
+        jTextField1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -181,8 +184,11 @@ public class AdminPage extends javax.swing.JPanel {
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                         .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(jTextField1))
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                         .addComponent(jButton16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(jButton15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -259,23 +265,25 @@ public class AdminPage extends javax.swing.JPanel {
                                                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jButton14, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(7, 7, 7)
                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 102, Short.MAX_VALUE))
@@ -366,22 +374,25 @@ public class AdminPage extends javax.swing.JPanel {
 
         jButton11.addActionListener(e -> {
             try{
-                Main.dataOutputStream.writeInt(2);
-                Main.dataOutputStream.writeUTF("I2509202000002_id_proof.*");
-                int status = Main.dataInputStream.readInt();
-                if(status>=200 && status<=299){
-                    String extension = Main.dataInputStream.readUTF();
-                    Main.receiveFile("downloads/I2509202000002_id_proof."+extension);
-                    if (Desktop.isDesktopSupported()) {
-                        try {
-                            File myFile = new File( "downloads/I2509202000002_id_proof."+extension);
-                            Desktop.getDesktop().open(myFile);
-                        } catch (IOException ex) {
-                            System.out.println("Application Missing");
-                        }
-                    }
+                String id = jTextField1.getText();
+                if(id.isBlank()) {
+                    jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));
                 }else{
-                    System.out.println(status);
+                    jTextField1.setBorder(null);
+                    Main.dataOutputStream.writeInt(4);
+                    Main.dataOutputStream.writeUTF(id);
+                    int status = Main.dataInputStream.readInt();
+                    if(status>=200 && status<=299) {
+                        SerializedApplicant applicant = (SerializedApplicant) Main.objectInputStream.readObject();
+                        Dialog dialog = new ApplicantDialogBox(Main.frame,true,applicant);
+                        dialog.setLocationRelativeTo(Main.frame);
+                        dialog.setVisible(true);
+                    }else {
+                        String message = "Applicant ID: "+id+" Not Found";
+                        Dialog dialog = new DialogBox(Main.frame,true,message);
+                        dialog.setLocationRelativeTo(Main.frame);
+                        dialog.setVisible(true);
+                    }
                 }
             }catch (SocketException | EOFException exception) {
                 Main.raiseErrorPage(new ErrorPage(500,exception));
@@ -389,6 +400,63 @@ public class AdminPage extends javax.swing.JPanel {
                 Main.raiseErrorPage(new ErrorPage(exception));
             }
         });
+
+        jButton12.addActionListener(e -> {
+            try {
+                jLabel6.setIcon(new javax.swing.ImageIcon("static/preloader_label.gif")); // NOI18N
+                Main.dataOutputStream.writeInt(3);
+                Main.dataInputStream.readInt();
+                jButton19.doClick();
+                jLabel6.setIcon(null);
+                String message = "Applicants Shortlisted";
+                Dialog dialog = new DialogBox(Main.frame,true,message);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+
+        jButton13.addActionListener(e -> {
+            try{
+                Main.dataOutputStream.writeInt(6);
+                Main.dataInputStream.readInt();
+                String message = "Issued Enrollment Forms to LOCKED Applicants";
+                Dialog dialog = new DialogBox(Main.frame,true,message);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+
+        jButton14.addActionListener(e -> {
+            try{
+                java.util.List<String> result = new ArrayList<>();
+                Main.dataOutputStream.writeInt(8);
+                int n = Main.dataInputStream.readInt();
+                for(int i=0;i<n;i++)
+                    result.add(Main.dataInputStream.readUTF());
+                Dialog dialog = new DocumentsDialogBox(Main.frame,true,"UNDER_VERIFICATION",result);
+                dialog.setLocationRelativeTo(Main.frame);
+                dialog.setVisible(true);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+
+        jButton15.addActionListener(e -> {
+            Dialog dialog = new EnrollApplicantDialogBox(Main.frame,true);
+            dialog.setLocationRelativeTo(Main.frame);
+            dialog.setVisible(true);
+        });
+
         jButton19.addActionListener(e -> {
             try{
                 Main.dataOutputStream.writeInt(7);
@@ -419,11 +487,13 @@ public class AdminPage extends javax.swing.JPanel {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;

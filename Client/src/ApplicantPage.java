@@ -578,7 +578,7 @@ public class ApplicantPage extends javax.swing.JPanel {
         jLabel36.setText(applicant.getStatus());
         if(!applicant.hasEnrollmentForm())
             jLabel37.setText("Not Issued");
-        else if(status == Main.Status.UNDER_VERIFICATION)
+        else if(status == Main.Status.UNDER_VERIFICATION || status == Main.Status.ENROLLED)
             jLabel37.setText("Submitted");
         else
             jLabel37.setText("Not Submitted");

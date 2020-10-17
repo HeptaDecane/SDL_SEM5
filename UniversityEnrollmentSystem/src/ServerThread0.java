@@ -283,15 +283,23 @@ public class ServerThread0 extends Thread{
                     case 3:
                         System.out.println("["+port+"] /shortlist");
                         admin.shortlistApplicants();
-                        dataOutputStream.writeUTF("Applicants Shortlisted");
+                        dataOutputStream.writeInt(200);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         break;
 
                     case 4:
                         System.out.println("["+port+"] /check-status");
                         String id = dataInputStream.readUTF();
-                        dataOutputStream.writeUTF("Status: "+admin.checkStatus(id));
-                        System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        applicant = admin.fetchApplicant(id);
+                        if(applicant!=null) {
+                            dataOutputStream.writeInt(200);
+                            SerializedApplicant serializedApplicant = new SerializedApplicant(applicant);
+                            objectOutputStream.writeObject(serializedApplicant);
+                            System.out.println(ANSI.GREEN + "[" + port + "] 200 ok" + ANSI.RESET);
+                        }else{
+                            dataOutputStream.writeInt(404);
+                            System.out.println(ANSI.GREEN + "[" + port + "] 404 not found" + ANSI.RESET);
+                        }
                         break;
 
                     case 5:
@@ -316,7 +324,7 @@ public class ServerThread0 extends Thread{
                     case 6:
                         System.out.println("["+port+"] /issue-enrollment-forms");
                         admin.issueEnrollmentForms();
-                        dataOutputStream.writeUTF("Success\nIssued Enrollment-Forms to LOCKED Applicants");
+                        dataOutputStream.writeInt(200);
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         break;
 
@@ -331,7 +339,12 @@ public class ServerThread0 extends Thread{
 
                     case 8:
                         System.out.println("["+port+"] /list-enrollment-forms");
-                        dataOutputStream.writeUTF(admin.viewEnrollmentForms());
+                        result = admin.getEnrollmentForms();
+                        dataOutputStream.writeInt(result.size());
+                        for(String string : result) {
+                            dataOutputStream.writeUTF(string);
+                            System.out.println(string);
+                        }
                         System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
                         break;
 
@@ -339,12 +352,12 @@ public class ServerThread0 extends Thread{
                         System.out.println("["+port+"] /enroll");
                         String applicantId = dataInputStream.readUTF();
                         if(admin.enrollApplicant(applicantId)) {
+                            dataOutputStream.writeInt(200);
                             System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Success\nEnrolled: " + applicantId);
                         }
                         else {
+                            dataOutputStream.writeInt(403);
                             System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Invalid Status for " + applicantId);
                         }
                         break;
 
