@@ -16,6 +16,7 @@ public abstract class Validators {
         return string.matches(regex);
     }
     public static boolean isAlNum(String string){
+        if (string.isBlank()) return false;
         return string.matches("^[a-zA-Z0-9]*$");
     }
     public static boolean isAlNum(String string,int min, int max){

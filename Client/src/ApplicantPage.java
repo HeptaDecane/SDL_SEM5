@@ -111,7 +111,7 @@ public class ApplicantPage extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Ubuntu Mono", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon("/home/near/Alpha/Stack/SDL_SEM5/Client/static/applicant_login.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("static/applicant_page.png")); // NOI18N
         jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -578,7 +578,7 @@ public class ApplicantPage extends javax.swing.JPanel {
         jLabel36.setText(applicant.getStatus());
         if(!applicant.hasEnrollmentForm())
             jLabel37.setText("Not Issued");
-        else if(status == Main.Status.UNDER_VERIFICATION || status == Main.Status.ENROLLED)
+        else if(status == Main.Status.UNDER_VERIFICATION || status == Main.Status.ENROLLED || status== Main.Status.DISQUALIFIED)
             jLabel37.setText("Submitted");
         else
             jLabel37.setText("Not Submitted");

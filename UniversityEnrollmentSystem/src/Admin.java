@@ -98,7 +98,7 @@ public class Admin extends University{
             Applicant.Status status = Applicant.Status.valueOf(resultSet.getString("status"));
             String branchName = resultSet.getString("branch_name");
             Branch branch = getBranch(branchName);
-            if(status != Applicant.Status.UNDER_VERIFICATION)
+            if(status !=Applicant.Status.UNDER_VERIFICATION && status!= Applicant.Status.DISQUALIFIED)
                 return false;
 
             if(branch.lockedSeats <= branch.allocatedSeats)
@@ -111,6 +111,32 @@ public class Admin extends University{
             );
             Database.executeUpdate(sql);
             branch.allocateSeat();
+            return true;
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean disqualifyApplicant(String id){
+        try {
+            sql = String.format(
+                "select status from applicant where applicant_id='%s'",id
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+
+            if(!resultSet.next())
+                return false;
+
+            Applicant.Status status = Applicant.Status.valueOf(resultSet.getString("status"));
+            if(status !=Applicant.Status.UNDER_VERIFICATION)
+                return false;
+
+            sql = String.format(
+                "update applicant set status='DISQUALIFIED' where applicant_id='%s'",id
+            );
+            Database.executeUpdate(sql);
             return true;
 
         }catch (SQLException e){
@@ -287,12 +313,28 @@ public class Admin extends University{
         return null;
     }
 
-    public void registerNewAdmin(String username,String name,String password){
-        sql = String.format(
-            "insert into admin (username, name, password) " +
-            "values ('%s','%s','%s')",username,name,password
-        );
-        Database.executeUpdate(sql);
+    public boolean registerNewAdmin(String username,String name,String password){
+        try {
+            int count = 0;
+            sql = String.format(
+                    "select count(*) from admin where username='%s'",username
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+            if(resultSet.next())
+                count = resultSet.getInt(1);
+            if(count>0)
+                return false;
+
+            sql = String.format(
+                    "insert into admin (username, name, password) " +
+                            "values ('%s','%s','%s')",username,name,password
+            );
+            Database.executeUpdate(sql);
+            return true;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void issueEnrollmentForms(){

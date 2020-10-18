@@ -118,8 +118,9 @@ public class Main {
         REJECTED,
         FLOATED,
         UNDER_VERIFICATION,
-        ENROLLED,NOT_FOUND,
-        FAILED
+        ENROLLED,
+        NOT_FOUND,
+        DISQUALIFIED
     }
 }
 

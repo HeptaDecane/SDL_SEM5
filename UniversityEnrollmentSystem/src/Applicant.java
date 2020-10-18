@@ -226,7 +226,7 @@ public class Applicant implements Comparable<Applicant>,Serializable {
     }
 
     public static enum Status{
-        PENDING,APPLIED,SHORTLISTED,LOCKED,REJECTED,FLOATED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND,FAILED
+        PENDING,APPLIED,SHORTLISTED,LOCKED,REJECTED,FLOATED,UNDER_VERIFICATION,ENROLLED,NOT_FOUND,FAILED,DISQUALIFIED
     }
 
     final static class Name implements Serializable{

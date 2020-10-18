@@ -311,13 +311,17 @@ public class ServerThread0 extends Thread{
                         String password = dataInputStream.readUTF();
                         System.out.println("["+port+"] password: "+ "*".repeat(password.length()));
                         if(password.length()<8){
+                            dataOutputStream.writeInt(400);
                             System.out.println(ANSI.RED+"["+port+"] 400 bad request"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Password must be at least 8 characters long");
                         }
                         else {
-                            admin.registerNewAdmin(username,name,password);
-                            System.out.println(ANSI.GREEN+"["+port+"] 201 created"+ANSI.RESET);
-                            dataOutputStream.writeUTF("Success\nNew Admin " + username + " Registered");
+                            if(admin.registerNewAdmin(username,name,password)) {
+                                dataOutputStream.writeInt(201);
+                                System.out.println(ANSI.GREEN + "[" + port + "] 201 created" + ANSI.RESET);
+                            }else {
+                                dataOutputStream.writeInt(409);
+                                System.out.println(ANSI.GREEN + "[" + port + "] 409 conflict" + ANSI.RESET);
+                            }
                         }
                         break;
 
@@ -362,6 +366,19 @@ public class ServerThread0 extends Thread{
                         break;
 
                     case 10:
+                        System.out.println("["+port+"] /disqualify");
+                        applicantId = dataInputStream.readUTF();
+                        if(admin.disqualifyApplicant(applicantId)) {
+                            dataOutputStream.writeInt(200);
+                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        }
+                        else {
+                            dataOutputStream.writeInt(403);
+                            System.out.println(ANSI.RED+"["+port+"] 403 forbidden"+ANSI.RESET);
+                        }
+                    break;
+
+                    case 11:
                         support(session);
                         break;
 
@@ -427,7 +444,17 @@ public class ServerThread0 extends Thread{
                 break;
 
                 case 2:
-                    existingSupportTicket();
+                    String ticketNo = dataInputStream.readUTF();
+                    Support support = Database.getSupportObject(ticketNo);
+                    if(support==null){
+                        dataOutputStream.writeInt(404);
+                        System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                    }
+                    else {
+                        dataOutputStream.writeInt(200);
+                        System.out.println(ANSI.RED+"["+port+"] 200 ok"+ANSI.RESET);
+                        existingSupportTicket(support);
+                    }
                 break;
 
                 default:
@@ -456,32 +483,38 @@ public class ServerThread0 extends Thread{
         support.generateTicketNo();
         Database.addSupportObject(support);
         dataOutputStream.writeUTF(support.getTicketNo());
-        existingSupportTicket();
+        existingSupportTicket(support);
     }
-    public void existingSupportTicket() throws Exception{
-        String ticketNo = dataInputStream.readUTF();
-        Support support = Database.getSupportObject(ticketNo);
-        dataOutputStream.writeBoolean(support == null);
-        if(support == null) return;
+    public void existingSupportTicket(Support support) throws Exception{
+        List<String> conversation = support.getConversation();
+        dataOutputStream.writeBoolean(support.isResolved());
+        if(support.getAdminUsername() == null)
+            dataOutputStream.writeUTF("None");
+        else
+            dataOutputStream.writeUTF(support.getAdminUsername());
+        dataOutputStream.writeInt(conversation.size());
+        for(String message: conversation)
+            dataOutputStream.writeUTF(message);
+
         int choice = dataInputStream.readInt();
         while (choice!=0){
             switch (choice){
                 case 1:
-                    dataOutputStream.writeUTF(support.getConversation(false));
-                    dataOutputStream.writeBoolean(support.isResolved());
-                    if(!support.isResolved())
-                        while (true){
-                            String message = dataInputStream.readUTF();
-                            if(message.equals("exit()"))
-                                break;
-                            support.post(message,false);
-                        }
+                    String message = dataInputStream.readUTF();
+                    support.post(message,false);
                 break;
 
                 case 2:
                     if(!support.isResolved())
                         support.setResolved(true);
-                    dataOutputStream.writeUTF("Ticket No: "+ticketNo+" Marked Resolved");
+                    dataOutputStream.writeInt(200);
+                break;
+
+                case 3:
+                    conversation = support.getConversation();
+                    dataOutputStream.writeInt(conversation.size());
+                    for(String text: conversation)
+                        dataOutputStream.writeUTF(text);
                 break;
 
                 default:

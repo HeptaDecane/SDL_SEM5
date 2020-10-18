@@ -418,7 +418,7 @@ public class ApplicantDialogBox extends javax.swing.JDialog {
         jLabel36.setText(applicant.getStatus());
         if(!applicant.hasEnrollmentForm())
             jLabel37.setText("Not Issued");
-        else if(status == Main.Status.UNDER_VERIFICATION || status == Main.Status.ENROLLED)
+        else if(status == Main.Status.UNDER_VERIFICATION || status == Main.Status.ENROLLED || status== Main.Status.DISQUALIFIED)
             jLabel37.setText("Submitted");
         else
             jLabel37.setText("Not Submitted");

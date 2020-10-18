@@ -6,6 +6,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.EOFException;
+import java.net.SocketException;
 
 /**
  *
@@ -112,7 +114,17 @@ public class LandingPage extends javax.swing.JPanel{
         });
 
         jButton4.addActionListener(e -> {
-            System.out.println("click");
+            try{
+                Main.dataOutputStream.writeInt(4);
+                Main.frame.getContentPane().removeAll();
+                Main.frame.setContentPane(new HelpAndSupport());
+                Main.frame.setSize(new HelpAndSupport().getPreferredSize());
+                Main.frame.setVisible(true);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
         });
     }
     // Variables declaration - do not modify

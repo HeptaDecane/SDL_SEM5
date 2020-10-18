@@ -1,5 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Support {
@@ -149,6 +151,27 @@ public class Support {
         }catch (SQLException e){
             e.printStackTrace();
             return null;
+        }
+
+    }
+
+    public List<String> getConversation(){
+        List<String> conversation= new ArrayList<>();
+        try {
+            String sql = String.format(
+                    "select * from conversation " +
+                            "where ticket_no='%s' " +
+                            "order by sent_at", ticketNo
+            );
+            ResultSet resultSet = Database.executeQuery(sql);
+            while (resultSet.next()){
+                conversation.add(resultSet.getString("message"));
+                conversation.add(resultSet.getString("sent_by_admin"));
+            }
+            return conversation;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
