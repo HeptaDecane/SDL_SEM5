@@ -98,8 +98,8 @@ public class TicketGenerationDialogBox extends javax.swing.JDialog {
                 conversation.add(Main.dataInputStream.readUTF());
 
             Main.frame.getContentPane().removeAll();
-            Main.frame.setContentPane(new SupportPage(isResolved, admin, conversation));
-            Main.frame.setSize(new SupportPage().getPreferredSize());
+            Main.frame.setContentPane(new ClientConversation(isResolved, admin, conversation));
+            Main.frame.setSize(new ClientConversation().getPreferredSize());
             Main.frame.setVisible(true);
         }catch (SocketException | EOFException exception) {
             Main.raiseErrorPage(new ErrorPage(500,exception));

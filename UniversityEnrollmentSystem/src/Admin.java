@@ -313,6 +313,33 @@ public class Admin extends University{
         return null;
     }
 
+    public List<String> getTickets(){
+        List<String> tickets = new ArrayList<>();
+        try {
+            ResultSet resultSet = Database.executeQuery(
+            "select * from connection where username is null " +
+                "and (select count(*) from conversation where conversation.ticket_no=connection.ticket_no)>0 "+
+                "and resolved=false"
+            );
+            while (resultSet.next())
+                tickets.add(resultSet.getString("ticket_no"));
+
+            tickets.add("BREAKPOINT");
+
+            sql = String.format("select * from connection where username='%s' " +
+                    "and resolved=false",username
+            );
+            resultSet = Database.executeQuery(sql);
+            while (resultSet.next())
+                tickets.add(resultSet.getString("ticket_no"));
+
+            return tickets;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public boolean registerNewAdmin(String username,String name,String password){
         try {
             int count = 0;

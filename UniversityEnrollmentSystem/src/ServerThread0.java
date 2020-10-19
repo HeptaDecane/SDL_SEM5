@@ -403,33 +403,55 @@ public class ServerThread0 extends Thread{
     public void support(Session session) throws Exception{
         Support support = null;
         String ticketNo;
+        List<String> conversation;
+        List<String> tickets = admin.getTickets();
+        dataOutputStream.writeInt(tickets.size());
+        for(String ticket : tickets)
+            dataOutputStream.writeUTF(ticket);
         System.out.println("\n"+"["+port+"] support/");
-        dataOutputStream.writeUTF(admin.listQueries());
-        while (true){
-            ticketNo = dataInputStream.readUTF();
-            session.updateLastActivity();
-            if(ticketNo.equals("exit()")) {
-                System.out.println("\n"+"["+port+"] admins-page/");
-                return;
-            }
-            support = Database.getSupportObject(ticketNo);
-            if(support != null){
-                dataOutputStream.writeBoolean(true);
+//        dataOutputStream.writeUTF(admin.listQueries());
+        int choice = dataInputStream.readInt();
+        while (choice != 0){
+            switch (choice){
+                case 1:
+                    ticketNo = dataInputStream.readUTF();
+                    session.updateLastActivity();
+                    support = Database.getSupportObject(ticketNo);
+                    if(support == null) support = new Support();
+                    dataOutputStream.writeUTF(support.getClientName());
+                    conversation = support.getConversation();
+                    dataOutputStream.writeInt(conversation.size());
+                    for(String message : conversation)
+                        dataOutputStream.writeUTF(message);
                 break;
-            }
-            dataOutputStream.writeBoolean(false);
-        }
-        dataOutputStream.writeUTF(support.getConversation(true));
-        while (true){
-            String message = dataInputStream.readUTF();
-            session.updateLastActivity();
-            if (message.equals("exit()")) {
-                System.out.println("\n"+"["+port+"] admins-page/");
+
+                case 2:
+                    String message = dataInputStream.readUTF();
+                    session.updateLastActivity();
+                    if(support.getAdminUsername() == null)
+                        support.setAdminUsername(admin.getUsername());
+                    support.post(message,true);
                 break;
+
+                case 3:
+                    tickets = admin.getTickets();
+                    dataOutputStream.writeInt(tickets.size());
+                    for(String ticket : tickets)
+                        dataOutputStream.writeUTF(ticket);
+                break;
+
+                case 4:
+                    conversation = support.getConversation();
+                    dataOutputStream.writeInt(conversation.size());
+                    for(String text : conversation)
+                        dataOutputStream.writeUTF(text);
+                break;
+
+                default:
+                    System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                    dataOutputStream.writeUTF("Invalid Selection");
             }
-            if(support.getAdminUsername() == null)
-                support.setAdminUsername(admin.getUsername());
-            support.post(message,true);
+            choice = dataInputStream.readInt();
         }
         System.out.println("\n"+"["+port+"] admins-page/");
     }
@@ -514,6 +536,10 @@ public class ServerThread0 extends Thread{
                 break;
 
                 case 3:
+                    if(support.getAdminUsername() == null)
+                        dataOutputStream.writeUTF("None");
+                    else
+                        dataOutputStream.writeUTF(support.getAdminUsername());
                     conversation = support.getConversation();
                     dataOutputStream.writeInt(conversation.size());
                     for(String text: conversation)

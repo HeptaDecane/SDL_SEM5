@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.EOFException;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,6 +25,12 @@ public class AdminPage extends javax.swing.JPanel {
         initComponents();
         addActionListeners();
         renderDetails();
+    }
+    public AdminPage(String name,boolean returning) {
+        this.name = name;
+        initComponents();
+        addActionListeners();
+        jButton19.doClick();
     }
     public AdminPage() {
         initComponents();
@@ -455,6 +462,25 @@ public class AdminPage extends javax.swing.JPanel {
             Dialog dialog = new DisqualifyApplicantDialogBox(Main.frame,true);
             dialog.setLocationRelativeTo(Main.frame);
             dialog.setVisible(true);
+        });
+
+        jButton17.addActionListener(e -> {
+            try{
+                Main.dataOutputStream.writeInt(11);
+                int n = Main.dataInputStream.readInt();
+                List<String> tickets = new ArrayList<>();
+                for(int i=0;i<n;i++)
+                    tickets.add(Main.dataInputStream.readUTF());
+
+                Main.frame.getContentPane().removeAll();
+                Main.frame.setContentPane(new AdminConversation(name,tickets));
+                Main.frame.setSize(new AdminConversation().getPreferredSize());
+                Main.frame.setVisible(true);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
         });
         
         jButton18.addActionListener(e -> {

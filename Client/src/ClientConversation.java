@@ -17,16 +17,16 @@ import java.util.List;
  *
  * @author near
  */
-public class SupportPage extends javax.swing.JPanel {
+public class ClientConversation extends javax.swing.JPanel {
 
     /**
      * Creates new form SupportPage
      */
-    public SupportPage() {
+    public ClientConversation() {
         initComponents();
     }
 
-    public SupportPage(boolean isResolved, String admin, List<String> conversation) {
+    public ClientConversation(boolean isResolved, String admin, List<String> conversation) {
         this.isResolved = isResolved;
         this.admin = admin;
         this.conversation = conversation;
@@ -47,12 +47,13 @@ public class SupportPage extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
         model = new DefaultTableModel();
 
         jLabel1.setFont(new java.awt.Font("Ubuntu Mono", 1, 24)); // NOI18N
@@ -100,6 +101,9 @@ public class SupportPage extends javax.swing.JPanel {
         jButton2.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jButton2.setText("send");
 
+        jButton4.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jButton4.setText("Refresh");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,7 +127,8 @@ public class SupportPage extends javax.swing.JPanel {
                                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                                         .addComponent(jLabel2)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                                 .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
@@ -138,6 +143,8 @@ public class SupportPage extends javax.swing.JPanel {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -173,6 +180,7 @@ public class SupportPage extends javax.swing.JPanel {
             jButton3.setEnabled(false);
         }
     }
+
 
     private void addActionListeners(){
         jButton1.addActionListener(e -> {
@@ -216,6 +224,25 @@ public class SupportPage extends javax.swing.JPanel {
                 jButton3.setText("Resolved");
                 jButton2.setEnabled(false);
                 jButton3.setEnabled(false);
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+
+        jButton4.addActionListener(e -> {
+            try{
+                clearChatBox();
+                Main.dataOutputStream.writeInt(3);
+                admin = Main.dataInputStream.readUTF();
+                jLabel3.setText(admin);
+                int n = Main.dataInputStream.readInt();
+                for(int i=0;i<n;i+=2){
+                    String message = Main.dataInputStream.readUTF();
+                    boolean sent = Main.dataInputStream.readUTF().equals("0");
+                    renderMessage(message,sent);
+                }
             }catch (SocketException | EOFException exception) {
                 Main.raiseErrorPage(new ErrorPage(500,exception));
             }catch (Exception exception){
@@ -270,10 +297,17 @@ public class SupportPage extends javax.swing.JPanel {
         jTable1.scrollRectToVisible(jTable1.getCellRect(jTable1.getRowCount()-1, 0, true));
     }
 
+    private void clearChatBox(){
+        model.setRowCount(0);
+        for(int i=0;i<25;i++)
+            model.insertRow(0,new Object[]{"",""});
+    }
+
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

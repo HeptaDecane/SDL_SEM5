@@ -287,8 +287,8 @@ public class HelpAndSupport extends javax.swing.JPanel {
                             conversation.add(Main.dataInputStream.readUTF());
 
                         Main.frame.getContentPane().removeAll();
-                        Main.frame.setContentPane(new SupportPage(isResolved,admin,conversation));
-                        Main.frame.setSize(new SupportPage().getPreferredSize());
+                        Main.frame.setContentPane(new ClientConversation(isResolved,admin,conversation));
+                        Main.frame.setSize(new ClientConversation().getPreferredSize());
                         Main.frame.setVisible(true);
                     }else jLabelMessage2.setText("Invalid Ticket No");
                 }
