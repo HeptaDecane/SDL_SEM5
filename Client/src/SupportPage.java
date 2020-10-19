@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.EOFException;
 import java.net.SocketException;
 import java.util.LinkedList;
@@ -55,6 +53,7 @@ public class SupportPage extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        model = new DefaultTableModel();
 
         jLabel1.setFont(new java.awt.Font("Ubuntu Mono", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -73,34 +72,20 @@ public class SupportPage extends javax.swing.JPanel {
         jTable1.setRowHeight(20);
         jTable1.setTableHeader(null);
         jTable1.setShowGrid(false);
-        model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        jTable1.setEnabled(false);
         jTable1.setModel(model);
         model.addColumn("Reply");
         model.addColumn("Message");
         jTable1.setCellSelectionEnabled(false);
-        jTable1.getColumnModel().getColumn(0).setCellRenderer(new ColumnColorRenderer(Color.GRAY));
-        jScrollPane1.setViewportView(jTable1);
-        for(int i=0;i<24;i++)
-            model.insertRow(jTable1.getRowCount(), new Object[]{"", ""});
-        jTable1.addMouseListener(new MouseAdapter() {
+        jTable1.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer(){
             @Override
-            public void mouseClicked(MouseEvent e) {
-                int row = jTable1.rowAtPoint(e.getPoint());
-                int col = jTable1.columnAtPoint(e.getPoint());
-                jTable1.clearSelection();
-                System.out.println(row+","+col);
-
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                cell.setForeground(Color.GRAY);
+                return cell;
             }
         });
-        jTable1.scrollRectToVisible(jTable1.getCellRect(jTable1.getRowCount()-1, 0, true));
-//        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-//        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-//        jTable1.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        jScrollPane1.setViewportView(jTable1);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 3, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
@@ -166,11 +151,26 @@ public class SupportPage extends javax.swing.JPanel {
     }// </editor-fold>
 
     private void render() {
+        for(int i=0;i<24;i++)
+            model.insertRow(jTable1.getRowCount(), new Object[]{"", ""});
+        jTable1.scrollRectToVisible(jTable1.getCellRect(jTable1.getRowCount()-1, 0, true));
+
+        jLabel3.setText(admin);
+
         int n = conversation.size();
         for(int i=0;i<n;){
             String message = conversation.get(i++);
             boolean sent = conversation.get(i++).equals("0");
             renderMessage(message,sent);
+        }
+        if(isResolved){
+            jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
+            jTextField1.setForeground(Color.GRAY);
+            jTextField1.setEditable(false);
+            jTextField1.setText("Closed");
+            jButton3.setText("Resolved");
+            jButton2.setEnabled(false);
+            jButton3.setEnabled(false);
         }
     }
 
@@ -192,10 +192,30 @@ public class SupportPage extends javax.swing.JPanel {
         jButton2.addActionListener(e -> {
             try{
                 String message = jTextField1.getText();
-                renderMessage(message,true);
-                Main.dataOutputStream.writeInt(1);
-                Main.dataOutputStream.writeUTF(message);
-                jTextField1.setText("");
+                if(!message.isBlank()) {
+                    renderMessage(message, true);
+                    Main.dataOutputStream.writeInt(1);
+                    Main.dataOutputStream.writeUTF(message);
+                    jTextField1.setText("");
+                }
+            }catch (SocketException | EOFException exception) {
+                Main.raiseErrorPage(new ErrorPage(500,exception));
+            }catch (Exception exception){
+                Main.raiseErrorPage(new ErrorPage(exception));
+            }
+        });
+
+        jButton3.addActionListener(e -> {
+            try{
+                Main.dataOutputStream.writeInt(2);
+                isResolved = true;
+                jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
+                jTextField1.setForeground(Color.GRAY);
+                jTextField1.setText("Closed");
+                jTextField1.setEditable(false);
+                jButton3.setText("Resolved");
+                jButton2.setEnabled(false);
+                jButton3.setEnabled(false);
             }catch (SocketException | EOFException exception) {
                 Main.raiseErrorPage(new ErrorPage(500,exception));
             }catch (Exception exception){
@@ -231,7 +251,17 @@ public class SupportPage extends javax.swing.JPanel {
                     model.insertRow(jTable1.getRowCount(),sent?new Object[]{"",breakPoint}:new Object[]{breakPoint,""});
                     breakPoint = "";
                 }
-                model.insertRow(jTable1.getRowCount(),sent?new Object[]{"",breakPoint}:new Object[]{breakPoint,""});
+                word = "[ "+word+" ]";
+                String part="";
+                for(char c : word.toCharArray()){
+                    part += String.valueOf(c);
+                    if(part.length()>=40) {
+                        model.insertRow(jTable1.getRowCount(), sent ? new Object[]{"", part} : new Object[]{part, ""});
+                        part = "";
+                    }
+                }
+                if(!part.isBlank())
+                    model.insertRow(jTable1.getRowCount(), sent ? new Object[]{"", part} : new Object[]{part, ""});
             }
         }
         if(!breakPoint.isBlank())
@@ -256,19 +286,4 @@ public class SupportPage extends javax.swing.JPanel {
     private String admin;
     private List<String> conversation;
     // End of variables declaration
-}
-
-class ColumnColorRenderer extends DefaultTableCellRenderer {
-    Color color;
-
-    public ColumnColorRenderer(Color color) {
-        super();
-        this.color = color;
-    }
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        cell.setForeground(color);
-        return cell;
-    }
 }

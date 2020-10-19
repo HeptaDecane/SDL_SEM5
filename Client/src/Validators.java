@@ -1,3 +1,5 @@
+
+
 public abstract class Validators {
     public static boolean isAlpha(String string){
         if (string.isBlank()) return false;
@@ -37,5 +39,8 @@ public abstract class Validators {
             return false;
         double num = Double.parseDouble(string);
         return num>=min && num<=max;
+    }
+    public static boolean isName(String string){
+        return string.matches("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$");
     }
 }

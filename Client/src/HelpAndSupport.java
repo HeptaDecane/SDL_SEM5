@@ -251,7 +251,7 @@ public class HelpAndSupport extends javax.swing.JPanel {
 
         jRadioButton2.addActionListener(e -> {
             jLabel5.setText("Name:");
-            jTextField2.setToolTipText("Alphabets only");
+            jTextField2.setToolTipText("eg: John Doe");
             isRegistered = false;
         });
 
@@ -302,8 +302,25 @@ public class HelpAndSupport extends javax.swing.JPanel {
         jButton3.addActionListener(e -> {
             try{
                 if(formIsValid()){
-                    System.out.println("click");
-                    Main.dataInputStream.readInt();
+                    Main.dataOutputStream.writeInt(1);
+                    Main.dataOutputStream.writeBoolean(isRegistered);
+                    Main.dataOutputStream.writeUTF(client);
+                    if(isRegistered){
+                        int status = Main.dataInputStream.readInt();
+                        if(status>=200 && status<=299){
+                            String ticketNo = Main.dataInputStream.readUTF();
+                            Dialog dialog = new TicketGenerationDialogBox(Main.frame,true,ticketNo);
+                            dialog.setLocationRelativeTo(Main.frame);
+                            dialog.setVisible(true);
+                        }else{
+                            jLabelMessage1.setText("Invalid Applicant ID");
+                        }
+                    }else {
+                        String ticketNo = Main.dataInputStream.readUTF();
+                        Dialog dialog = new TicketGenerationDialogBox(Main.frame,true,ticketNo);
+                        dialog.setLocationRelativeTo(Main.frame);
+                        dialog.setVisible(true);
+                    }
                 }else {
                     if(isRegistered)
                         jLabelMessage1.setText("Invalid Format for Applicant ID");
@@ -364,7 +381,7 @@ public class HelpAndSupport extends javax.swing.JPanel {
                 flag = false;
             }
         }else {
-            if(Validators.isAlpha(client)){
+            if(Validators.isName(client)){
                 jTextField2.setBorder(null);
             }else {
                 jTextField2.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED));

@@ -470,12 +470,16 @@ public class ServerThread0 extends Thread{
 
     public void newSupportTicket() throws Exception{
         Support support = new Support();
-        String isRegistered = dataInputStream.readUTF();
-        if(isRegistered.equalsIgnoreCase("yes")){
+        boolean isRegistered = dataInputStream.readBoolean();
+        if(isRegistered){
             String applicantId = dataInputStream.readUTF();
             boolean validApplicantId = support.setApplicantId(applicantId);
-            dataOutputStream.writeBoolean(validApplicantId);
-            if(!validApplicantId) return;
+            if(validApplicantId){
+                dataOutputStream.writeInt(200);
+            }else{
+                dataOutputStream.writeInt(404);
+                return;
+            }
         }
         else
             support.setClientName(dataInputStream.readUTF());
@@ -507,7 +511,6 @@ public class ServerThread0 extends Thread{
                 case 2:
                     if(!support.isResolved())
                         support.setResolved(true);
-                    dataOutputStream.writeInt(200);
                 break;
 
                 case 3:
