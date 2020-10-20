@@ -7,9 +7,10 @@
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.io.EOFException;
+import java.io.*;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -309,6 +310,7 @@ public class HelpAndSupport extends javax.swing.JPanel {
                         int status = Main.dataInputStream.readInt();
                         if(status>=200 && status<=299){
                             String ticketNo = Main.dataInputStream.readUTF();
+                            saveTicket(ticketNo);
                             Dialog dialog = new TicketGenerationDialogBox(Main.frame,true,ticketNo);
                             dialog.setLocationRelativeTo(Main.frame);
                             dialog.setVisible(true);
@@ -317,6 +319,7 @@ public class HelpAndSupport extends javax.swing.JPanel {
                         }
                     }else {
                         String ticketNo = Main.dataInputStream.readUTF();
+                        saveTicket(ticketNo);
                         Dialog dialog = new TicketGenerationDialogBox(Main.frame,true,ticketNo);
                         dialog.setLocationRelativeTo(Main.frame);
                         dialog.setVisible(true);
@@ -389,6 +392,15 @@ public class HelpAndSupport extends javax.swing.JPanel {
             }
         }
         return flag;
+    }
+
+    private void saveTicket(String ticketNo){
+        try(FileWriter file = new FileWriter("downloads/tickets.txt", true)){
+            Date date = new Date();
+            file.write(date+":\t"+ticketNo+"\t"+client+"\n");
+        }catch (IOException e){
+            System.out.println("Ticket No: "+ticketNo);
+        }
     }
 
     // Variables declaration - do not modify
