@@ -350,6 +350,36 @@ public class AdminPage extends javax.swing.JPanel {
             }
         });
 
+        jButton2.addActionListener(e -> {
+            Dialog dialog = new InitDialogBox(Main.frame,true);
+            dialog.setLocationRelativeTo(Main.frame);
+            dialog.setVisible(true);
+        });
+
+        jButton3.addActionListener(e -> {
+            Dialog dialog = new BranchAddDialogBox(Main.frame, true);
+            dialog.setLocationRelativeTo(Main.frame);
+            dialog.setVisible(true);
+        });
+
+        jButton4.addActionListener(e -> {
+            Dialog dialog = new BranchRemoveDialogBox(Main.frame,true);
+            dialog.setLocationRelativeTo(Main.frame);
+            dialog.setVisible(true);
+        });
+
+        jButton5.addActionListener(e -> {
+            Dialog dialog = new SetFormDialogBox(Main.frame,true);
+            dialog.setLocationRelativeTo(Main.frame);
+            dialog.setVisible(true);
+        });
+
+        jButton6.addActionListener(e -> {
+            Dialog dialog = new AddEventDialogBox(Main.frame,true);
+            dialog.setLocationRelativeTo(Main.frame);
+            dialog.setVisible(true);
+        });
+
         jButton7.addActionListener(e -> {
             try{
                 java.util.List<String> result = new ArrayList<>();

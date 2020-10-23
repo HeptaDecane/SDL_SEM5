@@ -7,7 +7,9 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -20,8 +22,9 @@ public class Main {
     protected static ObjectInputStream objectInputStream = null;
 
     protected static HashSet<String> branches;
-    protected static String entrance;
+    protected static String entrance,email,contact;
     protected static double maxMarks;
+    protected static List<String> events;
 
     static {
         try {
@@ -65,12 +68,22 @@ public class Main {
     }
 
     public static void acceptDetails() throws Exception{
+        email = dataInputStream.readUTF();
+        contact = dataInputStream.readUTF();
         entrance = dataInputStream.readUTF();
         maxMarks = dataInputStream.readDouble();
+
         int n = dataInputStream.readInt();
         branches = new HashSet<>();
         for(int i=0;i<n;i++)
             branches.add(dataInputStream.readUTF());
+
+        n = dataInputStream.readInt();
+        events = new ArrayList<>();
+        for(int i=0;i<n;i++)
+            events.add(dataInputStream.readUTF());
+
+        receiveFile("static/banner.png");
     }
 
     public static void sendFile(String path) throws Exception{
@@ -123,14 +136,3 @@ public class Main {
         DISQUALIFIED
     }
 }
-
-//jButton4.addActionListener(e -> {
-//    if (Desktop.isDesktopSupported()) {
-//        try {
-//            File myFile = new File( "/home/near/Placeholders/uidai.png");
-//            Desktop.getDesktop().open(myFile);
-//        } catch (IOException ex) {
-//            // no application registered for PDFs
-//        }
-//    }
-//});

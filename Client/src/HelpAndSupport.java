@@ -113,11 +113,11 @@ public class HelpAndSupport extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Dialog", 3, 16)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel8.setText("Email: heptadecane@gmail.com");
+        jLabel8.setText("Email: "+Main.email);
 
         jLabel9.setFont(new java.awt.Font("Dialog", 3, 16)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel9.setText("Contact: +91 9999999999");
+        jLabel9.setText("Contact: +91 "+Main.contact);
 
         jLabelMessage2.setFont(new java.awt.Font("Dialog", 3, 16)); // NOI18N
         jLabelMessage2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

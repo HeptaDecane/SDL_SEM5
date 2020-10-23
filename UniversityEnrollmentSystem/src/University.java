@@ -9,11 +9,15 @@ public class University {
     protected static Set<Branch> branches;
     public static String entrance;
     public static double maxMarks;
+    public static String email;
+    public static String contact;
     private static String sql;
 
     static {
         entrance = "JEE";
         maxMarks = 360;
+        email = "heptadecane@gmail.com";
+        contact = "9999999999";
         branches = new HashSet<>();
         branches.add(new Branch("COMP",300,300));
         branches.add(new Branch("ENTC",150,250));
@@ -139,6 +143,29 @@ public class University {
         else return null;
     }
 
+    public static List<String> getEvents(){
+        List<String> result = new ArrayList<>();
+        try {
+            ResultSet resultSet = Database.executeQuery("select * from event order by commencement");
+            while (resultSet.next()){
+                result.add(resultSet.getString("description"));
+                result.add(resultSet.getString("commencement"));
+            }
+            return result;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public static void addEvent(String event, String date){
+        sql = String.format(
+            "insert into event (description,commencement) values " +
+            "('%s', '%s')",event,date
+        );
+        Database.executeUpdate(sql);
+    }
+
     public static class Branch implements Serializable {
         private static final long serialVersionUID = 73L;
 
@@ -154,6 +181,14 @@ public class University {
             lockedSeats = 0;
             allocatedSeats = 0;
             this.cutOff = cutOff;
+        }
+
+        public Branch(String name){
+            this.name = name;
+            this.seats = 0;
+            lockedSeats = 0;
+            allocatedSeats = 0;
+            this.cutOff = 0;
         }
 
         public String getName() {

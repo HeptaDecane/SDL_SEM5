@@ -43,4 +43,38 @@ public abstract class Validators {
     public static boolean isName(String string){
         return string.matches("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$");
     }
+    public static boolean isDate(String string){
+        if(!string.matches("\\d{4}-\\d{2}-\\d{2}"))
+            return false;
+        String[] date = string.split("-");
+
+        int y = Integer.parseInt(date[0]);
+        int m = Integer.parseInt(date[1]);
+        int d = Integer.parseInt(date[2]);
+
+        if (y > 9999 || y < 1800)
+            return false;
+        if (m < 1 || m > 12)
+            return false;
+        if (d < 1 || d > 31)
+            return false;
+
+
+        if (m == 2){
+            if (isLeap(y))
+                return (d <= 29);
+            else
+                return (d <= 28);
+        }
+
+        if (m == 4 || m == 6 || m == 9 || m == 11)
+            return (d <= 30);
+
+        return true;
+    }
+
+    public static boolean isLeap (int year){
+        return (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0));
+    }
+
 }

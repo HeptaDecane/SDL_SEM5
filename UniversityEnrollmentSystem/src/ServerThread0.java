@@ -382,6 +382,45 @@ public class ServerThread0 extends Thread{
                         support(session);
                         break;
 
+                    case 12:
+                        University.email = dataInputStream.readUTF();
+                        University.contact = dataInputStream.readUTF();
+                        University.entrance = dataInputStream.readUTF();
+                        University.maxMarks = dataInputStream.readDouble();
+                        receiveAsset("banner.png");
+                        break;
+
+                    case 13:
+                        String branchName = dataInputStream.readUTF();
+                        int seats = dataInputStream.readInt();
+                        int cutOff = dataInputStream.readInt();
+                        University.Branch branch = new University.Branch(branchName,seats,cutOff);
+                        University.addBranch(branch);
+                        break;
+
+                    case 14:
+                        branchName = dataInputStream.readUTF();
+                        branch = new University.Branch(branchName);
+                        if(University.branches.contains(branch)){
+                            University.branches.remove(branch);
+                            dataOutputStream.writeInt(200);
+                            System.out.println(ANSI.GREEN+"["+port+"] 200 ok"+ANSI.RESET);
+                        }else{
+                            dataOutputStream.writeInt(404);
+                            System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
+                        }
+                        break;
+
+                    case 15:
+                        receiveAsset("EnrollmentForm.pdf");
+                    break;
+
+                    case 16:
+                        String event = dataInputStream.readUTF();
+                        String date = dataInputStream.readUTF();
+                        University.addEvent(event,date);
+                    break;
+
                     default:
                         System.out.println(ANSI.RED+"["+port+"] 404 not found"+ANSI.RESET);
                         dataOutputStream.writeUTF("Invalid Selection");
@@ -630,6 +669,19 @@ public class ServerThread0 extends Thread{
         fileOutputStream.close();
     }
 
+    private void receiveAsset(String fileName) throws Exception{
+        int bytes = 0;
+        FileOutputStream fileOutputStream = new FileOutputStream("assets/"+fileName);
+
+        long size = dataInputStream.readLong();
+        byte[] buffer = new byte[4*1024];
+        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+            fileOutputStream.write(buffer,0,bytes);
+            size -= bytes;
+        }
+        fileOutputStream.close();
+    }
+
     public String findFile(String dir, String glob){
         try(
             DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(dir), glob)
@@ -641,11 +693,22 @@ public class ServerThread0 extends Thread{
     }
 
     public void passDetails() throws Exception{
+        dataOutputStream.writeUTF(University.email);
+        dataOutputStream.writeUTF(University.contact);
         dataOutputStream.writeUTF(University.entrance);
         dataOutputStream.writeDouble(University.maxMarks);
+
         int n = University.branches.size();
         dataOutputStream.writeInt(n);
         for(University.Branch branch : University.branches)
             dataOutputStream.writeUTF(branch.getName());
+
+        List<String> events = University.getEvents();
+        n = events.size();
+        dataOutputStream.writeInt(n);
+        for(String event : events)
+            dataOutputStream.writeUTF(event);
+
+        sendFile("assets/banner.png");
     }
 }
