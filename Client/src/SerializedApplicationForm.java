@@ -124,44 +124,6 @@ public class SerializedApplicationForm implements Serializable {
         this.branchName = branchName;
     }
 
-    public void enterData(){
-        System.out.print("First Name: ");
-        firstName = scanner.nextLine();
-        System.out.print("Last Name: ");
-        lastName = scanner.nextLine();
-        System.out.print("UIDAI No: ");
-        uniqueId = scanner.nextLine();
-        System.out.print("Email: ");
-        email = scanner.nextLine();
-        System.out.print("Phone: ");
-        phNo = scanner.nextLine();
-
-        while (true){
-            System.out.print("Password: ");
-            password = scanner.nextLine();
-            if(password.length()>=8)
-                break;
-            System.out.println(ANSI.CYAN+"Password must be at least 8 characters long"+ANSI.RESET);
-        }
-
-        System.out.println("Entrance Details: "+ entrance);
-        System.out.print("Reg No: ");
-        regNo = scanner.nextLine();
-        System.out.print("Obtained Marks: ");
-        obtainedMarks = scanner.nextDouble();
-        System.out.print("Percentile: ");
-        percentile = scanner.nextDouble();
-
-        scanner.nextLine();
-        System.out.print("HSC Board: ");
-        hscBoard = scanner.nextLine();
-        System.out.print("HSC Reg: ");
-        hscRegNo = scanner.nextLine();
-        System.out.print("HSC Percentage: ");
-        hscPercentage = scanner.nextDouble();
-
-    }
-
     @Override
     public String toString() {
         String publicPassword = new String("*").repeat(password.length());

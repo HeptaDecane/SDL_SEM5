@@ -1,8 +1,6 @@
-import java.util.Scanner;
 import java.util.Set;
 
 public class StudentPortal {
-    Scanner input = new Scanner(System.in);
 
     private ApplicationForm applicationForm;
     private Applicant applicant;

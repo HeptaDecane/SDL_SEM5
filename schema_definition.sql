@@ -64,6 +64,11 @@ create table conversation(
     sent_by_admin bool not null default false
 );
 
+create table event(
+    description text not null,
+    commencement date not null
+);
+
 alter table application_form add constraint application_form_FK_hsc_reg_no
 foreign key(hsc_reg_no) references hsc(hsc_reg_no)
 on delete cascade;
