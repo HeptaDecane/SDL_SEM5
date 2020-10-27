@@ -47,27 +47,27 @@ public class ErrorPage extends JPanel {
         jScrollPane1 = new JScrollPane();
         jTextPane1 = new JTextPane();
 
-        jLabel1.setIcon(new ImageIcon("static/error_icon.png")); // NOI18N
+        jLabel1.setIcon(new ImageIcon("static/error_icon.png")); 
 
-        jLabel2.setFont(new Font("Dialog", 1, 36)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 36)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel2.setText("Error");
         jLabel2.setToolTipText("");
         jLabel2.setVerticalAlignment(SwingConstants.TOP);
 
-        jLabel3.setFont(new Font("Dialog", 0, 18)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 0, 18)); 
         jLabel3.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel3.setText("");
         jLabel3.setToolTipText("");
         jLabel3.setVerticalAlignment(SwingConstants.TOP);
 
-        jLabel4.setFont(new Font("Dialog", 1, 24)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 1, 24)); 
         jLabel4.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel4.setText("Oops! Something went wrong.");
         jLabel4.setToolTipText("");
         jLabel4.setVerticalAlignment(SwingConstants.TOP);
 
-        jTextPane1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jTextPane1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jScrollPane1.setViewportView(jTextPane1);
 
         GroupLayout layout = new GroupLayout(this);

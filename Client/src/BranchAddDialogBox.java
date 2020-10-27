@@ -33,22 +33,22 @@ public class BranchAddDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setText("Branch Name:");
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
 
-        jLabel2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 16)); 
         jLabel2.setText("Seats:");
 
-        jTextField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField2.setFont(new Font("Dialog", 1, 16)); 
 
-        jLabel3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 1, 16)); 
         jLabel3.setText("Cut-Off:");
 
-        jTextField3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField3.setFont(new Font("Dialog", 1, 16)); 
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Add");
 
         GroupLayout layout = new GroupLayout(getContentPane());

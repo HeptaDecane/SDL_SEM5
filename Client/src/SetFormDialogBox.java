@@ -30,22 +30,22 @@ public class SetFormDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setText("Enrollment Form:");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Confirm");
 
-        jLabel2.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel2.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
         jTextField1.setEnabled(false);
 
-        jButton2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new Font("Dialog", 1, 16)); 
         jButton2.setText("Browse");
 
-        jButton3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton3.setFont(new Font("Dialog", 1, 16)); 
         jButton3.setText("Clear");
 
         GroupLayout layout = new GroupLayout(getContentPane());

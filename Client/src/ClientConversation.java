@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -58,20 +52,20 @@ public class ClientConversation extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         model = new DefaultTableModel();
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu Mono", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Ubuntu Mono", 1, 24)); 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon("static/conversation.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("static/conversation.png")); 
         jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jButton1.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Ubuntu Mono", 1, 18)); 
         jButton1.setForeground(new Color(13063248));
         jButton1.setText("Leave");
 
-        jButton3.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jButton3.setFont(new java.awt.Font("Dialog", 1, 16)); 
         jButton3.setText("Mark Resolved");
 
-        jTable1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Dialog", 1, 16)); 
         jTable1.setRowHeight(20);
         jTable1.setTableHeader(null);
         jTable1.setShowGrid(false);
@@ -90,20 +84,20 @@ public class ClientConversation extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 3, 16)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Dialog", 3, 16)); 
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
         jLabel2.setText("Admin:");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 0, 16)); 
         jLabel3.setForeground(new java.awt.Color(119, 119, 119));
         jLabel3.setText("8888888888888888");
 
-        jTextField1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new java.awt.Font("Dialog", 1, 16)); 
 
-        jButton2.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Dialog", 1, 16)); 
         jButton2.setText("send");
 
-        jButton4.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jButton4.setFont(new java.awt.Font("Dialog", 1, 16)); 
         jButton4.setText("Refresh");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -34,24 +34,24 @@ public class AddEventDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setText("Event:");
 
-        jLabel2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 16)); 
         jLabel2.setText("Commencement Date:");
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
 
-        jLabel3.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel3.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel3.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel3.setForeground(Color.GRAY);
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Pin");
 
-        jTextField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField2.setFont(new Font("Dialog", 1, 16)); 
 
-        jLabel4.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 3, 16)); 
         jLabel4.setForeground(new Color(153, 153, 153));
         jLabel4.setText("( YYYY-MM-DD )");
 

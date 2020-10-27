@@ -27,12 +27,12 @@ public class ListDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTable1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jTable1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jTable1.setSelectionBackground(null);
         jTable1.setSelectionForeground(null);
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 16)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel2.setText("STATUS");
 

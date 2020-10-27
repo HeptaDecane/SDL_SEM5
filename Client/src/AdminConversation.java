@@ -68,17 +68,17 @@ public class AdminConversation extends JPanel {
         };
         model3 = new DefaultTableModel();
 
-        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); // NOI18N
+        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel1.setIcon(new ImageIcon("static/client_support.png")); // NOI18N
+        jLabel1.setIcon(new ImageIcon("static/client_support.png")); 
         jLabel1.setBorder(BorderFactory.createEtchedBorder());
         jLabel1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-        jLabel2.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 3, 16)); 
         jLabel2.setForeground(Color.GRAY);
         jLabel2.setText(" ClientName");
 
-        jTable1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jTable1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jTable1.setRowHeight(24);
         jTable1.setModel(model1);
         model1.addColumn("Ongoing Tickets");
@@ -86,7 +86,7 @@ public class AdminConversation extends JPanel {
         model1.insertRow(0,new Object[]{""});
         jScrollPane1.setViewportView(jTable1);
 
-        jTable2.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jTable2.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jTable2.setRowHeight(24);
         jTable2.setModel(model2);
         model2.addColumn("New Tickets");
@@ -94,7 +94,7 @@ public class AdminConversation extends JPanel {
         model2.insertRow(0,new Object[]{""});
         jScrollPane2.setViewportView(jTable2);
 
-        jTable3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTable3.setFont(new Font("Dialog", 1, 16)); 
         jTable3.setRowHeight(20);
         jTable3.setTableHeader(null);
         jTable3.setShowGrid(false);
@@ -114,16 +114,16 @@ public class AdminConversation extends JPanel {
         });
         jScrollPane3.setViewportView(jTable3);
 
-        jButton1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jButton1.setForeground(UIManager.getDefaults().getColor("Actions.Red"));
         jButton1.setForeground(new Color(13063248));
         jButton1.setText("Back");
 
-        jButton2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new Font("Dialog", 1, 16)); 
         jButton2.setText("send");
         jButton2.setEnabled(false);
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
         jTextField1.setEnabled(false);
 
         GroupLayout layout = new GroupLayout(this);

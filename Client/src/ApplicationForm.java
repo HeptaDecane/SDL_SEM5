@@ -134,73 +134,73 @@ public class ApplicationForm extends JPanel {
         jPasswordField1 = new JPasswordField();
         jPasswordField2 = new JPasswordField();
 
-        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); // NOI18N
+        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel1.setIcon(new ImageIcon("/home/near/Alpha/Stack/SDL_SEM5/Client/static/applicant_registration.png")); // NOI18N
+        jLabel1.setIcon(new ImageIcon("/home/near/Alpha/Stack/SDL_SEM5/Client/static/applicant_registration.png")); 
         jLabel1.setBorder(BorderFactory.createEtchedBorder());
         jLabel1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-        jLabel2.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 0, 16)); 
         jLabel2.setText("First Name:");
 
-        jLabel3.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 0, 16)); 
         jLabel3.setText("Last Name:");
 
-        jLabel4.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 0, 16)); 
         jLabel4.setText("ID Type:");
 
-        jLabel5.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel5.setFont(new Font("Dialog", 0, 16)); 
         jLabel5.setText("Mobile: ");
 
-        jLabel6.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel6.setFont(new Font("Dialog", 0, 16)); 
         jLabel6.setText("ID Number:");
 
-        jLabel7.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel7.setFont(new Font("Dialog", 0, 16)); 
         jLabel7.setText("Email:");
 
-        jLabel8.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel8.setFont(new Font("Dialog", 0, 16)); 
         jLabel8.setText("Password:");
 
-        jLabel9.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel9.setFont(new Font("Dialog", 0, 16)); 
         jLabel9.setText("Confirm Password:");
 
-        jLabel10.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel10.setFont(new Font("Dialog", 1, 16)); 
         jLabel10.setText("Entrance Details ");
 
-        jLabel11.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel11.setFont(new Font("Dialog", 0, 16)); 
         jLabel11.setText("Registration No.:");
 
-        jLabel12.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel12.setFont(new Font("Dialog", 0, 16)); 
         jLabel12.setText("Score (out of 360):");
 
-        jLabel13.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel13.setFont(new Font("Dialog", 0, 16)); 
         jLabel13.setText("Percentile:");
 
-        jLabel14.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel14.setFont(new Font("Dialog", 1, 16)); 
         jLabel14.setText("HSC Delails");
 
-        jLabel15.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel15.setFont(new Font("Dialog", 0, 16)); 
         jLabel15.setText("Registration No.:");
 
-        jLabel16.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel16.setFont(new Font("Dialog", 0, 16)); 
         jLabel16.setText("Registration No.:");
 
-        jLabel17.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel17.setFont(new Font("Dialog", 0, 16)); 
         jLabel17.setText("Percentage (%):");
 
-        jLabel18.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel18.setFont(new Font("Dialog", 0, 16)); 
         jLabel18.setText("Photograph: ");
 
-        jLabel19.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel19.setFont(new Font("Dialog", 0, 16)); 
         jLabel19.setText("Signature:");
 
-        jLabel20.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel20.setFont(new Font("Dialog", 0, 16)); 
         jLabel20.setText("ID Proof:");
 
-        jLabel21.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel21.setFont(new Font("Dialog", 0, 16)); 
         jLabel21.setText("Choose Branch:");
 
-        jLabelMessage.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabelMessage.setFont(new Font("Dialog", 2, 16)); 
         jLabelMessage.setVerticalAlignment(SwingConstants.TOP);
 
         jLabelPhotograph.setHorizontalAlignment(SwingConstants.CENTER);
@@ -219,48 +219,48 @@ public class ApplicationForm extends JPanel {
 
         jSeparator2.setBorder(BorderFactory.createLineBorder(new Color(187, 187, 187)));
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField2.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField3.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField4.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField4.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField5.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField5.setFont(new Font("Dialog", 1, 16)); 
 
         jTextField6.setEditable(false);
-        jTextField6.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField6.setFont(new Font("Dialog", 1, 16)); 
         jTextField6.setHorizontalAlignment(JTextField.CENTER);
         jTextField6.setText("+91");
 
-        jTextField7.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField7.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField8.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField8.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField9.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField9.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField10.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField10.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField11.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField11.setFont(new Font("Dialog", 1, 16)); 
 
         jTextField12.setEditable(false);
-        jTextField12.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jTextField12.setFont(new Font("Dialog", 1, 14)); 
 
         jTextField13.setEditable(false);
-        jTextField13.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jTextField13.setFont(new Font("Dialog", 1, 14)); 
 
         jTextField14.setEditable(false);
-        jTextField14.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jTextField14.setFont(new Font("Dialog", 1, 14)); 
 
-        jButton1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jButton1.setForeground(new Color(13063248));
         jButton1.setText("Back");
 
-        jButton2.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton2.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jButton2.setText("Reset");
 
-        jButton3.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton3.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jButton3.setText("Submit");
 
         jButton4.setText("Browse");
@@ -270,18 +270,18 @@ public class ApplicationForm extends JPanel {
         jButton8.setText("Browse");
         jButton9.setText("Clear");
 
-        jComboBox3.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jComboBox3.setFont(new Font("Dialog", 1, 14)); 
         jComboBox3.setModel(new DefaultComboBoxModel<>(new String[] { "NOT SELECTED" }));
 
-        jComboBox1.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jComboBox1.setFont(new Font("Dialog", 1, 14)); 
         jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] { "UIDAI", "PASSPORT", "PAN", "DRIVING_LICENSE", "VOTER_ID" }));
 
-        jComboBox2.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jComboBox2.setFont(new Font("Dialog", 1, 14)); 
         jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "CBSE", "STATE" }));
 
-        jPasswordField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jPasswordField1.setFont(new Font("Dialog", 1, 16)); 
 
-        jPasswordField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jPasswordField2.setFont(new Font("Dialog", 1, 16)); 
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);

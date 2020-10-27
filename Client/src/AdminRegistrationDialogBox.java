@@ -50,43 +50,43 @@ public class AdminRegistrationDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabelTitle.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabelTitle.setFont(new Font("Dialog", 1, 16)); 
         jLabelTitle.setText("New Admin");
 
-        jLabelMessage.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabelMessage.setFont(new Font("Dialog", 1, 16)); 
         jLabelMessage.setHorizontalAlignment(SwingConstants.CENTER);
         jLabelMessage.setForeground(Color.GRAY);
         jLabelMessage.setText(" ");
 
-        jLabel1.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 0, 16)); 
         jLabel1.setText("Username:");
 
-        jLabel2.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 0, 16)); 
         jLabel2.setText("First Name:");
 
-        jLabel3.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 0, 16)); 
         jLabel3.setText("Last Name:");
 
-        jLabel4.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 0, 16)); 
         jLabel4.setText("Password:");
 
-        jLabel5.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel5.setFont(new Font("Dialog", 0, 16)); 
         jLabel5.setText("Confirm Password:");
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
         jTextField1.setToolTipText("AlphaNumeric, At Least 4 Characters");
 
-        jTextField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField2.setFont(new Font("Dialog", 1, 16)); 
 
-        jTextField3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField3.setFont(new Font("Dialog", 1, 16)); 
 
-        jPasswordField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jPasswordField1.setFont(new Font("Dialog", 1, 16)); 
         jPasswordField1.setToolTipText("At Least 8 Characters");
 
-        jPasswordField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jPasswordField2.setFont(new Font("Dialog", 1, 16)); 
         jPasswordField2.setToolTipText("At Least 8 Characters");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Submit");
 
         GroupLayout layout = new GroupLayout(getContentPane());

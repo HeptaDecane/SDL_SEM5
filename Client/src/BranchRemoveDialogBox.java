@@ -25,18 +25,18 @@ public class BranchRemoveDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setText("Branch Name:");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Remove");
 
-        jComboBox1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jComboBox1.setFont(new Font("Dialog", 1, 16)); 
         jComboBox1.setModel(new DefaultComboBoxModel<>(new String[]{"NOT SELECTED"}));
         for(String branch : Main.branches)
             jComboBox1.addItem(branch);
 
-        jLabel2.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel2.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel2.setForeground(Color.GRAY);
 

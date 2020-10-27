@@ -118,152 +118,152 @@ public class ApplicantPage extends JPanel {
 
         setPreferredSize(new Dimension(1250, 750));
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("STATUS");
         jButton1.setEnabled(false);
 
-        jButton2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new Font("Dialog", 1, 16)); 
         jButton2.setText("Float Seat");
 
-        jButton3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton3.setFont(new Font("Dialog", 1, 16)); 
         jButton3.setText("Lock Seat");
 
-        jButton4.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton4.setFont(new Font("Dialog", 1, 16)); 
         jButton4.setText("Enrollment Form");
 
-        jButton5.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton5.setFont(new Font("Dialog", 1, 16)); 
         jButton5.setText("Change Password");
 
-        jButton6.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton6.setFont(new Font("Dialog", 1, 16)); 
         jButton6.setForeground(new Color(13063248));
         jButton6.setText("Logout");
 
-        jButton7.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton7.setFont(new Font("Dialog", 1, 16)); 
         jButton7.setText("Refresh");
 
-        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); // NOI18N
+        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel1.setIcon(new ImageIcon("static/applicant_page.png")); // NOI18N
+        jLabel1.setIcon(new ImageIcon("static/applicant_page.png")); 
         jLabel1.setBorder(BorderFactory.createEtchedBorder());
         jLabel1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-        jLabel39.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel39.setFont(new Font("Dialog", 3, 16)); 
         jLabel39.setText("Status:");
 
         jPanel1.setBorder(BorderFactory.createLineBorder(new Color(187, 187, 187)));
 
         jSeparator1.setBorder(BorderFactory.createLineBorder(new Color(187, 187, 187)));
 
-        jLabel2.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 3, 16)); 
         jLabel2.setText("Applicant Details");
 
-        jLabel3.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 2, 16)); 
         jLabel3.setText("Applicant ID:");
 
-        jLabel4.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 2, 16)); 
         jLabel4.setText("First Name:");
 
-        jLabel5.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel5.setFont(new Font("Dialog", 2, 16)); 
         jLabel5.setText("Last Name:");
 
-        jLabel6.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel6.setFont(new Font("Dialog", 2, 16)); 
         jLabel6.setText("Unique ID:");
 
-        jLabel7.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel7.setFont(new Font("Dialog", 2, 16)); 
         jLabel7.setText("Email:");
 
-        jLabel8.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel8.setFont(new Font("Dialog", 2, 16)); 
         jLabel8.setText("Contact: ");
 
-        jLabel9.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel9.setFont(new Font("Dialog", 3, 16)); 
         jLabel9.setText("Entrance Details");
 
-        jLabel11.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel11.setFont(new Font("Dialog", 2, 16)); 
         jLabel11.setText("Reg No: ");
 
-        jLabel12.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel12.setFont(new Font("Dialog", 2, 16)); 
         jLabel12.setText("Score:");
 
-        jLabel13.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel13.setFont(new Font("Dialog", 2, 16)); 
         jLabel13.setText("Percentile:");
 
-        jLabel14.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel14.setFont(new Font("Dialog", 3, 16)); 
         jLabel14.setText("HSC Details");
 
-        jLabel15.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel15.setFont(new Font("Dialog", 2, 16)); 
         jLabel15.setText("Board:");
 
-        jLabel16.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel16.setFont(new Font("Dialog", 2, 16)); 
         jLabel16.setText("Reg No: ");
 
-        jLabel17.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel17.setFont(new Font("Dialog", 2, 16)); 
         jLabel17.setText("Percentage:");
 
-        jLabel18.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel18.setFont(new Font("Dialog", 3, 16)); 
         jLabel18.setText("Application Status");
 
-        jLabel19.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel19.setFont(new Font("Dialog", 2, 16)); 
         jLabel19.setText("Applied Branch:");
 
-        jLabel20.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel20.setFont(new Font("Dialog", 2, 16)); 
         jLabel20.setText("Staus:");
 
-        jLabel21.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel21.setFont(new Font("Dialog", 2, 16)); 
         jLabel21.setText("Enrollment Form:");
 
-        jLabel22.setFont(new Font("Dialog", 2, 16)); // NOI18N
+        jLabel22.setFont(new Font("Dialog", 2, 16)); 
         jLabel22.setText("Enrollment ID: ");
 
-        jLabel23.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel23.setFont(new Font("Dialog", 1, 16)); 
         jLabel23.setHorizontalAlignment(SwingConstants.LEFT);
         jLabel23.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel24.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel24.setFont(new Font("Dialog", 1, 16)); 
         jLabel24.setHorizontalAlignment(SwingConstants.LEFT);
         jLabel24.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel25.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel25.setFont(new Font("Dialog", 1, 16)); 
         jLabel25.setHorizontalAlignment(SwingConstants.LEFT);
         jLabel25.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel26.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel26.setFont(new Font("Dialog", 1, 16)); 
         jLabel26.setHorizontalAlignment(SwingConstants.LEFT);
         jLabel26.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel27.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel27.setFont(new Font("Dialog", 1, 16)); 
         jLabel27.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel28.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel28.setFont(new Font("Dialog", 1, 16)); 
         jLabel28.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel29.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel29.setFont(new Font("Dialog", 1, 16)); 
         jLabel29.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel30.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel30.setFont(new Font("Dialog", 1, 16)); 
         jLabel30.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel31.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel31.setFont(new Font("Dialog", 1, 16)); 
         jLabel31.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel32.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel32.setFont(new Font("Dialog", 1, 16)); 
         jLabel32.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel33.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel33.setFont(new Font("Dialog", 1, 16)); 
         jLabel33.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel34.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel34.setFont(new Font("Dialog", 1, 16)); 
         jLabel34.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel35.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel35.setFont(new Font("Dialog", 1, 16)); 
         jLabel35.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel36.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel36.setFont(new Font("Dialog", 1, 16)); 
         jLabel36.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel37.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel37.setFont(new Font("Dialog", 1, 16)); 
         jLabel37.setText("XXXXXXXXXXXXXXXX");
 
-        jLabel38.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel38.setFont(new Font("Dialog", 1, 16)); 
         jLabel38.setText("XXXXXXXXXXXXXXXX");
 
 
@@ -431,7 +431,7 @@ public class ApplicantPage extends JPanel {
                                 .addContainerGap())
         );
 
-        jButton7.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton7.setFont(new Font("Dialog", 1, 16)); 
         jButton7.setText("Refresh");
 
         GroupLayout layout = new GroupLayout(this);

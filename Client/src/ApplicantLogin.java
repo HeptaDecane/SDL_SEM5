@@ -34,32 +34,32 @@ public class ApplicantLogin extends JPanel {
         jTextField1 = new JTextField();
         jPasswordField1 = new JPasswordField();
 
-        jButton1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jButton1.setForeground(new Color(13063248));
         jButton1.setText("Back");
 
-        jButton2.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jButton2.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jButton2.setText("Login");
 
-        jLabel1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel1.setText("Applicant ID:");
 
-        jLabel2.setFont(new Font("Ubuntu Mono", 1, 24)); // NOI18N
+        jLabel2.setFont(new Font("Ubuntu Mono", 1, 24)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel2.setIcon(new ImageIcon("static/applicant_login.png")); // NOI18N
+        jLabel2.setIcon(new ImageIcon("static/applicant_login.png")); 
         jLabel2.setBorder(BorderFactory.createEtchedBorder());
         jLabel2.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-        jLabel3.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel3.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel3.setText("Password:");
 
-        jLabel4.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel4.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel4.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel4.setForeground(Color.GRAY);
 
-        jTextField1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jTextField1.setFont(new Font("Ubuntu Mono", 1, 18)); 
 
-        jPasswordField1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jPasswordField1.setFont(new Font("Ubuntu Mono", 1, 18)); 
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);

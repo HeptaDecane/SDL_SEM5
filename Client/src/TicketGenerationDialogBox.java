@@ -27,15 +27,15 @@ public class TicketGenerationDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 16)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel2.setText("Ticket No: "+ticketNo);
 
-        jLabel3.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 0, 16)); 
         jLabel3.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel3.setText("Save your Ticket No. for further referencing");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("OK");
 
         GroupLayout layout = new GroupLayout(getContentPane());

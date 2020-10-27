@@ -88,30 +88,30 @@ public class AdminPage extends JPanel {
         jComboBox1 = new JComboBox<>();
         jTextField1 = new JTextField();
 
-        jTable1.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jTable1.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jTable1.setSelectionBackground(null);
         jTable1.setSelectionForeground(null);
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); // NOI18N
+        jLabel1.setFont(new Font("Ubuntu Mono", 1, 24)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-        jLabel1.setIcon(new ImageIcon("static/admin_page.png")); // NOI18N
+        jLabel1.setIcon(new ImageIcon("static/admin_page.png")); 
         jLabel1.setBorder(BorderFactory.createEtchedBorder());
         jLabel1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-        jLabel2.setFont(new Font("Dialog", 1, 18)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 18)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel2.setText("Welcome, Admin");
 
-        jLabel3.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 3, 16)); 
         jLabel3.setText("Customization");
         jLabel3.setForeground(Color.GRAY);
 
-        jLabel4.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 3, 16)); 
         jLabel4.setText("Introspection");
         jLabel4.setForeground(Color.GRAY);
 
-        jLabel5.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabel5.setFont(new Font("Dialog", 3, 16)); 
         jLabel5.setText("Enrollment");
         jLabel5.setForeground(Color.GRAY);
 
@@ -122,59 +122,59 @@ public class AdminPage extends JPanel {
         jSeparator3.setOrientation(SwingConstants.VERTICAL);
         jSeparator3.setBorder(BorderFactory.createLineBorder(new Color(187, 187, 187)));
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setForeground(new Color(13063248));
         jButton1.setText("Logout");
 
-        jButton2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new Font("Dialog", 1, 16)); 
         jButton2.setText("Initialize");
 
-        jButton3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton3.setFont(new Font("Dialog", 1, 16)); 
         jButton3.setText("Add Branch");
 
-        jButton4.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton4.setFont(new Font("Dialog", 1, 16)); 
         jButton4.setText("Remove Branch");
 
-        jButton5.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton5.setFont(new Font("Dialog", 1, 16)); 
         jButton5.setText("Set Enrollmet Form");
 
-        jButton6.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton6.setFont(new Font("Dialog", 1, 16)); 
         jButton6.setText("Add Events");
 
-        jButton7.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton7.setFont(new Font("Dialog", 1, 16)); 
         jButton7.setText("List Applicants");
 
-        jButton11.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton11.setFont(new Font("Dialog", 1, 16)); 
         jButton11.setText("Check Status");
 
-        jButton12.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton12.setFont(new Font("Dialog", 1, 16)); 
         jButton12.setText("Shortlist Applicants");
 
-        jButton13.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton13.setFont(new Font("Dialog", 1, 16)); 
         jButton13.setText("Issue Forms");
 
-        jButton14.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton14.setFont(new Font("Dialog", 1, 16)); 
         jButton14.setText("View Documents");
 
-        jButton15.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton15.setFont(new Font("Dialog", 1, 16)); 
         jButton15.setText("Enroll Applicant");
 
-        jButton16.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton16.setFont(new Font("Dialog", 1, 16)); 
         jButton16.setText("Mark Disqualified");
 
-        jButton17.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton17.setFont(new Font("Dialog", 1, 16)); 
         jButton17.setText("Client Support");
 
-        jButton18.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton18.setFont(new Font("Dialog", 1, 16)); 
         jButton18.setText("New Admin");
 
-        jButton19.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton19.setFont(new Font("Dialog", 1, 16)); 
         jButton19.setText("Refresh");
 
-        jComboBox1.setFont(new Font("Dialog", 0, 18)); // NOI18N
+        jComboBox1.setFont(new Font("Dialog", 0, 18)); 
         jComboBox1.setModel(new DefaultComboBoxModel<>(new String[] { "ALL", "APPLIED", "SHORTLISTED", "LOCKED", "REJECTED", "FLOATED", "UNDER_VERIFICATION", "ENROLLED", "DISQUALIFIED" }));
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
@@ -447,7 +447,7 @@ public class AdminPage extends JPanel {
 
         jButton12.addActionListener(e -> {
             try {
-                jLabel6.setIcon(new ImageIcon("static/preloader_label.gif")); // NOI18N
+                jLabel6.setIcon(new ImageIcon("static/preloader_label.gif")); 
                 Main.dataOutputStream.writeInt(3);
                 Main.dataInputStream.readInt();
                 jButton19.doClick();

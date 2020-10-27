@@ -20,11 +20,11 @@ public class DialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Message");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("OK");
 
         GroupLayout layout = new GroupLayout(getContentPane());

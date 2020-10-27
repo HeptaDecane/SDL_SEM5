@@ -21,15 +21,15 @@ public class LoginFailedDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Multiple sessions detected");
 
-        jLabel2.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 0, 16)); 
         jLabel2.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel2.setText("Try logout from active session");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("OK");
 
         GroupLayout layout = new GroupLayout(getContentPane());

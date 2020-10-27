@@ -51,13 +51,13 @@ public class EnrollmentFormDialogBox extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jTextField1.setEditable(false);
-        jTextField1.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 14)); 
 
         jTextField2.setEditable(false);
-        jTextField2.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jTextField2.setFont(new Font("Dialog", 1, 14)); 
 
         jTextField3.setEditable(false);
-        jTextField3.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        jTextField3.setFont(new Font("Dialog", 1, 14)); 
 
         jButton4.setText("Browse");
         jButton5.setText("Clear");
@@ -66,22 +66,22 @@ public class EnrollmentFormDialogBox extends JDialog {
         jButton8.setText("Browse");
         jButton9.setText("Clear");
 
-        jLabel1.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 0, 16)); 
         jLabel1.setText("Enrollment Form: ");
 
-        jLabel2.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 0, 16)); 
         jLabel2.setText("Entrance Marksheet:");
 
-        jLabel3.setFont(new Font("Dialog", 0, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 0, 16)); 
         jLabel3.setText("HSC MarkSheet");
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Download Form");
 
-        jButton2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new Font("Dialog", 1, 16)); 
         jButton2.setText("Cancel");
 
-        jButton3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton3.setFont(new Font("Dialog", 1, 16)); 
         jButton3.setText("Submit");
 
         GroupLayout layout = new GroupLayout(getContentPane());

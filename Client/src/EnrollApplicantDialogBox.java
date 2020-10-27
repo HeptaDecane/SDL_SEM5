@@ -27,16 +27,16 @@ public class EnrollApplicantDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setText("Applicant ID:");
 
-        jLabelMessage.setFont(new Font("Dialog", 3, 16)); // NOI18N
+        jLabelMessage.setFont(new Font("Dialog", 3, 16)); 
         jLabelMessage.setHorizontalAlignment(SwingConstants.CENTER);
         jLabelMessage.setForeground(Color.GRAY);
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Enroll");
 
         GroupLayout layout = new GroupLayout(getContentPane());

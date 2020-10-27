@@ -52,47 +52,47 @@ public class InitDialogBox extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new Font("Dialog", 1, 16)); 
         jLabel1.setText("Banner:");
 
-        jTextField1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField1.setFont(new Font("Dialog", 1, 16)); 
         jTextField1.setEnabled(false);
 
-        jButton1.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton1.setFont(new Font("Dialog", 1, 16)); 
         jButton1.setText("Browse");
 
-        jButton2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton2.setFont(new Font("Dialog", 1, 16)); 
         jButton2.setText("Clear");
 
-        jLabel2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel2.setFont(new Font("Dialog", 1, 16)); 
         jLabel2.setText("Entrance Name:");
 
-        jTextField2.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField2.setFont(new Font("Dialog", 1, 16)); 
 
-        jLabel3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel3.setFont(new Font("Dialog", 1, 16)); 
         jLabel3.setText("Max Marks:");
 
-        jTextField3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField3.setFont(new Font("Dialog", 1, 16)); 
 
-        jButton3.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jButton3.setFont(new Font("Dialog", 1, 16)); 
         jButton3.setText("Confirm");
 
-        jLabel4.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel4.setFont(new Font("Dialog", 1, 16)); 
         jLabel4.setText("Support Email:");
 
-        jTextField4.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField4.setFont(new Font("Dialog", 1, 16)); 
 
-        jLabel5.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jLabel5.setFont(new Font("Dialog", 1, 16)); 
         jLabel5.setText("Support Contact:");
 
-        jTextField5.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField5.setFont(new Font("Dialog", 1, 16)); 
 
         jTextField6.setEditable(false);
-        jTextField6.setFont(new Font("Dialog", 1, 16)); // NOI18N
+        jTextField6.setFont(new Font("Dialog", 1, 16)); 
         jTextField6.setHorizontalAlignment(JTextField.CENTER);
         jTextField6.setText("+91");
 
-        jLabel6.setFont(new Font("Ubuntu Mono", 1, 18)); // NOI18N
+        jLabel6.setFont(new Font("Ubuntu Mono", 1, 18)); 
         jLabel6.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel6.setForeground(Color.GRAY);
 
