@@ -23,3 +23,17 @@ downloads/*
 # UI Design
 Panels/
 Panels/*
+
+
+# Android
+*.iml
+*gradle*
+.idea/
+*/.idea/
+build/
+*/build/
+*.properties
+*/libs/
+*proguard-rules.pro
+*/.gitignore
+*/app/.gitignore
